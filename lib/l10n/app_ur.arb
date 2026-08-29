@@ -195,6 +195,20 @@
   "applicationAgreementAccepted": "معاہدہ اور رازداری قبول شدہ",
   "applicationNotAccepted": "ابھی قبول نہیں کیا گیا",
 
+  "certificateTitle": "نکاح مشیر آئی ڈی کارڈ",
+  "certificateDownload": "سرٹیفکیٹ پی ڈی ایف ڈاؤن لوڈ کریں",
+  "certificateCardSectionTitle": "فزیکل کارڈ",
+  "certificateCardRequested": "درخواست {date} کو دی گئی — ایڈمن پرنٹ کر کے بھیجے گا",
+  "@certificateCardRequested": {"placeholders": {"date": {"type": "String"}}},
+  "certificateCardDispatched": "{date} کو بھیج دیا گیا",
+  "@certificateCardDispatched": {"placeholders": {"date": {"type": "String"}}},
+  "certificateRequestCard": "کارڈ بھیجنے کی درخواست کریں",
+
+  "paymentAccountsTitle": "سلامتی بینک اکاؤنٹس",
+  "paymentAccountsSubtitle": "یہ تفصیلات کسی ایسے کلائنٹ کے ساتھ شیئر کریں جو جاز کیش، ایزی پیسہ، یا بینک ٹرانسفر سے ادائیگی کر رہا ہو۔",
+  "paymentAccountsCopied": "کلپ بورڈ پر کاپی ہو گیا",
+  "paymentAccountsEmpty": "ابھی تک کوئی ادائیگی اکاؤنٹ مقرر نہیں کیا گیا۔",
+
   "errorGeneric": "کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔",
   "errorNetwork": "انٹرنیٹ سے رابطہ نہیں ہو سکا۔ اپنا انٹرنیٹ چیک کریں۔",
   "retry": "دوبارہ کوشش کریں",

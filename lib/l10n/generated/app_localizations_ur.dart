@@ -542,6 +542,42 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applicationNotAccepted => 'ابھی قبول نہیں کیا گیا';
 
   @override
+  String get certificateTitle => 'نکاح مشیر آئی ڈی کارڈ';
+
+  @override
+  String get certificateDownload => 'سرٹیفکیٹ پی ڈی ایف ڈاؤن لوڈ کریں';
+
+  @override
+  String get certificateCardSectionTitle => 'فزیکل کارڈ';
+
+  @override
+  String certificateCardRequested(String date) {
+    return 'درخواست $date کو دی گئی — ایڈمن پرنٹ کر کے بھیجے گا';
+  }
+
+  @override
+  String certificateCardDispatched(String date) {
+    return '$date کو بھیج دیا گیا';
+  }
+
+  @override
+  String get certificateRequestCard => 'کارڈ بھیجنے کی درخواست کریں';
+
+  @override
+  String get paymentAccountsTitle => 'سلامتی بینک اکاؤنٹس';
+
+  @override
+  String get paymentAccountsSubtitle =>
+      'یہ تفصیلات کسی ایسے کلائنٹ کے ساتھ شیئر کریں جو جاز کیش، ایزی پیسہ، یا بینک ٹرانسفر سے ادائیگی کر رہا ہو۔';
+
+  @override
+  String get paymentAccountsCopied => 'کلپ بورڈ پر کاپی ہو گیا';
+
+  @override
+  String get paymentAccountsEmpty =>
+      'ابھی تک کوئی ادائیگی اکاؤنٹ مقرر نہیں کیا گیا۔';
+
+  @override
   String get errorGeneric => 'کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔';
 
   @override

@@ -1136,6 +1136,66 @@ abstract class AppLocalizations {
   /// **'Not yet accepted'**
   String get applicationNotAccepted;
 
+  /// No description provided for @certificateTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nikah Counselor ID Card'**
+  String get certificateTitle;
+
+  /// No description provided for @certificateDownload.
+  ///
+  /// In en, this message translates to:
+  /// **'Download Certificate PDF'**
+  String get certificateDownload;
+
+  /// No description provided for @certificateCardSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Physical Card'**
+  String get certificateCardSectionTitle;
+
+  /// No description provided for @certificateCardRequested.
+  ///
+  /// In en, this message translates to:
+  /// **'Requested {date} — admin will print and mail it'**
+  String certificateCardRequested(String date);
+
+  /// No description provided for @certificateCardDispatched.
+  ///
+  /// In en, this message translates to:
+  /// **'Dispatched {date}'**
+  String certificateCardDispatched(String date);
+
+  /// No description provided for @certificateRequestCard.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Card Dispatch'**
+  String get certificateRequestCard;
+
+  /// No description provided for @paymentAccountsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Sallaamti Bank Accounts'**
+  String get paymentAccountsTitle;
+
+  /// No description provided for @paymentAccountsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share these with a client paying by JazzCash, EasyPaisa, or bank transfer.'**
+  String get paymentAccountsSubtitle;
+
+  /// No description provided for @paymentAccountsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get paymentAccountsCopied;
+
+  /// No description provided for @paymentAccountsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No payment accounts are configured yet.'**
+  String get paymentAccountsEmpty;
+
   /// No description provided for @errorGeneric.
   ///
   /// In en, this message translates to:

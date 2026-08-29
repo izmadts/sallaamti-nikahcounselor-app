@@ -37,6 +37,7 @@ class MoreScreen extends ConsumerWidget {
           _MoreTile(icon: Icons.qr_code, label: l10n.referralTitle, onTap: () => context.push('/referral')),
           _MoreTile(icon: Icons.verified_outlined, label: l10n.applicationTitle, onTap: () => context.push('/application')),
           _MoreTile(icon: Icons.menu_book_outlined, label: l10n.guideTitle, onTap: () => context.push('/guide')),
+          _MoreTile(icon: Icons.account_balance_outlined, label: l10n.paymentAccountsTitle, onTap: () => context.push('/payment-accounts')),
           const Divider(height: 32),
           _MoreTile(
             icon: Icons.logout,

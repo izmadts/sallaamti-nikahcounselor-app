@@ -543,6 +543,41 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applicationNotAccepted => 'Not yet accepted';
 
   @override
+  String get certificateTitle => 'Nikah Counselor ID Card';
+
+  @override
+  String get certificateDownload => 'Download Certificate PDF';
+
+  @override
+  String get certificateCardSectionTitle => 'Physical Card';
+
+  @override
+  String certificateCardRequested(String date) {
+    return 'Requested $date — admin will print and mail it';
+  }
+
+  @override
+  String certificateCardDispatched(String date) {
+    return 'Dispatched $date';
+  }
+
+  @override
+  String get certificateRequestCard => 'Request Card Dispatch';
+
+  @override
+  String get paymentAccountsTitle => 'Sallaamti Bank Accounts';
+
+  @override
+  String get paymentAccountsSubtitle =>
+      'Share these with a client paying by JazzCash, EasyPaisa, or bank transfer.';
+
+  @override
+  String get paymentAccountsCopied => 'Copied to clipboard';
+
+  @override
+  String get paymentAccountsEmpty => 'No payment accounts are configured yet.';
+
+  @override
   String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override

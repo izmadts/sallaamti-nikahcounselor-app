@@ -195,6 +195,20 @@
   "applicationAgreementAccepted": "Agreement & NDA Accepted",
   "applicationNotAccepted": "Not yet accepted",
 
+  "certificateTitle": "Nikah Counselor ID Card",
+  "certificateDownload": "Download Certificate PDF",
+  "certificateCardSectionTitle": "Physical Card",
+  "certificateCardRequested": "Requested {date} — admin will print and mail it",
+  "@certificateCardRequested": {"placeholders": {"date": {"type": "String"}}},
+  "certificateCardDispatched": "Dispatched {date}",
+  "@certificateCardDispatched": {"placeholders": {"date": {"type": "String"}}},
+  "certificateRequestCard": "Request Card Dispatch",
+
+  "paymentAccountsTitle": "Sallaamti Bank Accounts",
+  "paymentAccountsSubtitle": "Share these with a client paying by JazzCash, EasyPaisa, or bank transfer.",
+  "paymentAccountsCopied": "Copied to clipboard",
+  "paymentAccountsEmpty": "No payment accounts are configured yet.",
+
   "errorGeneric": "Something went wrong. Please try again.",
   "errorNetwork": "Couldn't connect. Check your internet connection.",
   "retry": "Retry",
