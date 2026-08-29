@@ -506,6 +506,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get performanceCurrentLevelTag => 'Your level';
 
   @override
+  String get performanceNotCertifiedYet =>
+      'Your Nikah Counselor certification isn\'t on file yet — contact your admin if this looks wrong.';
+
+  @override
   String get referralTitle => 'My Referral';
 
   @override

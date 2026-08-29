@@ -1064,6 +1064,12 @@ abstract class AppLocalizations {
   /// **'Your level'**
   String get performanceCurrentLevelTag;
 
+  /// No description provided for @performanceNotCertifiedYet.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Nikah Counselor certification isn\'t on file yet — contact your admin if this looks wrong.'**
+  String get performanceNotCertifiedYet;
+
   /// No description provided for @referralTitle.
   ///
   /// In en, this message translates to:

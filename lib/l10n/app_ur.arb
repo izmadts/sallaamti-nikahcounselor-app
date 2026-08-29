@@ -180,6 +180,7 @@
   "performanceCommissionByLevel": "سطح کے مطابق کمیشن",
   "performanceCommissionByLevelSubtitle": "تصدیق شدہ پروفائل کی کمیشن شرح — ایڈمن مقرر کرتا ہے، سطح بڑھنے پر خودکار اپ ڈیٹ ہوتی ہے۔",
   "performanceCurrentLevelTag": "آپ کی سطح",
+  "performanceNotCertifiedYet": "آپ کی نکاح مشیر سرٹیفیکیشن ابھی ریکارڈ میں نہیں ہے — اگر یہ غلط لگے تو ایڈمن سے رابطہ کریں۔",
 
   "referralTitle": "میرا ریفرل",
   "referralCode": "کاؤنسلر کوڈ",

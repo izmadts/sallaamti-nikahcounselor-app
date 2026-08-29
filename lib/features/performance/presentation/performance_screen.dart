@@ -112,13 +112,27 @@ class PerformanceScreen extends ConsumerWidget {
                 if (data['level_progress'] != null) ...[
                   const SizedBox(height: 16),
                   _LevelProgressCard(progress: Map<String, dynamic>.from(data['level_progress'] as Map), accent: accent, l10n: l10n),
-                ] else ...[
+                ] else if (data['is_certified'] == true) ...[
+                  // level_progress is null AND certified means every next-
+                  // level threshold is already cleared — genuinely maxed out.
                   const SizedBox(height: 16),
                   Card(
                     color: MatchmakerTheme.goldLight.withValues(alpha: 0.25),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
                       child: Text(l10n.performanceMaxLevel, textAlign: TextAlign.center, style: const TextStyle(fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                ] else ...[
+                  // level_progress is null because there's no certified
+                  // application on file at all — a different situation
+                  // entirely from having reached the top level.
+                  const SizedBox(height: 16),
+                  Card(
+                    color: Colors.grey.shade100,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Text(l10n.performanceNotCertifiedYet, textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade700)),
                     ),
                   ),
                 ],

@@ -505,6 +505,10 @@ class AppLocalizationsUr extends AppLocalizations {
   String get performanceCurrentLevelTag => 'آپ کی سطح';
 
   @override
+  String get performanceNotCertifiedYet =>
+      'آپ کی نکاح مشیر سرٹیفیکیشن ابھی ریکارڈ میں نہیں ہے — اگر یہ غلط لگے تو ایڈمن سے رابطہ کریں۔';
+
+  @override
   String get referralTitle => 'میرا ریفرل';
 
   @override

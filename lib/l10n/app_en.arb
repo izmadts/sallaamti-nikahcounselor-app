@@ -180,6 +180,7 @@
   "performanceCommissionByLevel": "Commission by Level",
   "performanceCommissionByLevelSubtitle": "Verified-profile commission rate — set by admin, updates automatically as you level up.",
   "performanceCurrentLevelTag": "Your level",
+  "performanceNotCertifiedYet": "Your Nikah Counselor certification isn't on file yet — contact your admin if this looks wrong.",
 
   "referralTitle": "My Referral",
   "referralCode": "Counselor Code",
