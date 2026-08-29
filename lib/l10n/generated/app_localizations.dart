@@ -1022,6 +1022,48 @@ abstract class AppLocalizations {
   /// **'Total Commission Earned'**
   String get performanceCommissionEarned;
 
+  /// No description provided for @performanceNextLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Level: {level}'**
+  String performanceNextLevel(String level);
+
+  /// No description provided for @performanceMaxLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'ve reached the top level 🎉'**
+  String get performanceMaxLevel;
+
+  /// No description provided for @performanceVerifiedProfiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified profiles'**
+  String get performanceVerifiedProfiles;
+
+  /// No description provided for @performanceDaysAsCounselor.
+  ///
+  /// In en, this message translates to:
+  /// **'Days as counselor'**
+  String get performanceDaysAsCounselor;
+
+  /// No description provided for @performanceCommissionByLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission by Level'**
+  String get performanceCommissionByLevel;
+
+  /// No description provided for @performanceCommissionByLevelSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Verified-profile commission rate — set by admin, updates automatically as you level up.'**
+  String get performanceCommissionByLevelSubtitle;
+
+  /// No description provided for @performanceCurrentLevelTag.
+  ///
+  /// In en, this message translates to:
+  /// **'Your level'**
+  String get performanceCurrentLevelTag;
+
   /// No description provided for @referralTitle.
   ///
   /// In en, this message translates to:
@@ -1123,6 +1165,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Loading…'**
   String get loading;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @notificationsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re all caught up — nothing needs your attention right now.'**
+  String get notificationsEmpty;
+
+  /// No description provided for @notificationsFollowUpsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Follow-ups Due'**
+  String get notificationsFollowUpsSection;
+
+  /// No description provided for @notificationsActivitySection.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get notificationsActivitySection;
+
+  /// No description provided for @guideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nikah Counselor Guide'**
+  String get guideTitle;
 }
 
 class _AppLocalizationsDelegate

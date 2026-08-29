@@ -26,3 +26,10 @@ class DashboardRepository {
     return DashboardData.fromJson(data);
   }
 }
+
+final dashboardRepositoryProvider = Provider((ref) => DashboardRepository(ref.watch(apiClientProvider)));
+
+// Declared here (not in the Dashboard screen file) so BrandTopBar — shown
+// on every shell screen, not just Dashboard — can watch it too, e.g. for
+// the notification bell's follow-ups-due badge, without an import cycle.
+final dashboardProvider = FutureProvider.autoDispose((ref) => ref.watch(dashboardRepositoryProvider).fetch());

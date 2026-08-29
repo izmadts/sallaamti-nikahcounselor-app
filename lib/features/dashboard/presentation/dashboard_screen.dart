@@ -5,12 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/brand_top_bar.dart';
 import '../../auth/state/auth_controller.dart';
 import '../data/dashboard_repository.dart';
-
-final dashboardRepositoryProvider = Provider((ref) => DashboardRepository(ref.watch(apiClientProvider)));
-
-final dashboardProvider = FutureProvider.autoDispose((ref) => ref.watch(dashboardRepositoryProvider).fetch());
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -22,7 +19,7 @@ class DashboardScreen extends ConsumerWidget {
     final user = ref.watch(authControllerProvider).user;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.dashboardTitle)),
+      appBar: const BrandTopBar(),
       body: RefreshIndicator(
         onRefresh: () => ref.refresh(dashboardProvider.future),
         child: AsyncValueView(

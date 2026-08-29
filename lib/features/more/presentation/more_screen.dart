@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/state/locale_controller.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
+import '../../../shared/widgets/brand_top_bar.dart';
 import '../../auth/state/auth_controller.dart';
 
 class MoreScreen extends ConsumerWidget {
@@ -17,7 +18,7 @@ class MoreScreen extends ConsumerWidget {
     final currentLocale = ref.watch(localeControllerProvider)?.languageCode ?? 'en';
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.navMore)),
+      appBar: const BrandTopBar(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -35,6 +36,7 @@ class MoreScreen extends ConsumerWidget {
           _MoreTile(icon: Icons.trending_up, label: l10n.performanceTitle, onTap: () => context.push('/performance')),
           _MoreTile(icon: Icons.qr_code, label: l10n.referralTitle, onTap: () => context.push('/referral')),
           _MoreTile(icon: Icons.verified_outlined, label: l10n.applicationTitle, onTap: () => context.push('/application')),
+          _MoreTile(icon: Icons.menu_book_outlined, label: l10n.guideTitle, onTap: () => context.push('/guide')),
           const Divider(height: 32),
           _MoreTile(
             icon: Icons.logout,

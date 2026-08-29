@@ -481,6 +481,30 @@ class AppLocalizationsUr extends AppLocalizations {
   String get performanceCommissionEarned => 'کل کمائی گئی کمیشن';
 
   @override
+  String performanceNextLevel(String level) {
+    return 'اگلی سطح: $level';
+  }
+
+  @override
+  String get performanceMaxLevel => 'آپ سب سے اونچی سطح پر پہنچ چکے ہیں 🎉';
+
+  @override
+  String get performanceVerifiedProfiles => 'تصدیق شدہ پروفائلز';
+
+  @override
+  String get performanceDaysAsCounselor => 'کاؤنسلر کے طور پر دن';
+
+  @override
+  String get performanceCommissionByLevel => 'سطح کے مطابق کمیشن';
+
+  @override
+  String get performanceCommissionByLevelSubtitle =>
+      'تصدیق شدہ پروفائل کی کمیشن شرح — ایڈمن مقرر کرتا ہے، سطح بڑھنے پر خودکار اپ ڈیٹ ہوتی ہے۔';
+
+  @override
+  String get performanceCurrentLevelTag => 'آپ کی سطح';
+
+  @override
   String get referralTitle => 'میرا ریفرل';
 
   @override
@@ -531,4 +555,20 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get loading => 'لوڈ ہو رہا ہے…';
+
+  @override
+  String get notificationsTitle => 'اطلاعات';
+
+  @override
+  String get notificationsEmpty =>
+      'آپ کا سب کچھ مکمل ہے — ابھی کچھ بھی توجہ طلب نہیں۔';
+
+  @override
+  String get notificationsFollowUpsSection => 'فالو اپ باقی';
+
+  @override
+  String get notificationsActivitySection => 'حالیہ سرگرمی';
+
+  @override
+  String get guideTitle => 'نکاح مشیر گائیڈ';
 }

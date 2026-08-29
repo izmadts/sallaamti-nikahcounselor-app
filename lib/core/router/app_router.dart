@@ -16,8 +16,10 @@ import '../../features/clients/presentation/client_detail_screen.dart';
 import '../../features/clients/presentation/client_list_screen.dart';
 import '../../features/commission/presentation/commission_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
+import '../../features/guide/presentation/guide_screen.dart';
 import '../../features/interests/presentation/interests_screen.dart';
 import '../../features/more/presentation/more_screen.dart';
+import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/performance/presentation/performance_screen.dart';
 import '../../features/referral/presentation/referral_screen.dart';
 import '../../shared/widgets/app_shell.dart';
@@ -92,6 +94,9 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(path: '/more', builder: (context, state) => const MoreScreen()),
         ],
       ),
+
+      GoRoute(path: '/notifications', builder: (context, state) => const NotificationsScreen()),
+      GoRoute(path: '/guide', builder: (context, state) => const GuideScreen()),
 
       GoRoute(path: '/clients/new', builder: (context, state) => const ClientCreateScreen()),
       GoRoute(

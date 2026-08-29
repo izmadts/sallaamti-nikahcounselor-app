@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_exception.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/brand_top_bar.dart';
 import '../../auth/state/auth_controller.dart';
 import '../data/interest_repository.dart';
 
@@ -33,7 +34,7 @@ class InterestsScreen extends ConsumerWidget {
     final async = ref.watch(interestsProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.interestsTitle)),
+      appBar: const BrandTopBar(),
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,

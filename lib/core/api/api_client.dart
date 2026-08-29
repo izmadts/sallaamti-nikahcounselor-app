@@ -46,7 +46,8 @@ class ApiClient {
   Future<Map<String, dynamic>> patch(String path, {Map<String, dynamic>? data}) =>
       _request(() => _dio.patch(path, data: data));
 
-  Future<Map<String, dynamic>> delete(String path) => _request(() => _dio.delete(path));
+  Future<Map<String, dynamic>> delete(String path, {Map<String, dynamic>? query}) =>
+      _request(() => _dio.delete(path, queryParameters: query));
 
   // Laravel reads booleans from multipart bodies via $request->boolean(),
   // which only recognizes string forms ('1'/'true'/'on'/'yes') — a Dart

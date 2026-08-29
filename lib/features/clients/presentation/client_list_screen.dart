@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/brand_top_bar.dart';
 import '../../../shared/widgets/status_chip.dart';
 import '../../auth/state/auth_controller.dart';
 import '../data/client_repository.dart';
@@ -42,7 +43,7 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
     final filter = ref.watch(clientListFilterProvider);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.clientsTitle)),
+      appBar: const BrandTopBar(),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => context.push('/clients/new'),
         icon: const Icon(Icons.add),

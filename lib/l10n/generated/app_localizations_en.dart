@@ -482,6 +482,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String get performanceCommissionEarned => 'Total Commission Earned';
 
   @override
+  String performanceNextLevel(String level) {
+    return 'Next Level: $level';
+  }
+
+  @override
+  String get performanceMaxLevel => 'You\'ve reached the top level 🎉';
+
+  @override
+  String get performanceVerifiedProfiles => 'Verified profiles';
+
+  @override
+  String get performanceDaysAsCounselor => 'Days as counselor';
+
+  @override
+  String get performanceCommissionByLevel => 'Commission by Level';
+
+  @override
+  String get performanceCommissionByLevelSubtitle =>
+      'Verified-profile commission rate — set by admin, updates automatically as you level up.';
+
+  @override
+  String get performanceCurrentLevelTag => 'Your level';
+
+  @override
   String get referralTitle => 'My Referral';
 
   @override
@@ -532,4 +556,20 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loading => 'Loading…';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get notificationsEmpty =>
+      'You\'re all caught up — nothing needs your attention right now.';
+
+  @override
+  String get notificationsFollowUpsSection => 'Follow-ups Due';
+
+  @override
+  String get notificationsActivitySection => 'Recent Activity';
+
+  @override
+  String get guideTitle => 'Nikah Counselor Guide';
 }

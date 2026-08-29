@@ -6,6 +6,7 @@ import '../../../core/api/api_exception.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/brand_top_bar.dart';
 import '../../auth/state/auth_controller.dart';
 import '../../clients/presentation/client_list_screen.dart';
 import '../../clients/state/client_detail_provider.dart';
@@ -57,7 +58,11 @@ class BrowseScreen extends ConsumerWidget {
     final isPickMode = forLeadId != null;
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.browseTitle)),
+      // Pick mode is a focused sub-task (choosing a candidate for a
+      // specific batch), reached by pushing over whatever screen the
+      // counselor was already on — a back button and specific title fit
+      // better there than the shared brand bar the 4 other root tabs use.
+      appBar: isPickMode ? AppBar(title: Text(l10n.browseTitle)) : const BrandTopBar(),
       body: Column(
         children: [
           Padding(

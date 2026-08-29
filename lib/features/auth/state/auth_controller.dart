@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api/api_client.dart';
 import '../../../core/api/api_exception.dart';
+import '../../../core/push/push_notification_service.dart';
 import '../../../core/storage/secure_store.dart';
 import '../data/auth_repository.dart';
 import '../domain/app_user.dart';
@@ -26,16 +28,25 @@ final authRepositoryProvider = Provider<AuthRepository>(
 );
 
 final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
-  (ref) => AuthController(ref.watch(authRepositoryProvider)),
+  (ref) => AuthController(ref.watch(authRepositoryProvider), ref.watch(pushNotificationServiceProvider)),
 );
 
 // Every method either lands on AuthStatus.authenticated with a fresh user,
 // or throws an ApiException the calling screen catches to show inline.
 class AuthController extends StateNotifier<AuthState> {
   final AuthRepository _repository;
+  final PushNotificationService _push;
 
-  AuthController(this._repository) : super(const AuthState.checking()) {
+  AuthController(this._repository, this._push) : super(const AuthState.checking()) {
     _restoreSession();
+  }
+
+  // Fire-and-forget — a device-token registration failure (permission
+  // denied, Firebase not reachable, etc.) must never block sign-in.
+  void _registerPushSafely() {
+    _push.registerThisDevice().catchError((Object e, StackTrace st) {
+      if (kDebugMode) debugPrint('Push registration failed: $e');
+    });
   }
 
   Future<void> _restoreSession() async {
@@ -53,6 +64,7 @@ class AuthController extends StateNotifier<AuthState> {
         return;
       }
       state = AuthState.authenticated(user);
+      _registerPushSafely();
     } on ApiException {
       await SecureStore.clearToken();
       state = const AuthState.unauthenticated();
@@ -80,9 +92,19 @@ class AuthController extends StateNotifier<AuthState> {
 
     await SecureStore.saveToken(result.token);
     state = AuthState.authenticated(result.user);
+    _registerPushSafely();
   }
 
   Future<void> logout() async {
+    // Best-effort, and must happen before the token is cleared below — the
+    // unregister call needs to still be authenticated to reach this device's
+    // own device-token row.
+    try {
+      await _push.unregisterThisDevice();
+    } catch (_) {
+      // Not fatal — a stale token server-side just means a future send to
+      // it fails silently on Firebase's end.
+    }
     try {
       await _repository.logout();
     } on ApiException {

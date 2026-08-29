@@ -1,8 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Runtime-requested on Android 13+ via firebase_messaging's own
+         requestPermission() call — declaring it here is what makes that
+         request possible at all. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
         android:label="Nikah Counselor"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <!-- Small monochrome status-bar icon for FCM notifications — falls
+             back to the launcher icon (which isn't monochrome) if omitted,
+             rendering as a plain grey square on some OEM skins. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/notification_color" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
