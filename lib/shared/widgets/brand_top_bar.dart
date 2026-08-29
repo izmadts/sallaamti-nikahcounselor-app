@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/theme/matchmaker_theme.dart';
 import '../../features/auth/state/auth_controller.dart';
-import '../../features/dashboard/data/dashboard_repository.dart';
+import '../../features/notifications/data/notification_repository.dart';
 
 // The shared identity bar for the app's 5 root tabs (Dashboard/Clients/
 // Browse/Interests/More) — logo + wordmark on the left, a notification
@@ -22,8 +22,8 @@ class BrandTopBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authControllerProvider).user;
-    final dashboardAsync = ref.watch(dashboardProvider);
-    final badgeCount = dashboardAsync.valueOrNull?.followUps.length ?? 0;
+    final unreadAsync = ref.watch(unreadNotificationCountProvider);
+    final badgeCount = unreadAsync.valueOrNull ?? 0;
     final tierEmoji = MatchmakerTheme.tierBadges[user?.tier] ?? '🥉';
 
     return AppBar(
@@ -55,7 +55,10 @@ class BrandTopBar extends ConsumerWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(Icons.notifications_outlined),
                 tooltip: 'Notifications',
-                onPressed: () => context.push('/notifications'),
+                onPressed: () async {
+                  await context.push('/notifications');
+                  ref.invalidate(unreadNotificationCountProvider);
+                },
               ),
               if (badgeCount > 0)
                 Positioned(
