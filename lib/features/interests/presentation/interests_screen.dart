@@ -38,7 +38,7 @@ class InterestsScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(interestsProvider),
         builder: (data) {
           final interests = List<Map<String, dynamic>>.from((data['interests'] as List).map((e) => Map<String, dynamic>.from(e as Map)));

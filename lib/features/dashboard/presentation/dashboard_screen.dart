@@ -25,7 +25,7 @@ class DashboardScreen extends ConsumerWidget {
         child: AsyncValueView(
           loading: async.isLoading,
           error: async.error,
-          data: async.value,
+          data: async.valueOrNull,
           onRetry: () => ref.invalidate(dashboardProvider),
           builder: (data) => ListView(
             padding: const EdgeInsets.all(16),

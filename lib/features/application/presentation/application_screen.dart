@@ -26,7 +26,7 @@ class ApplicationScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(applicationProvider),
         builder: (data) {
           final hasApplication = data['has_application'] as bool? ?? false;

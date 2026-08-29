@@ -94,7 +94,7 @@ class BrowseScreen extends ConsumerWidget {
             child: AsyncValueView(
               loading: async.isLoading,
               error: async.error,
-              data: async.value,
+              data: async.valueOrNull,
               onRetry: () => ref.invalidate(browseListProvider),
               builder: (data) {
                 final profiles = List<Map<String, dynamic>>.from((data['profiles'] as List).map((e) => Map<String, dynamic>.from(e as Map)));

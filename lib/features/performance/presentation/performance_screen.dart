@@ -24,7 +24,7 @@ class PerformanceScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(performanceProvider),
         builder: (data) {
           final stats = Map<String, dynamic>.from(data['stats'] as Map);

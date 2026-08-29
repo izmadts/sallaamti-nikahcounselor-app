@@ -34,7 +34,7 @@ class CandidateDetailScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(candidateDetailProvider(profileId)),
         builder: (data) {
           final p = Map<String, dynamic>.from(data['profile'] as Map);

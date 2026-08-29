@@ -33,7 +33,7 @@ class ReferralScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(referralProvider),
         builder: (data) {
           final code = data['counselor_code'] as String?;

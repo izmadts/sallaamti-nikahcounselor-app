@@ -24,7 +24,7 @@ class CommissionScreen extends ConsumerWidget {
       body: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(commissionProvider),
         builder: (data) {
           final entries = List<Map<String, dynamic>>.from((data['entries'] as List).map((e) => Map<String, dynamic>.from(e as Map)));

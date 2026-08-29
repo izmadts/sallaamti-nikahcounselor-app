@@ -67,7 +67,7 @@ class NotificationsScreen extends ConsumerWidget {
         child: AsyncValueView(
           loading: async.isLoading,
           error: async.error,
-          data: async.value,
+          data: async.valueOrNull,
           onRetry: () => ref.invalidate(notificationsListProvider),
           builder: (data) {
             if (data.notifications.isEmpty) {

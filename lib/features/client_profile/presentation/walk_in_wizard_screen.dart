@@ -138,7 +138,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
         child: AsyncValueView(
         loading: async.isLoading,
         error: async.error,
-        data: async.value,
+        data: async.valueOrNull,
         onRetry: () => ref.invalidate(clientProfileProvider(widget.leadId)),
         builder: (data) {
           _initFromData(data);
