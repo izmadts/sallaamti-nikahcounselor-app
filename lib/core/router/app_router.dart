@@ -96,6 +96,23 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
+      // The candidate-picker use of BrowseScreen (forLeadId/forBatchId set)
+      // is pushed from ClientDetailScreen, which lives outside the shell
+      // above — pushing the shell's own '/browse' route from outside it
+      // creates two Pages with the same GoRouter key and crashes with
+      // "'!keyReservation.contains(key)': is not true" the moment it's
+      // reached (e.g. Shortlist tab's "Add to Shortlist" button). A
+      // separate top-level route sidesteps that entirely, and BrowseScreen
+      // already renders its own AppBar+back-button in this "pick mode"
+      // rather than the shared bottom-nav chrome, so nothing else changes.
+      GoRoute(
+        path: '/browse-pick',
+        builder: (context, state) => BrowseScreen(
+          forLeadId: state.uri.queryParameters['forLeadId'] != null ? int.parse(state.uri.queryParameters['forLeadId']!) : null,
+          forBatchId: state.uri.queryParameters['forBatchId'] != null ? int.parse(state.uri.queryParameters['forBatchId']!) : null,
+        ),
+      ),
+
       GoRoute(path: '/notifications', builder: (context, state) => const NotificationsScreen()),
       GoRoute(path: '/guide', builder: (context, state) => const GuideScreen()),
       GoRoute(path: '/payment-accounts', builder: (context, state) => const PaymentAccountsScreen()),

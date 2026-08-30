@@ -107,7 +107,7 @@ class BatchesTab extends ConsumerWidget {
                             children: [
                               Expanded(
                                 child: OutlinedButton(
-                                  onPressed: () => context.push('/browse?forLeadId=$leadId&forBatchId=${batch['id']}'),
+                                  onPressed: () => context.push('/browse-pick?forLeadId=$leadId&forBatchId=${batch['id']}'),
                                   child: Text(l10n.batchAddCandidate),
                                 ),
                               ),

@@ -29,7 +29,7 @@ class ShortlistTab extends ConsumerWidget {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => context.push('/browse?forLeadId=$leadId'),
+        onPressed: () => context.push('/browse-pick?forLeadId=$leadId'),
         icon: const Icon(Icons.add),
         label: Text(l10n.shortlistAdd),
         backgroundColor: MatchmakerTheme.plum,
