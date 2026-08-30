@@ -209,6 +209,20 @@
   "paymentAccountsCopied": "Copied to clipboard",
   "paymentAccountsEmpty": "No payment accounts are configured yet.",
 
+  "packagesTitle": "Nikah Packages",
+  "packagesSubtitle": "The current packages and what each one includes — same details a client sees when choosing one.",
+  "packagesEmpty": "No packages are configured yet.",
+  "packagesOneTime": "One-time",
+  "packagesDays": "{count} days",
+  "@packagesDays": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "packagesUnlimitedProposals": "Unlimited proposals",
+  "packagesProposalLimit": "{count} proposals",
+  "@packagesProposalLimit": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
   "errorGeneric": "Something went wrong. Please try again.",
   "errorNetwork": "Couldn't connect. Check your internet connection.",
   "retry": "Retry",

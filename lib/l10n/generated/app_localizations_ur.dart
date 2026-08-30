@@ -578,6 +578,32 @@ class AppLocalizationsUr extends AppLocalizations {
       'ابھی تک کوئی ادائیگی اکاؤنٹ مقرر نہیں کیا گیا۔';
 
   @override
+  String get packagesTitle => 'نکاح پیکجز';
+
+  @override
+  String get packagesSubtitle =>
+      'موجودہ پیکجز اور ہر ایک میں کیا شامل ہے — وہی تفصیلات جو کلائنٹ کو پیکج منتخب کرتے وقت نظر آتی ہیں۔';
+
+  @override
+  String get packagesEmpty => 'ابھی تک کوئی پیکج مقرر نہیں کیا گیا۔';
+
+  @override
+  String get packagesOneTime => 'یک وقتی';
+
+  @override
+  String packagesDays(int count) {
+    return '$count دن';
+  }
+
+  @override
+  String get packagesUnlimitedProposals => 'لامحدود تجاویز';
+
+  @override
+  String packagesProposalLimit(int count) {
+    return '$count تجاویز';
+  }
+
+  @override
   String get errorGeneric => 'کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔';
 
   @override

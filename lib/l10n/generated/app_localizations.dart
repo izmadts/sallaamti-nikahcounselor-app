@@ -1196,6 +1196,48 @@ abstract class AppLocalizations {
   /// **'No payment accounts are configured yet.'**
   String get paymentAccountsEmpty;
 
+  /// No description provided for @packagesTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Nikah Packages'**
+  String get packagesTitle;
+
+  /// No description provided for @packagesSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The current packages and what each one includes — same details a client sees when choosing one.'**
+  String get packagesSubtitle;
+
+  /// No description provided for @packagesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No packages are configured yet.'**
+  String get packagesEmpty;
+
+  /// No description provided for @packagesOneTime.
+  ///
+  /// In en, this message translates to:
+  /// **'One-time'**
+  String get packagesOneTime;
+
+  /// No description provided for @packagesDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} days'**
+  String packagesDays(int count);
+
+  /// No description provided for @packagesUnlimitedProposals.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited proposals'**
+  String get packagesUnlimitedProposals;
+
+  /// No description provided for @packagesProposalLimit.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} proposals'**
+  String packagesProposalLimit(int count);
+
   /// No description provided for @errorGeneric.
   ///
   /// In en, this message translates to:

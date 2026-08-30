@@ -209,6 +209,20 @@
   "paymentAccountsCopied": "کلپ بورڈ پر کاپی ہو گیا",
   "paymentAccountsEmpty": "ابھی تک کوئی ادائیگی اکاؤنٹ مقرر نہیں کیا گیا۔",
 
+  "packagesTitle": "نکاح پیکجز",
+  "packagesSubtitle": "موجودہ پیکجز اور ہر ایک میں کیا شامل ہے — وہی تفصیلات جو کلائنٹ کو پیکج منتخب کرتے وقت نظر آتی ہیں۔",
+  "packagesEmpty": "ابھی تک کوئی پیکج مقرر نہیں کیا گیا۔",
+  "packagesOneTime": "یک وقتی",
+  "packagesDays": "{count} دن",
+  "@packagesDays": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "packagesUnlimitedProposals": "لامحدود تجاویز",
+  "packagesProposalLimit": "{count} تجاویز",
+  "@packagesProposalLimit": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+
   "errorGeneric": "کچھ غلط ہو گیا۔ دوبارہ کوشش کریں۔",
   "errorNetwork": "انٹرنیٹ سے رابطہ نہیں ہو سکا۔ اپنا انٹرنیٹ چیک کریں۔",
   "retry": "دوبارہ کوشش کریں",

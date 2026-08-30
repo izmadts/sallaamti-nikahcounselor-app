@@ -20,6 +20,7 @@ import '../../features/guide/presentation/guide_screen.dart';
 import '../../features/interests/presentation/interests_screen.dart';
 import '../../features/more/presentation/more_screen.dart';
 import '../../features/notifications/presentation/notifications_screen.dart';
+import '../../features/packages/presentation/packages_screen.dart';
 import '../../features/payment_accounts/presentation/payment_accounts_screen.dart';
 import '../../features/performance/presentation/performance_screen.dart';
 import '../../features/referral/presentation/referral_screen.dart';
@@ -116,6 +117,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/notifications', builder: (context, state) => const NotificationsScreen()),
       GoRoute(path: '/guide', builder: (context, state) => const GuideScreen()),
       GoRoute(path: '/payment-accounts', builder: (context, state) => const PaymentAccountsScreen()),
+      GoRoute(path: '/packages', builder: (context, state) => const PackagesScreen()),
 
       GoRoute(path: '/clients/new', builder: (context, state) => const ClientCreateScreen()),
       GoRoute(

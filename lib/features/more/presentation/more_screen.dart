@@ -32,6 +32,7 @@ class MoreScreen extends ConsumerWidget {
             label: currentLocale == 'en' ? l10n.urdu : l10n.english,
             onTap: () => ref.read(localeControllerProvider.notifier).choose(currentLocale == 'en' ? 'ur' : 'en'),
           ),
+          _MoreTile(icon: Icons.card_giftcard_outlined, label: l10n.packagesTitle, onTap: () => context.push('/packages')),
           _MoreTile(icon: Icons.payments_outlined, label: l10n.commissionTitle, onTap: () => context.push('/commission')),
           _MoreTile(icon: Icons.trending_up, label: l10n.performanceTitle, onTap: () => context.push('/performance')),
           _MoreTile(icon: Icons.qr_code, label: l10n.referralTitle, onTap: () => context.push('/referral')),

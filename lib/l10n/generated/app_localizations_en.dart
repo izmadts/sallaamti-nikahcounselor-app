@@ -578,6 +578,32 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentAccountsEmpty => 'No payment accounts are configured yet.';
 
   @override
+  String get packagesTitle => 'Nikah Packages';
+
+  @override
+  String get packagesSubtitle =>
+      'The current packages and what each one includes — same details a client sees when choosing one.';
+
+  @override
+  String get packagesEmpty => 'No packages are configured yet.';
+
+  @override
+  String get packagesOneTime => 'One-time';
+
+  @override
+  String packagesDays(int count) {
+    return '$count days';
+  }
+
+  @override
+  String get packagesUnlimitedProposals => 'Unlimited proposals';
+
+  @override
+  String packagesProposalLimit(int count) {
+    return '$count proposals';
+  }
+
+  @override
   String get errorGeneric => 'Something went wrong. Please try again.';
 
   @override
