@@ -29,6 +29,7 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
   late TextEditingController _notesController;
   String? _status;
   String? _source;
+  String? _gender;
   bool _saving = false;
   String? _error;
 
@@ -41,6 +42,7 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     _notesController = TextEditingController(text: widget.client['notes'] as String? ?? '');
     _status = widget.client['status'] as String?;
     _source = widget.client['source'] as String?;
+    _gender = widget.client['gender'] as String?;
   }
 
   @override
@@ -61,6 +63,7 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     try {
       await ref.read(clientRepositoryProvider).update(widget.leadId, {
         'name': _nameController.text.trim(),
+        'gender': _gender,
         'phone': _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
         'email': _emailController.text.trim().isEmpty ? null : _emailController.text.trim(),
         'status': _status,
@@ -137,6 +140,17 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
                 controller: _nameController,
                 decoration: InputDecoration(labelText: l10n.clientNameLabel),
                 validator: (v) => (v == null || v.trim().isEmpty) ? l10n.errorGeneric : null,
+              ),
+              const SizedBox(height: 12),
+              // Was collected at client creation but never shown/editable
+              // here — also what Browse's pick-mode now defaults its
+              // gender filter against (opposite gender), so a client with
+              // no gender recorded gets no automatic narrowing there either.
+              PickerField(
+                label: l10n.clientGenderLabel,
+                value: _gender,
+                options: const {'male': 'Male', 'female': 'Female'},
+                onChanged: (v) => setState(() => _gender = v),
               ),
               const SizedBox(height: 12),
               TextFormField(controller: _phoneController, decoration: InputDecoration(labelText: l10n.clientPhoneLabel)),

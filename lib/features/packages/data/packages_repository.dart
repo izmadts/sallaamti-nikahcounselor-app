@@ -33,21 +33,40 @@ class NikahPackageInfo {
   });
 
   factory NikahPackageInfo.fromJson(Map<String, dynamic> json) => NikahPackageInfo(
-        id: json['id'] as int,
-        name: json['name'] as String,
-        tagline: json['tagline'] as String?,
-        description: json['description'] as String?,
-        features: (json['features'] as List?) ?? [],
+        id: _asInt(json['id']) ?? 0,
+        name: json['name']?.toString() ?? '',
+        tagline: json['tagline']?.toString(),
+        description: json['description']?.toString(),
+        features: _asList(json['features']),
         // Laravel's decimal:2 cast serializes price as a string ("1000.00"),
-        // not a JSON number — 'as num' threw on every real response.
-        price: num.parse(json['price'].toString()),
-        currency: json['currency'] as String?,
-        durationDays: json['duration_days'] as int?,
-        proposalLimit: json['proposal_limit'] as int?,
-        consultantLevel: json['consultant_level'] as String?,
-        isOneTime: json['is_one_time'] as bool? ?? false,
-        color: json['color'] as String?,
+        // not a JSON number.
+        price: num.tryParse(json['price'].toString()) ?? 0,
+        currency: json['currency']?.toString(),
+        durationDays: _asInt(json['duration_days']),
+        proposalLimit: _asInt(json['proposal_limit']),
+        consultantLevel: json['consultant_level']?.toString(),
+        isOneTime: json['is_one_time'] == true || json['is_one_time'] == 1,
+        color: json['color']?.toString(),
       );
+
+  // A JSON array with non-sequential PHP keys (e.g. a feature list edited
+  // down over time without reindexing) serializes as a JSON *object*, not
+  // an array — 'as List' threw on any package whose features had that
+  // shape. Falls back to the map's values, or [] for anything else.
+  static List<dynamic> _asList(dynamic value) {
+    if (value is List) return value;
+    if (value is Map) return value.values.toList();
+    return [];
+  }
+
+  // Handles an int, a numeric string, or a decimal-cast string like the
+  // price field above.
+  static int? _asInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value.toString());
+  }
 }
 
 class PackagesRepository {
