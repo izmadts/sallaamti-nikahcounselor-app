@@ -9,6 +9,7 @@ class MatchmakerEnums {
   final Map<String, String> leadSources;
   final Map<String, String> lookingFor;
   final Map<String, String> requirementPriorities;
+  final Map<String, String> requirementTypes;
 
   MatchmakerEnums({
     required this.consentTypes,
@@ -17,6 +18,7 @@ class MatchmakerEnums {
     required this.leadSources,
     required this.lookingFor,
     required this.requirementPriorities,
+    required this.requirementTypes,
   });
 
   factory MatchmakerEnums.fromJson(Map<String, dynamic> json) => MatchmakerEnums(
@@ -26,6 +28,7 @@ class MatchmakerEnums {
         leadSources: _map(json['lead_sources']),
         lookingFor: _map(json['looking_for']),
         requirementPriorities: _map(json['requirement_priorities']),
+        requirementTypes: _map(json['requirement_types']),
       );
 
   static Map<String, String> _map(dynamic raw) =>

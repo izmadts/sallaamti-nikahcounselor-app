@@ -38,7 +38,9 @@ class NikahPackageInfo {
         tagline: json['tagline'] as String?,
         description: json['description'] as String?,
         features: (json['features'] as List?) ?? [],
-        price: json['price'] as num,
+        // Laravel's decimal:2 cast serializes price as a string ("1000.00"),
+        // not a JSON number — 'as num' threw on every real response.
+        price: num.parse(json['price'].toString()),
         currency: json['currency'] as String?,
         durationDays: json['duration_days'] as int?,
         proposalLimit: json['proposal_limit'] as int?,

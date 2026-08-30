@@ -88,6 +88,7 @@ class _RequirementsTabState extends ConsumerState<RequirementsTab> {
             const SizedBox(height: 12),
             for (int i = 0; i < _items.length; i++) _RequirementRow(
               item: _items[i],
+              types: enums.requirementTypes,
               priorities: enums.requirementPriorities,
               onChanged: (updated) => setState(() => _items[i] = updated),
               onRemove: () => setState(() => _items.removeAt(i)),
@@ -114,11 +115,12 @@ class _RequirementsTabState extends ConsumerState<RequirementsTab> {
 
 class _RequirementRow extends StatelessWidget {
   final Map<String, dynamic> item;
+  final Map<String, String> types;
   final Map<String, String> priorities;
   final ValueChanged<Map<String, dynamic>> onChanged;
   final VoidCallback onRemove;
 
-  const _RequirementRow({required this.item, required this.priorities, required this.onChanged, required this.onRemove});
+  const _RequirementRow({required this.item, required this.types, required this.priorities, required this.onChanged, required this.onRemove});
 
   @override
   Widget build(BuildContext context) {
@@ -131,12 +133,28 @@ class _RequirementRow extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: TextFormField(
-                    initialValue: item['requirement_type'] as String,
-                    decoration: InputDecoration(labelText: l10n.requirementTypeLabel, isDense: true),
-                    onChanged: (v) => onChanged({...item, 'requirement_type': v}),
+                  // A picker, not free text — so requirement_type stays one
+                  // of the fixed keys the backend's match-scoring algorithm
+                  // knows how to compare against a candidate's actual
+                  // profile fields (see MatchmakingRequirementItem::
+                  // matchesCandidate()). Free text here used to mean things
+                  // like "City" vs "city" vs "shehar" could never reliably
+                  // be matched against anything.
+                  child: PickerField(
+                    // A pre-existing item saved before this screen used a
+                    // picker may hold free text that isn't one of these
+                    // keys (e.g. "City" typed by hand) — falling back to
+                    // null here (nothing selected) avoids
+                    // DropdownButtonFormField crashing on an initialValue
+                    // it has no matching item for; the counselor just picks
+                    // a real one to replace it.
+                    label: l10n.requirementTypeLabel,
+                    value: types.containsKey(item['requirement_type']) ? item['requirement_type'] as String : null,
+                    options: types,
+                    onChanged: (v) => onChanged({...item, 'requirement_type': v ?? ''}),
                   ),
                 ),
                 IconButton(icon: const Icon(Icons.delete_outline, color: Colors.redAccent), onPressed: onRemove),

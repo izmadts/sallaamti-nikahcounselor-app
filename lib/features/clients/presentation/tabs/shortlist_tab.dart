@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/api/api_exception.dart';
 import '../../../../core/theme/matchmaker_theme.dart';
 import '../../../../l10n/generated/app_localizations.dart';
+import '../../../../shared/widgets/match_score_badge.dart';
 import '../../state/client_detail_provider.dart';
 import '../client_list_screen.dart';
 
@@ -43,10 +44,21 @@ class ShortlistTab extends ConsumerWidget {
               itemBuilder: (context, i) {
                 final item = shortlist[i];
                 final candidate = item['candidate'] as Map?;
+                final score = MatchScore.fromJson(item['match_score']);
                 return Card(
                   child: ListTile(
                     title: Text(candidate != null ? '${candidate['age']} yrs, ${candidate['city'] ?? '—'}' : '—'),
-                    subtitle: item['note'] != null ? Text(item['note'] as String) : null,
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (item['note'] != null) Text(item['note'] as String),
+                        if (score != null) ...[
+                          const SizedBox(height: 4),
+                          MatchScoreBadge(score: score, small: true),
+                        ],
+                      ],
+                    ),
                     trailing: IconButton(
                       icon: const Icon(Icons.close, color: Colors.redAccent),
                       onPressed: () => _remove(context, ref, item['id'] as int),

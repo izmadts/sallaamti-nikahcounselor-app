@@ -7,6 +7,7 @@ import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/brand_top_bar.dart';
+import '../../../shared/widgets/match_score_badge.dart';
 import '../../auth/state/auth_controller.dart';
 import '../../clients/presentation/client_list_screen.dart';
 import '../../clients/state/client_detail_provider.dart';
@@ -16,9 +17,13 @@ final browseRepositoryProvider = Provider((ref) => BrowseRepository(ref.watch(ap
 
 final browseFilterProvider = StateProvider.autoDispose<Map<String, String>>((ref) => {});
 
-final browseListProvider = FutureProvider.autoDispose((ref) {
+// Keyed by forLeadId so a plain browse (null) and a pick-mode browse for a
+// specific client never share a cached result — the server includes a
+// match_score per candidate only when a lead_id is sent.
+final browseListProvider = FutureProvider.autoDispose.family<Map<String, dynamic>, int?>((ref, forLeadId) {
   final filters = ref.watch(browseFilterProvider);
-  return ref.watch(browseRepositoryProvider).index(filters);
+  final query = {...filters, if (forLeadId != null) 'lead_id': forLeadId.toString()};
+  return ref.watch(browseRepositoryProvider).index(query);
 });
 
 // When forLeadId is set, each card shows an "add to shortlist" (or, if
@@ -53,7 +58,7 @@ class BrowseScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(browseListProvider);
+    final async = ref.watch(browseListProvider(forLeadId));
     final filters = ref.watch(browseFilterProvider);
     final isPickMode = forLeadId != null;
 
@@ -95,7 +100,7 @@ class BrowseScreen extends ConsumerWidget {
               loading: async.isLoading,
               error: async.error,
               data: async.valueOrNull,
-              onRetry: () => ref.invalidate(browseListProvider),
+              onRetry: () => ref.invalidate(browseListProvider(forLeadId)),
               builder: (data) {
                 final profiles = List<Map<String, dynamic>>.from((data['profiles'] as List).map((e) => Map<String, dynamic>.from(e as Map)));
                 if (profiles.isEmpty) {
@@ -107,10 +112,21 @@ class BrowseScreen extends ConsumerWidget {
                   separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, i) {
                     final p = profiles[i];
+                    final score = MatchScore.fromJson(p['match_score']);
                     return Card(
                       child: ListTile(
                         title: Text('${p['age']} yrs, ${p['city'] ?? '—'}'),
-                        subtitle: Text([p['sect'], p['profession']].where((e) => e != null).join(' · ')),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text([p['sect'], p['profession']].where((e) => e != null).join(' · ')),
+                            if (score != null) ...[
+                              const SizedBox(height: 4),
+                              MatchScoreBadge(score: score, small: true),
+                            ],
+                          ],
+                        ),
                         trailing: isPickMode
                             ? IconButton(
                                 icon: const Icon(Icons.add_circle, color: MatchmakerTheme.plum),
