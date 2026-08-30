@@ -45,4 +45,14 @@ class ClientRepository {
 
   Future<Map<String, dynamic>> regenerateProposalLink(int leadId, int batchId, int proposalId) =>
       _client.post('/matchmaker/clients/$leadId/proposal-batches/$batchId/proposals/$proposalId/regenerate-link');
+
+  // Deliberately not under /matchmaker/clients/* — this channel is
+  // reachable by either party (the client too, from the member app), see
+  // Api\V1\NikahHireCounselorController::authorizeLeadParty() on the
+  // backend, so it's routed once at the top level instead of duplicated
+  // under both apps' own prefixes.
+  Future<Map<String, dynamic>> messages(int leadId) => _client.get('/leads/$leadId/messages');
+
+  Future<Map<String, dynamic>> sendMessage(int leadId, String message) =>
+      _client.post('/leads/$leadId/messages', data: {'message': message});
 }
