@@ -29,6 +29,10 @@ class ApplicationScreen extends ConsumerWidget {
         data: async.valueOrNull,
         onRetry: () => ref.invalidate(applicationProvider),
         builder: (data) {
+          // A malformed/unexpected field shouldn't take down the whole
+          // screen with Flutter's raw red error view — this at least lets
+          // the counselor retry instead of getting stuck.
+          try {
           final hasApplication = data['has_application'] as bool? ?? false;
           if (!hasApplication) {
             return Center(child: Text('—', style: TextStyle(color: Colors.grey.shade600)));
@@ -88,6 +92,23 @@ class ApplicationScreen extends ConsumerWidget {
               ],
             ],
           );
+          } catch (_) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.error_outline, size: 40, color: Colors.redAccent),
+                    const SizedBox(height: 12),
+                    Text(l10n.errorGeneric, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    OutlinedButton(onPressed: () => ref.invalidate(applicationProvider), child: Text(l10n.retry)),
+                  ],
+                ),
+              ),
+            );
+          }
         },
       ),
     );
