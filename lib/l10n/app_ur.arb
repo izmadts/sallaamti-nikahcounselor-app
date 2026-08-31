@@ -112,6 +112,16 @@
   "progressLinkShare": "کلائنٹ کو بھیجیں",
   "progressLinkExplain": "کلائنٹ اپنے فون نمبر کے آخری 7 ہندسے درج کر کے یہ صفحہ کھولے گا۔",
 
+  "loginPasswordTitle": "کلائنٹ لاگ ان پاس ورڈ",
+  "loginPasswordExplain": "کلائنٹ کے خود سیلامتی ایپ میں لاگ ان کرنے کے لیے ایک عارضی پاس ورڈ سیٹ کریں۔ پہلی بار لاگ ان پر انہیں اپنا پاس ورڈ چننے کو کہا جائے گا۔",
+  "loginPasswordSet": "لاگ ان پاس ورڈ سیٹ کریں",
+  "loginPasswordFieldLabel": "عارضی پاس ورڈ",
+  "loginPasswordGenerateButton": "مضبوط پاس ورڈ بنائیں",
+  "loginPasswordCopyButton": "کاپی کریں",
+  "loginPasswordCopied": "کلپ بورڈ پر کاپی ہو گیا",
+  "loginPasswordConfirmButton": "پاس ورڈ سیٹ کریں",
+  "loginPasswordSuccess": "پاس ورڈ سیٹ ہو گیا — اب کلائنٹ کو بتا دیں۔",
+
   "batchesTitle": "تجاویز کے گروپ",
   "batchesNew": "نیا گروپ",
   "batchAddCandidate": "امیدوار شامل کریں",

@@ -112,6 +112,16 @@
   "progressLinkShare": "Share with Client",
   "progressLinkExplain": "The client unlocks this page with the last 7 digits of their phone number.",
 
+  "loginPasswordTitle": "Client Login Password",
+  "loginPasswordExplain": "Set a temporary password so this client can log into the Sallaamti app themselves. They'll be prompted to choose their own on first login.",
+  "loginPasswordSet": "Set Login Password",
+  "loginPasswordFieldLabel": "Temporary Password",
+  "loginPasswordGenerateButton": "Generate Strong Password",
+  "loginPasswordCopyButton": "Copy",
+  "loginPasswordCopied": "Copied to clipboard",
+  "loginPasswordConfirmButton": "Set Password",
+  "loginPasswordSuccess": "Password set — share it with the client now.",
+
   "batchesTitle": "Proposal Batches",
   "batchesNew": "New Batch",
   "batchAddCandidate": "Add Candidate",

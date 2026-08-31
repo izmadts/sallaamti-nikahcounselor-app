@@ -33,6 +33,9 @@ class ClientRepository {
 
   Future<Map<String, dynamic>> regenerateProgressLink(int leadId) => _client.post('/matchmaker/clients/$leadId/progress-link');
 
+  Future<Map<String, dynamic>> setLoginPassword(int leadId, String password) => _client
+      .post('/matchmaker/clients/$leadId/set-password', data: {'password': password, 'password_confirmation': password});
+
   Future<Map<String, dynamic>> createBatch(int leadId) => _client.post('/matchmaker/clients/$leadId/proposal-batches');
 
   Future<Map<String, dynamic>> addProposal(int leadId, int batchId, int candidateProfileId) =>

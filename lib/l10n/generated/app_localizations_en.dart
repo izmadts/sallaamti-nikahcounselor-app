@@ -316,6 +316,35 @@ class AppLocalizationsEn extends AppLocalizations {
       'The client unlocks this page with the last 7 digits of their phone number.';
 
   @override
+  String get loginPasswordTitle => 'Client Login Password';
+
+  @override
+  String get loginPasswordExplain =>
+      'Set a temporary password so this client can log into the Sallaamti app themselves. They\'ll be prompted to choose their own on first login.';
+
+  @override
+  String get loginPasswordSet => 'Set Login Password';
+
+  @override
+  String get loginPasswordFieldLabel => 'Temporary Password';
+
+  @override
+  String get loginPasswordGenerateButton => 'Generate Strong Password';
+
+  @override
+  String get loginPasswordCopyButton => 'Copy';
+
+  @override
+  String get loginPasswordCopied => 'Copied to clipboard';
+
+  @override
+  String get loginPasswordConfirmButton => 'Set Password';
+
+  @override
+  String get loginPasswordSuccess =>
+      'Password set — share it with the client now.';
+
+  @override
   String get batchesTitle => 'Proposal Batches';
 
   @override

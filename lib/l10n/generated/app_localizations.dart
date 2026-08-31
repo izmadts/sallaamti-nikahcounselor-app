@@ -692,6 +692,60 @@ abstract class AppLocalizations {
   /// **'The client unlocks this page with the last 7 digits of their phone number.'**
   String get progressLinkExplain;
 
+  /// No description provided for @loginPasswordTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Client Login Password'**
+  String get loginPasswordTitle;
+
+  /// No description provided for @loginPasswordExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Set a temporary password so this client can log into the Sallaamti app themselves. They\'ll be prompted to choose their own on first login.'**
+  String get loginPasswordExplain;
+
+  /// No description provided for @loginPasswordSet.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Login Password'**
+  String get loginPasswordSet;
+
+  /// No description provided for @loginPasswordFieldLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Temporary Password'**
+  String get loginPasswordFieldLabel;
+
+  /// No description provided for @loginPasswordGenerateButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate Strong Password'**
+  String get loginPasswordGenerateButton;
+
+  /// No description provided for @loginPasswordCopyButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy'**
+  String get loginPasswordCopyButton;
+
+  /// No description provided for @loginPasswordCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied to clipboard'**
+  String get loginPasswordCopied;
+
+  /// No description provided for @loginPasswordConfirmButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Set Password'**
+  String get loginPasswordConfirmButton;
+
+  /// No description provided for @loginPasswordSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Password set — share it with the client now.'**
+  String get loginPasswordSuccess;
+
   /// No description provided for @batchesTitle.
   ///
   /// In en, this message translates to:

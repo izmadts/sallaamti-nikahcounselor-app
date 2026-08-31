@@ -316,6 +316,35 @@ class AppLocalizationsUr extends AppLocalizations {
       'کلائنٹ اپنے فون نمبر کے آخری 7 ہندسے درج کر کے یہ صفحہ کھولے گا۔';
 
   @override
+  String get loginPasswordTitle => 'کلائنٹ لاگ ان پاس ورڈ';
+
+  @override
+  String get loginPasswordExplain =>
+      'کلائنٹ کے خود سیلامتی ایپ میں لاگ ان کرنے کے لیے ایک عارضی پاس ورڈ سیٹ کریں۔ پہلی بار لاگ ان پر انہیں اپنا پاس ورڈ چننے کو کہا جائے گا۔';
+
+  @override
+  String get loginPasswordSet => 'لاگ ان پاس ورڈ سیٹ کریں';
+
+  @override
+  String get loginPasswordFieldLabel => 'عارضی پاس ورڈ';
+
+  @override
+  String get loginPasswordGenerateButton => 'مضبوط پاس ورڈ بنائیں';
+
+  @override
+  String get loginPasswordCopyButton => 'کاپی کریں';
+
+  @override
+  String get loginPasswordCopied => 'کلپ بورڈ پر کاپی ہو گیا';
+
+  @override
+  String get loginPasswordConfirmButton => 'پاس ورڈ سیٹ کریں';
+
+  @override
+  String get loginPasswordSuccess =>
+      'پاس ورڈ سیٹ ہو گیا — اب کلائنٹ کو بتا دیں۔';
+
+  @override
   String get batchesTitle => 'تجاویز کے گروپ';
 
   @override
