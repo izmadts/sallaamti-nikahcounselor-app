@@ -387,9 +387,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walkInStepAbout => 'About';
 
   @override
-  String get walkInStepVerification => 'Verification';
-
-  @override
   String get walkInStepPayment => 'Payment';
 
   @override
@@ -416,9 +413,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get walkInCnicBackLabel => 'CNIC Back Photo';
-
-  @override
-  String get walkInPhotoLabel => 'Photo (optional)';
 
   @override
   String get walkInSaveStep => 'Save & Continue';

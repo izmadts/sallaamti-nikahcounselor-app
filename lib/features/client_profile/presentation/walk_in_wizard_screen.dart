@@ -10,6 +10,7 @@ import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
 import '../../../shared/widgets/picker_field.dart';
+import '../../../shared/widgets/set_login_password_flow.dart';
 import '../../auth/state/auth_controller.dart';
 import '../../clients/state/client_detail_provider.dart';
 import '../data/client_profile_repository.dart';
@@ -37,8 +38,6 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
 
   // Field state, populated once from the loaded profile / prefill.
   final _fields = <String, dynamic>{};
-  final _files = <String, File>{};
-  final _picker = ImagePicker();
 
   bool _initialized = false;
 
@@ -66,7 +65,6 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
         'expectations': profile['expectations'],
         'education': profile['education'],
         'profession': profile['profession'],
-        'cnic_number': profile['cnic_number'],
       });
     } else {
       final prefill = Map<String, dynamic>.from(data['prefill'] as Map);
@@ -76,14 +74,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
     }
   }
 
-  Future<void> _pickImage(String key) async {
-    final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 85);
-    if (picked != null) {
-      setState(() => _files[key] = File(picked.path));
-    }
-  }
-
-  Future<bool> _saveStep(Map<String, dynamic> stepFields, {Map<String, File>? stepFiles}) async {
+  Future<bool> _saveStep(Map<String, dynamic> stepFields) async {
     setState(() {
       _submitting = true;
       _error = null;
@@ -95,7 +86,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
     }
 
     try {
-      await ref.read(clientProfileRepositoryProvider).store(widget.leadId, payload, files: stepFiles ?? const {});
+      await ref.read(clientProfileRepositoryProvider).store(widget.leadId, payload);
       _hasProfile = true;
       ref.invalidate(clientDetailProvider(widget.leadId));
       return true;
@@ -108,7 +99,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
   }
 
   void _next() {
-    if (_page < 5) {
+    if (_page < 4) {
       setState(() => _page++);
       _pageController.animateToPage(_page, duration: const Duration(milliseconds: 250), curve: Curves.ease);
     } else {
@@ -144,7 +135,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
           _initFromData(data);
           return Column(
             children: [
-              LinearProgressIndicator(value: (_page + 1) / 6, color: MatchmakerTheme.plum),
+              LinearProgressIndicator(value: (_page + 1) / 5, color: MatchmakerTheme.plum),
               Expanded(
                 child: PageView(
                   controller: _pageController,
@@ -154,7 +145,6 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
                     _FamilyStep(fields: _fields),
                     _DeenStep(fields: _fields),
                     _AboutStep(fields: _fields),
-                    _VerificationStep(fields: _fields, files: _files, onPickImage: _pickImage),
                     _PaymentStep(leadId: widget.leadId),
                   ],
                 ),
@@ -173,7 +163,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
                         if (_page > 0)
                           Expanded(child: OutlinedButton(onPressed: _submitting ? null : _back, child: const Icon(Icons.arrow_back))),
                         if (_page > 0) const SizedBox(width: 8),
-                        if (_page < 5)
+                        if (_page < 4)
                           Expanded(
                             flex: 3,
                             child: ElevatedButton(
@@ -186,8 +176,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
                                         return;
                                       }
                                       final stepFields = _stepFieldsFor(_page);
-                                      final stepFiles = _page == 4 ? _files : null;
-                                      final ok = await _saveStep(stepFields, stepFiles: stepFiles);
+                                      final ok = await _saveStep(stepFields);
                                       if (ok) _next();
                                     },
                               child: _submitting
@@ -261,11 +250,6 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
           'expectations': _fields['expectations'],
           'education': _fields['education'],
           'profession': _fields['profession'],
-        };
-      case 4:
-        return {
-          'cnic_number': _fields['cnic_number'],
-          'allow_photo_sharing': _fields['allow_photo_sharing'] ?? true,
         };
       default:
         return {};
@@ -637,54 +621,14 @@ class _AboutStepState extends State<_AboutStep> {
         TextFormField(initialValue: widget.fields['about'] as String?, decoration: const InputDecoration(labelText: 'About'), maxLines: 3, onChanged: (v) => widget.fields['about'] = v),
         const SizedBox(height: 12),
         TextFormField(initialValue: widget.fields['expectations'] as String?, decoration: const InputDecoration(labelText: 'Expectations'), maxLines: 3, onChanged: (v) => widget.fields['expectations'] = v),
-      ],
-    );
-  }
-}
-
-class _VerificationStep extends StatefulWidget {
-  final Map<String, dynamic> fields;
-  final Map<String, File> files;
-  final void Function(String key) onPickImage;
-  const _VerificationStep({required this.fields, required this.files, required this.onPickImage});
-
-  @override
-  State<_VerificationStep> createState() => _VerificationStepState();
-}
-
-class _VerificationStepState extends State<_VerificationStep> {
-  @override
-  Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    return _StepScaffold(
-      title: l10n.walkInStepVerification,
-      children: [
-        TextFormField(
-          initialValue: widget.fields['cnic_number'] as String?,
-          decoration: InputDecoration(labelText: l10n.walkInCnicNumberLabel),
-          onChanged: (v) => widget.fields['cnic_number'] = v,
-        ),
         const SizedBox(height: 16),
-        _ImagePickerTile(label: l10n.walkInCnicFrontLabel, hasImage: widget.files.containsKey('cnic_front_image'), onTap: () async {
-          widget.onPickImage('cnic_front_image');
-          setState(() {});
-        }),
-        const SizedBox(height: 8),
-        _ImagePickerTile(label: l10n.walkInCnicBackLabel, hasImage: widget.files.containsKey('cnic_back_image'), onTap: () async {
-          widget.onPickImage('cnic_back_image');
-          setState(() {});
-        }),
-        const SizedBox(height: 8),
-        _ImagePickerTile(label: l10n.walkInPhotoLabel, hasImage: widget.files.containsKey('photo'), onTap: () async {
-          widget.onPickImage('photo');
-          setState(() {});
-        }),
-        const SizedBox(height: 12),
-        SwitchListTile(
-          contentPadding: EdgeInsets.zero,
-          value: widget.fields['allow_photo_sharing'] as bool? ?? true,
-          onChanged: (v) => setState(() => widget.fields['allow_photo_sharing'] = v),
-          title: const Text('Allow photo to be shared after mutual interest'),
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(12)),
+          child: Text(
+            "🔗 CNIC and photo aren't collected here — after payment, you'll land on the client's page where you can set their login password and share their secure self-upload link.",
+            style: TextStyle(color: Colors.blue.shade900, fontSize: 12),
+          ),
         ),
       ],
     );
@@ -773,6 +717,23 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
               const Icon(Icons.check_circle, color: Colors.green, size: 56),
               const SizedBox(height: 12),
               Text(l10n.walkInFinish, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              const SizedBox(height: 8),
+              Text(
+                l10n.loginPasswordExplain,
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton.icon(
+                icon: const Icon(Icons.password),
+                label: Text(l10n.loginPasswordSet),
+                onPressed: () => showSetLoginPasswordFlow(context, ref, widget.leadId),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: () => context.pop(),
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
             ],
           ),
         ),

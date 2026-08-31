@@ -387,9 +387,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get walkInStepAbout => 'تعارف';
 
   @override
-  String get walkInStepVerification => 'تصدیق';
-
-  @override
   String get walkInStepPayment => 'ادائیگی';
 
   @override
@@ -415,9 +412,6 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get walkInCnicBackLabel => 'شناختی کارڈ کا پچھلا حصہ';
-
-  @override
-  String get walkInPhotoLabel => 'تصویر (اختیاری)';
 
   @override
   String get walkInSaveStep => 'محفوظ کریں اور آگے بڑھیں';

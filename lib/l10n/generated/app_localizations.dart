@@ -830,12 +830,6 @@ abstract class AppLocalizations {
   /// **'About'**
   String get walkInStepAbout;
 
-  /// No description provided for @walkInStepVerification.
-  ///
-  /// In en, this message translates to:
-  /// **'Verification'**
-  String get walkInStepVerification;
-
   /// No description provided for @walkInStepPayment.
   ///
   /// In en, this message translates to:
@@ -889,12 +883,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'CNIC Back Photo'**
   String get walkInCnicBackLabel;
-
-  /// No description provided for @walkInPhotoLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'Photo (optional)'**
-  String get walkInPhotoLabel;
 
   /// No description provided for @walkInSaveStep.
   ///
