@@ -674,8 +674,12 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
   bool _submitted = false;
   final _picker = ImagePicker();
 
+  // Gallery, not camera — a payment screenshot already exists as an image
+  // (from JazzCash/the bank app), it's never something to photograph live.
+  // Camera-only stays reserved for genuine identity verification (a selfie,
+  // or a physical document photographed on the spot) — see apply_screen.dart.
   Future<void> _pickScreenshot() async {
-    final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 85);
+    final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
     if (picked != null) setState(() => _screenshot = File(picked.path));
   }
 
