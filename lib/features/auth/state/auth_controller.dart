@@ -71,14 +71,23 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> login({required String login, required String password}) async {
-    final result = await _repository.login(login: login, password: password);
+  Future<void> login({required String login, required String password}) =>
+      _acceptIfCounselor(_repository.login(login: login, password: password));
 
-    // auth/login is role-agnostic by design (any account can log in) — the
-    // real backend security boundary is EnsureUserIsMatchmakerApi on every
-    // matchmaker.* route. This is a client-side courtesy so a non-counselor
-    // credential pair sees a clear message instead of a broken empty
-    // dashboard where every screen 403s.
+  Future<String> forgotPassword(String email) => _repository.forgotPassword(email);
+
+  Future<void> resetPassword({required String email, required String code, required String password}) =>
+      _acceptIfCounselor(_repository.resetPassword(email: email, code: code, password: password));
+
+  // Both ways into this app end here. /auth/login and /auth/password/reset
+  // are role-agnostic by design (any account can use them) — the real backend
+  // security boundary is EnsureUserIsMatchmakerApi on every matchmaker.*
+  // route. This is a client-side courtesy so a non-counselor account sees a
+  // clear message instead of a broken empty dashboard where every screen
+  // 403s, and its token is dropped rather than left sitting on the device.
+  Future<void> _acceptIfCounselor(Future<AuthResult> pending) async {
+    final result = await pending;
+
     if (!result.user.isMatchmaker) {
       await SecureStore.saveToken(result.token);
       try {

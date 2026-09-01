@@ -53,6 +53,57 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applyHere => 'یہاں درخواست دیں';
 
   @override
+  String get forgotPassword => 'پاسورڈ بھول گئے؟';
+
+  @override
+  String get forgotPasswordTitle => 'پاسورڈ دوبارہ ترتیب دیں';
+
+  @override
+  String get forgotPasswordIntro =>
+      'اپنے کاؤنسلر اکاؤنٹ کا ای میل پتہ درج کریں، ہم آپ کو 6 ہندسوں کا کوڈ بھیجیں گے۔';
+
+  @override
+  String get sendResetCode => 'کوڈ بھیجیں';
+
+  @override
+  String resetCodeSentTo(String email) {
+    return 'اگر یہ پتہ رجسٹرڈ ہے تو ہم نے $email پر 6 ہندسوں کا کوڈ بھیج دیا ہے۔ یہ 10 منٹ میں ختم ہو جائے گا۔';
+  }
+
+  @override
+  String get resetCode => 'ری سیٹ کوڈ';
+
+  @override
+  String get newPassword => 'نیا پاسورڈ';
+
+  @override
+  String get confirmPassword => 'پاسورڈ کی تصدیق کریں';
+
+  @override
+  String get resetPasswordButton => 'پاسورڈ تبدیل کریں';
+
+  @override
+  String get resendCode => 'کوڈ دوبارہ بھیجیں';
+
+  @override
+  String get invalidEmail => 'درست ای میل پتہ درج کریں۔';
+
+  @override
+  String get passwordsDoNotMatch => 'پاسورڈ آپس میں میل نہیں کھاتے۔';
+
+  @override
+  String get passwordTooShort => 'کم از کم 8 حروف استعمال کریں۔';
+
+  @override
+  String get fieldRequired => 'یہ خانہ ضروری ہے';
+
+  @override
+  String get backToLogin => 'لاگ ان پر واپس جائیں';
+
+  @override
+  String get useADifferentEmail => 'کوئی اور ای میل استعمال کریں';
+
+  @override
   String get applyTitle => 'نکاح کاؤنسلر بنیں';
 
   @override

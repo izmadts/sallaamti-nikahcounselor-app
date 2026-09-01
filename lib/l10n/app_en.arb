@@ -17,6 +17,26 @@
   "noAccountYet": "Not a counselor yet?",
   "applyHere": "Apply Here",
 
+  "forgotPassword": "Forgot your password?",
+  "forgotPasswordTitle": "Reset Password",
+  "forgotPasswordIntro": "Enter the email address on your counselor account and we'll send you a 6-digit reset code.",
+  "sendResetCode": "Send Reset Code",
+  "resetCodeSentTo": "We've sent a 6-digit code to {email}, if that address is registered. It expires in 10 minutes.",
+  "@resetCodeSentTo": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "resetCode": "Reset Code",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm Password",
+  "resetPasswordButton": "Reset Password",
+  "resendCode": "Resend Code",
+  "invalidEmail": "Enter a valid email address.",
+  "passwordsDoNotMatch": "Those passwords don't match.",
+  "passwordTooShort": "Use at least 8 characters.",
+  "fieldRequired": "This field is required",
+  "backToLogin": "Back to log in",
+  "useADifferentEmail": "Use a different email",
+
   "applyTitle": "Become a Nikah Counselor",
   "applySubtitle": "Fill this out and our team will review your application. Once approved and certified, you'll be able to log in and start working.",
   "applyWhatsappLabel": "WhatsApp Number (if different)",

@@ -108,7 +108,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                         : Text(l10n.loginButton),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 8),
+                  TextButton(
+                    onPressed: () => context.push('/forgot-password'),
+                    child: Text(l10n.forgotPassword),
+                  ),
+                  const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

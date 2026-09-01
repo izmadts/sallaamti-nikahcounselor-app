@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../features/application/presentation/application_screen.dart';
 import '../../features/apply/presentation/apply_screen.dart';
 import '../../features/auth/presentation/language_screen.dart';
+import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/state/auth_controller.dart';
@@ -59,7 +60,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       // counselor away from it for no reason).
       if (path == '/apply') return null;
 
-      const guestOnlyRoutes = ['/language', '/login'];
+      const guestOnlyRoutes = ['/language', '/login', '/forgot-password'];
       final isGuestOnlyRoute = guestOnlyRoutes.contains(path);
 
       if (auth.status == AuthStatus.checking) return null;
@@ -78,6 +79,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
       GoRoute(path: '/language', builder: (context, state) => const LanguageScreen()),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(path: '/forgot-password', builder: (context, state) => const ForgotPasswordScreen()),
       GoRoute(path: '/apply', builder: (context, state) => const ApplyScreen()),
 
       ShellRoute(

@@ -53,6 +53,57 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyHere => 'Apply Here';
 
   @override
+  String get forgotPassword => 'Forgot your password?';
+
+  @override
+  String get forgotPasswordTitle => 'Reset Password';
+
+  @override
+  String get forgotPasswordIntro =>
+      'Enter the email address on your counselor account and we\'ll send you a 6-digit reset code.';
+
+  @override
+  String get sendResetCode => 'Send Reset Code';
+
+  @override
+  String resetCodeSentTo(String email) {
+    return 'We\'ve sent a 6-digit code to $email, if that address is registered. It expires in 10 minutes.';
+  }
+
+  @override
+  String get resetCode => 'Reset Code';
+
+  @override
+  String get newPassword => 'New Password';
+
+  @override
+  String get confirmPassword => 'Confirm Password';
+
+  @override
+  String get resetPasswordButton => 'Reset Password';
+
+  @override
+  String get resendCode => 'Resend Code';
+
+  @override
+  String get invalidEmail => 'Enter a valid email address.';
+
+  @override
+  String get passwordsDoNotMatch => 'Those passwords don\'t match.';
+
+  @override
+  String get passwordTooShort => 'Use at least 8 characters.';
+
+  @override
+  String get fieldRequired => 'This field is required';
+
+  @override
+  String get backToLogin => 'Back to log in';
+
+  @override
+  String get useADifferentEmail => 'Use a different email';
+
+  @override
   String get applyTitle => 'Become a Nikah Counselor';
 
   @override

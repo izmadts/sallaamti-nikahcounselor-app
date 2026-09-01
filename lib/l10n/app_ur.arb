@@ -17,6 +17,26 @@
   "noAccountYet": "ابھی کاؤنسلر نہیں بنے؟",
   "applyHere": "یہاں درخواست دیں",
 
+  "forgotPassword": "پاسورڈ بھول گئے؟",
+  "forgotPasswordTitle": "پاسورڈ دوبارہ ترتیب دیں",
+  "forgotPasswordIntro": "اپنے کاؤنسلر اکاؤنٹ کا ای میل پتہ درج کریں، ہم آپ کو 6 ہندسوں کا کوڈ بھیجیں گے۔",
+  "sendResetCode": "کوڈ بھیجیں",
+  "resetCodeSentTo": "اگر یہ پتہ رجسٹرڈ ہے تو ہم نے {email} پر 6 ہندسوں کا کوڈ بھیج دیا ہے۔ یہ 10 منٹ میں ختم ہو جائے گا۔",
+  "@resetCodeSentTo": {
+    "placeholders": { "email": { "type": "String" } }
+  },
+  "resetCode": "ری سیٹ کوڈ",
+  "newPassword": "نیا پاسورڈ",
+  "confirmPassword": "پاسورڈ کی تصدیق کریں",
+  "resetPasswordButton": "پاسورڈ تبدیل کریں",
+  "resendCode": "کوڈ دوبارہ بھیجیں",
+  "invalidEmail": "درست ای میل پتہ درج کریں۔",
+  "passwordsDoNotMatch": "پاسورڈ آپس میں میل نہیں کھاتے۔",
+  "passwordTooShort": "کم از کم 8 حروف استعمال کریں۔",
+  "fieldRequired": "یہ خانہ ضروری ہے",
+  "backToLogin": "لاگ ان پر واپس جائیں",
+  "useADifferentEmail": "کوئی اور ای میل استعمال کریں",
+
   "applyTitle": "نکاح کاؤنسلر بنیں",
   "applySubtitle": "یہ فارم مکمل کریں، ہماری ٹیم آپ کی درخواست کا جائزہ لے گی۔ منظوری اور سرٹیفیکیشن کے بعد آپ لاگ ان کر کے کام شروع کر سکیں گے۔",
   "applyWhatsappLabel": "واٹس ایپ نمبر (اگر مختلف ہو)",
