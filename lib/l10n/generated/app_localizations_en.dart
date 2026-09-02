@@ -160,8 +160,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please accept both checkboxes to continue.';
 
   @override
-  String get applyPhotosRequired =>
-      'Please add your selfie and both sides of your CNIC.';
+  String get applyPhotosRequired => 'Please add your selfie photo.';
 
   @override
   String get applySubmit => 'Submit Application';

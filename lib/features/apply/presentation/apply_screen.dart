@@ -82,7 +82,7 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
       setState(() => _error = l10n.applyConsentRequired);
       return;
     }
-    if (!_files.containsKey('selfie_photo') || !_files.containsKey('cnic_front_image') || !_files.containsKey('cnic_back_image')) {
+    if (!_files.containsKey('selfie_photo')) {
       setState(() => _error = l10n.applyPhotosRequired);
       return;
     }
@@ -192,10 +192,6 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                   TextFormField(controller: _cnicNumberController, decoration: InputDecoration(labelText: l10n.walkInCnicNumberLabel), validator: _required(l10n)),
                   const SizedBox(height: 16),
                   _ImageTile(label: l10n.applySelfieLabel, hasImage: _files.containsKey('selfie_photo'), onTap: () => _pickImage('selfie_photo')),
-                  const SizedBox(height: 8),
-                  _ImageTile(label: l10n.walkInCnicFrontLabel, hasImage: _files.containsKey('cnic_front_image'), onTap: () => _pickImage('cnic_front_image')),
-                  const SizedBox(height: 8),
-                  _ImageTile(label: l10n.walkInCnicBackLabel, hasImage: _files.containsKey('cnic_back_image'), onTap: () => _pickImage('cnic_back_image')),
                   const SizedBox(height: 20),
                   TextFormField(controller: _areaController, decoration: InputDecoration(labelText: l10n.applyAreaLabel)),
                   const SizedBox(height: 12),

@@ -383,7 +383,7 @@ abstract class AppLocalizations {
   /// No description provided for @applyPhotosRequired.
   ///
   /// In en, this message translates to:
-  /// **'Please add your selfie and both sides of your CNIC.'**
+  /// **'Please add your selfie photo.'**
   String get applyPhotosRequired;
 
   /// No description provided for @applySubmit.

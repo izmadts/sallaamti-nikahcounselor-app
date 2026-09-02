@@ -160,8 +160,7 @@ class AppLocalizationsUr extends AppLocalizations {
       'آگے بڑھنے کے لیے دونوں خانوں کو نشان زد کریں۔';
 
   @override
-  String get applyPhotosRequired =>
-      'براہ کرم اپنی تصویر اور شناختی کارڈ کے دونوں اطراف شامل کریں۔';
+  String get applyPhotosRequired => 'براہ کرم اپنی سیلفی تصویر شامل کریں۔';
 
   @override
   String get applySubmit => 'درخواست جمع کروائیں';
