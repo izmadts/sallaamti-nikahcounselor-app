@@ -53,4 +53,11 @@ class ClientRepository {
 
   Future<Map<String, dynamic>> sendMessage(int leadId, String message) =>
       _client.post('/leads/$leadId/messages', data: {'message': message});
+
+  Future<void> reportConversation(int leadId, {required String reason, String? details, int? messageId}) =>
+      _client.post('/leads/$leadId/report', data: {
+        'reason': reason,
+        if (details != null && details.isNotEmpty) 'details': details,
+        if (messageId != null) 'lead_client_message_id': messageId,
+      });
 }

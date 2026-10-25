@@ -101,10 +101,39 @@ class _MessagesTabState extends ConsumerState<MessagesTab> {
     }
   }
 
+  Future<void> _report() async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (ctx) => const _ReportConversationDialog(),
+    );
+    if (result == null || !mounted) return;
+
+    try {
+      await ref.read(clientRepositoryProvider).reportConversation(
+            widget.leadId,
+            reason: result['reason']!,
+            details: result['details'],
+          );
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Report submitted. Our team will review it shortly.')));
+    } on ApiException catch (e) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
+    } catch (_) {
+      if (mounted) ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something went wrong. Please try again.')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton.icon(
+            onPressed: _report,
+            icon: const Icon(Icons.flag_outlined, size: 16),
+            label: const Text('Report'),
+          ),
+        ),
         Expanded(child: _buildBody(context)),
         SafeArea(
           top: false,
@@ -186,6 +215,61 @@ class _MessagesTabState extends ConsumerState<MessagesTab> {
           ),
         );
       },
+    );
+  }
+}
+
+class _ReportConversationDialog extends StatefulWidget {
+  const _ReportConversationDialog();
+
+  @override
+  State<_ReportConversationDialog> createState() => _ReportConversationDialogState();
+}
+
+class _ReportConversationDialogState extends State<_ReportConversationDialog> {
+  static const _reasons = ['Inappropriate message', 'Abusive client', 'Spam', 'Other'];
+  String? _reason;
+  final _detailsController = TextEditingController();
+
+  @override
+  void dispose() {
+    _detailsController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Report this conversation'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ..._reasons.map((r) => RadioListTile<String>(
+                value: r,
+                groupValue: _reason,
+                title: Text(r),
+                dense: true,
+                onChanged: (v) => setState(() => _reason = v),
+              )),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _detailsController,
+            decoration: const InputDecoration(labelText: 'Details (optional)'),
+            minLines: 2,
+            maxLines: 4,
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.of(context).pop(), child: Text(MaterialLocalizations.of(context).cancelButtonLabel)),
+        FilledButton(
+          onPressed: _reason == null
+              ? null
+              : () => Navigator.of(context).pop({'reason': _reason!, 'details': _detailsController.text.trim()}),
+          child: const Text('Submit Report'),
+        ),
+      ],
     );
   }
 }

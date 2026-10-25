@@ -96,11 +96,25 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
                     separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
                       final c = clients[i];
+                      final unread = c['unread_message_count'] as int? ?? 0;
                       return Card(
                         child: ListTile(
                           title: Text(c['name'] as String, style: const TextStyle(fontWeight: FontWeight.w700)),
                           subtitle: Text((c['phone'] as String?) ?? (c['email'] as String?) ?? '—'),
-                          trailing: StatusChip.forLeadStatus(c['status'] as String),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (unread > 0) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(color: MatchmakerTheme.plum, borderRadius: BorderRadius.circular(10)),
+                                  child: Text('$unread', style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700)),
+                                ),
+                                const SizedBox(width: 6),
+                              ],
+                              StatusChip.forLeadStatus(c['status'] as String),
+                            ],
+                          ),
                           onTap: () => context.push('/clients/${c['id']}'),
                         ),
                       );

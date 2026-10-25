@@ -19,6 +19,7 @@ class ClientDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final async = ref.watch(clientDetailProvider(leadId));
+    final unread = async.value?['unread_message_count'] as int? ?? 0;
 
     return DefaultTabController(
       length: 6,
@@ -33,7 +34,13 @@ class ClientDetailScreen extends ConsumerWidget {
               Tab(text: l10n.clientTabShortlist),
               Tab(text: l10n.clientTabConsent),
               Tab(text: l10n.clientTabBatches),
-              const Tab(text: 'Messages'),
+              Tab(
+                child: Badge(
+                  isLabelVisible: unread > 0,
+                  label: Text('$unread'),
+                  child: const Text('Messages'),
+                ),
+              ),
             ],
           ),
         ),
