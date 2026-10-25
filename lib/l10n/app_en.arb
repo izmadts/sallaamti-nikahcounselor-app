@@ -164,8 +164,6 @@
   "walkInGuardianNameLabel": "Guardian Name",
   "walkInGuardianContactLabel": "Guardian Contact",
   "walkInCnicNumberLabel": "CNIC Number",
-  "walkInCnicFrontLabel": "CNIC Front Photo",
-  "walkInCnicBackLabel": "CNIC Back Photo",
   "walkInSaveStep": "Save & Continue",
   "walkInFinish": "Finish",
   "walkInPaymentMethodLabel": "Payment Method",

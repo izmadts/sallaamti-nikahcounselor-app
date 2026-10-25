@@ -461,12 +461,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get walkInCnicNumberLabel => 'شناختی کارڈ نمبر';
 
   @override
-  String get walkInCnicFrontLabel => 'شناختی کارڈ کا اگلا حصہ';
-
-  @override
-  String get walkInCnicBackLabel => 'شناختی کارڈ کا پچھلا حصہ';
-
-  @override
   String get walkInSaveStep => 'محفوظ کریں اور آگے بڑھیں';
 
   @override

@@ -974,18 +974,6 @@ abstract class AppLocalizations {
   /// **'CNIC Number'**
   String get walkInCnicNumberLabel;
 
-  /// No description provided for @walkInCnicFrontLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'CNIC Front Photo'**
-  String get walkInCnicFrontLabel;
-
-  /// No description provided for @walkInCnicBackLabel.
-  ///
-  /// In en, this message translates to:
-  /// **'CNIC Back Photo'**
-  String get walkInCnicBackLabel;
-
   /// No description provided for @walkInSaveStep.
   ///
   /// In en, this message translates to:

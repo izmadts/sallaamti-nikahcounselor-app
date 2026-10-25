@@ -164,8 +164,6 @@
   "walkInGuardianNameLabel": "سرپرست کا نام",
   "walkInGuardianContactLabel": "سرپرست کا رابطہ نمبر",
   "walkInCnicNumberLabel": "شناختی کارڈ نمبر",
-  "walkInCnicFrontLabel": "شناختی کارڈ کا اگلا حصہ",
-  "walkInCnicBackLabel": "شناختی کارڈ کا پچھلا حصہ",
   "walkInSaveStep": "محفوظ کریں اور آگے بڑھیں",
   "walkInFinish": "مکمل کریں",
   "walkInPaymentMethodLabel": "ادائیگی کا طریقہ",

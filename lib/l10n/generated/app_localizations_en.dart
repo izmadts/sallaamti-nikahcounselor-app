@@ -462,12 +462,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get walkInCnicNumberLabel => 'CNIC Number';
 
   @override
-  String get walkInCnicFrontLabel => 'CNIC Front Photo';
-
-  @override
-  String get walkInCnicBackLabel => 'CNIC Back Photo';
-
-  @override
   String get walkInSaveStep => 'Save & Continue';
 
   @override
