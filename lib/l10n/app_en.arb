@@ -127,11 +127,6 @@
   "consentRevoked": "Revoked",
   "consentPending": "Waiting on client",
 
-  "progressLinkTitle": "Progress Link",
-  "progressLinkGenerate": "Generate / Regenerate Link",
-  "progressLinkShare": "Share with Client",
-  "progressLinkExplain": "The client unlocks this page with the last 7 digits of their phone number.",
-
   "loginPasswordTitle": "Client Login Password",
   "loginPasswordExplain": "Set a temporary password so this client can log into the Sallaamti app themselves. They'll be prompted to choose their own on first login.",
   "loginPasswordSet": "Set Login Password",

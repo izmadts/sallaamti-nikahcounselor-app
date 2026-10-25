@@ -353,19 +353,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get consentPending => 'Waiting on client';
 
   @override
-  String get progressLinkTitle => 'Progress Link';
-
-  @override
-  String get progressLinkGenerate => 'Generate / Regenerate Link';
-
-  @override
-  String get progressLinkShare => 'Share with Client';
-
-  @override
-  String get progressLinkExplain =>
-      'The client unlocks this page with the last 7 digits of their phone number.';
-
-  @override
   String get loginPasswordTitle => 'Client Login Password';
 
   @override

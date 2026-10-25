@@ -353,19 +353,6 @@ class AppLocalizationsUr extends AppLocalizations {
   String get consentPending => 'کلائنٹ کے جواب کا انتظار';
 
   @override
-  String get progressLinkTitle => 'پیش رفت لنک';
-
-  @override
-  String get progressLinkGenerate => 'لنک بنائیں / نیا بنائیں';
-
-  @override
-  String get progressLinkShare => 'کلائنٹ کو بھیجیں';
-
-  @override
-  String get progressLinkExplain =>
-      'کلائنٹ اپنے فون نمبر کے آخری 7 ہندسے درج کر کے یہ صفحہ کھولے گا۔';
-
-  @override
   String get loginPasswordTitle => 'کلائنٹ لاگ ان پاس ورڈ';
 
   @override

@@ -764,30 +764,6 @@ abstract class AppLocalizations {
   /// **'Waiting on client'**
   String get consentPending;
 
-  /// No description provided for @progressLinkTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Progress Link'**
-  String get progressLinkTitle;
-
-  /// No description provided for @progressLinkGenerate.
-  ///
-  /// In en, this message translates to:
-  /// **'Generate / Regenerate Link'**
-  String get progressLinkGenerate;
-
-  /// No description provided for @progressLinkShare.
-  ///
-  /// In en, this message translates to:
-  /// **'Share with Client'**
-  String get progressLinkShare;
-
-  /// No description provided for @progressLinkExplain.
-  ///
-  /// In en, this message translates to:
-  /// **'The client unlocks this page with the last 7 digits of their phone number.'**
-  String get progressLinkExplain;
-
   /// No description provided for @loginPasswordTitle.
   ///
   /// In en, this message translates to:

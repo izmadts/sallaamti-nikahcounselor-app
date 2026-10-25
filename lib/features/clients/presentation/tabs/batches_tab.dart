@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/api/api_exception.dart';
 import '../../../../core/theme/matchmaker_theme.dart';
@@ -28,21 +27,6 @@ class BatchesTab extends ConsumerWidget {
     try {
       await ref.read(clientRepositoryProvider).sendBatch(leadId, batchId);
       ref.invalidate(clientDetailProvider(leadId));
-    } on ApiException catch (e) {
-      if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
-    }
-  }
-
-  Future<void> _shareOrRegenerateLink(BuildContext context, WidgetRef ref, int batchId, int proposalId, String? existingUrl) async {
-    if (existingUrl != null) {
-      await SharePlus.instance.share(ShareParams(text: existingUrl));
-      return;
-    }
-    try {
-      final data = await ref.read(clientRepositoryProvider).regenerateProposalLink(leadId, batchId, proposalId);
-      ref.invalidate(clientDetailProvider(leadId));
-      final url = data['url'] as String?;
-      if (url != null) await SharePlus.instance.share(ShareParams(text: url));
     } on ApiException catch (e) {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
     }
@@ -94,12 +78,6 @@ class BatchesTab extends ConsumerWidget {
                             contentPadding: EdgeInsets.zero,
                             title: Text(p['candidate'] != null ? '${p['candidate']['age']} yrs, ${p['candidate']['city'] ?? '—'}' : '—'),
                             subtitle: Text((p['response'] as String?) ?? (p['status'] as String? ?? '—')),
-                            trailing: p['status'] == 'sent' || p['status'] == 'responded'
-                                ? IconButton(
-                                    icon: const Icon(Icons.ios_share, size: 20),
-                                    onPressed: () => _shareOrRegenerateLink(context, ref, batch['id'] as int, p['id'] as int, p['share_url'] as String?),
-                                  )
-                                : null,
                           ),
                         if (isDraft) ...[
                           const SizedBox(height: 4),

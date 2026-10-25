@@ -127,11 +127,6 @@
   "consentRevoked": "منسوخ شدہ",
   "consentPending": "کلائنٹ کے جواب کا انتظار",
 
-  "progressLinkTitle": "پیش رفت لنک",
-  "progressLinkGenerate": "لنک بنائیں / نیا بنائیں",
-  "progressLinkShare": "کلائنٹ کو بھیجیں",
-  "progressLinkExplain": "کلائنٹ اپنے فون نمبر کے آخری 7 ہندسے درج کر کے یہ صفحہ کھولے گا۔",
-
   "loginPasswordTitle": "کلائنٹ لاگ ان پاس ورڈ",
   "loginPasswordExplain": "کلائنٹ کے خود سیلامتی ایپ میں لاگ ان کرنے کے لیے ایک عارضی پاس ورڈ سیٹ کریں۔ پہلی بار لاگ ان پر انہیں اپنا پاس ورڈ چننے کو کہا جائے گا۔",
   "loginPasswordSet": "لاگ ان پاس ورڈ سیٹ کریں",

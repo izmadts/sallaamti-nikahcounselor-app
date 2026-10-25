@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/api/api_exception.dart';
 import '../../../../core/data/enum_repository.dart';
@@ -80,19 +79,6 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     }
   }
 
-  Future<void> _generateProgressLink() async {
-    try {
-      final data = await ref.read(clientRepositoryProvider).regenerateProgressLink(widget.leadId);
-      ref.invalidate(clientDetailProvider(widget.leadId));
-      final url = data['url'] as String?;
-      if (url != null) {
-        await SharePlus.instance.share(ShareParams(text: url));
-      }
-    } on ApiException catch (e) {
-      if (mounted) setState(() => _error = e.displayMessage);
-    }
-  }
-
   Future<void> _openSetPasswordDialog() => showSetLoginPasswordFlow(context, ref, widget.leadId);
 
   @override
@@ -100,7 +86,6 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     final l10n = AppLocalizations.of(context)!;
     final enumsAsync = ref.watch(enumsProvider);
     final isConverted = widget.client['is_converted'] as bool? ?? false;
-    final hasProgressLink = widget.client['has_progress_link'] as bool? ?? false;
 
     return AsyncValueView(
       loading: enumsAsync.isLoading,
@@ -171,16 +156,6 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
                 child: _saving
                     ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : Text(l10n.clientSave),
-              ),
-              const Divider(height: 40),
-              Text(l10n.progressLinkTitle, style: const TextStyle(fontWeight: FontWeight.w700)),
-              const SizedBox(height: 4),
-              Text(l10n.progressLinkExplain, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
-              const SizedBox(height: 8),
-              OutlinedButton.icon(
-                icon: Icon(hasProgressLink ? Icons.share : Icons.link, color: MatchmakerTheme.plum),
-                label: Text(hasProgressLink ? l10n.progressLinkShare : l10n.progressLinkGenerate),
-                onPressed: _generateProgressLink,
               ),
               if (isConverted) ...[
                 const Divider(height: 40),

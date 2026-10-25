@@ -31,8 +31,6 @@ class ClientRepository {
 
   Future<Map<String, dynamic>> revokeConsent(int leadId, int consentId) => _client.post('/matchmaker/clients/$leadId/consents/$consentId/revoke');
 
-  Future<Map<String, dynamic>> regenerateProgressLink(int leadId) => _client.post('/matchmaker/clients/$leadId/progress-link');
-
   Future<Map<String, dynamic>> setLoginPassword(int leadId, String password) => _client
       .post('/matchmaker/clients/$leadId/set-password', data: {'password': password, 'password_confirmation': password});
 
@@ -45,9 +43,6 @@ class ClientRepository {
       _client.delete('/matchmaker/clients/$leadId/proposal-batches/$batchId/proposals/$proposalId');
 
   Future<Map<String, dynamic>> sendBatch(int leadId, int batchId) => _client.post('/matchmaker/clients/$leadId/proposal-batches/$batchId/send');
-
-  Future<Map<String, dynamic>> regenerateProposalLink(int leadId, int batchId, int proposalId) =>
-      _client.post('/matchmaker/clients/$leadId/proposal-batches/$batchId/proposals/$proposalId/regenerate-link');
 
   // Deliberately not under /matchmaker/clients/* — this channel is
   // reachable by either party (the client too, from the member app), see
