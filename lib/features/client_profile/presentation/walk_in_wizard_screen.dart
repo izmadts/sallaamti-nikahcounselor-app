@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
@@ -35,6 +36,13 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
   bool _submitting = false;
   String? _error;
   bool _hasProfile = false;
+
+  // Captured from the FIRST successful store() response — that's the one
+  // call that creates the account and returns a real temp password (see
+  // ClientProfileController::store() on the backend). Threaded down to
+  // _PaymentStep so it can show it on the wizard's final success screen,
+  // same spot the existing manual "Set Login Password" flow already lives.
+  Map<String, dynamic>? _newCredentials;
 
   // Field state, populated once from the loaded profile / prefill.
   final _fields = <String, dynamic>{};
@@ -86,7 +94,10 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
     }
 
     try {
-      await ref.read(clientProfileRepositoryProvider).store(widget.leadId, payload);
+      final response = await ref.read(clientProfileRepositoryProvider).store(widget.leadId, payload);
+      if (!_hasProfile && response['credentials'] != null) {
+        _newCredentials = Map<String, dynamic>.from(response['credentials'] as Map);
+      }
       _hasProfile = true;
       ref.invalidate(clientDetailProvider(widget.leadId));
       return true;
@@ -145,7 +156,7 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
                     _FamilyStep(fields: _fields),
                     _DeenStep(fields: _fields),
                     _AboutStep(fields: _fields),
-                    _PaymentStep(leadId: widget.leadId),
+                    _PaymentStep(leadId: widget.leadId, newCredentials: _newCredentials),
                   ],
                 ),
               ),
@@ -659,7 +670,8 @@ class _ImagePickerTile extends StatelessWidget {
 // wizard's final page for a linear flow, but posts to a separate endpoint.
 class _PaymentStep extends ConsumerStatefulWidget {
   final int leadId;
-  const _PaymentStep({required this.leadId});
+  final Map<String, dynamic>? newCredentials;
+  const _PaymentStep({required this.leadId, this.newCredentials});
 
   @override
   ConsumerState<_PaymentStep> createState() => _PaymentStepState();
@@ -712,6 +724,7 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
     final l10n = AppLocalizations.of(context)!;
 
     if (_submitted) {
+      final creds = widget.newCredentials;
       return Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -721,18 +734,21 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
               const Icon(Icons.check_circle, color: Colors.green, size: 56),
               const SizedBox(height: 12),
               Text(l10n.walkInFinish, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-              const SizedBox(height: 8),
-              Text(
-                l10n.loginPasswordExplain,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
-              ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                icon: const Icon(Icons.password),
-                label: Text(l10n.loginPasswordSet),
-                onPressed: () => showSetLoginPasswordFlow(context, ref, widget.leadId),
-              ),
+              if (creds != null) _NewCredentialsCard(credentials: creds, l10n: l10n),
+              if (creds == null) ...[
+                Text(
+                  l10n.loginPasswordExplain,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: const Icon(Icons.password),
+                  label: Text(l10n.loginPasswordSet),
+                  onPressed: () => showSetLoginPasswordFlow(context, ref, widget.leadId),
+                ),
+              ],
               const SizedBox(height: 8),
               TextButton(
                 onPressed: () => context.pop(),
@@ -766,6 +782,70 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
               : Text(l10n.walkInSubmitPayment),
         ),
       ],
+    );
+  }
+}
+
+// Shown once, right on the wizard's final success screen — mirrors the
+// web's one-time "New Client Credentials" card (admin/leads/show.blade.php,
+// matchmaker/clients/show.blade.php). The password only ever exists in
+// this response; nothing re-fetches or persists it client-side.
+class _NewCredentialsCard extends StatelessWidget {
+  final Map<String, dynamic> credentials;
+  final AppLocalizations l10n;
+  const _NewCredentialsCard({required this.credentials, required this.l10n});
+
+  String get _message {
+    final identifier = credentials['identifier'] as String? ?? '';
+    final password = credentials['password'] as String? ?? '';
+    final appUrl = credentials['app_url'] as String? ?? '';
+    return "Assalamu Alaikum! Here's your Sallaamti login:\n"
+        'Username: $identifier\n'
+        'Password: $password\n'
+        'Download the app: $appUrl\n'
+        "Log in and you'll be asked to set your own password.";
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final identifier = credentials['identifier'] as String? ?? '';
+    final password = credentials['password'] as String? ?? '';
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: MatchmakerTheme.gold, width: 2),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        children: [
+          Text(l10n.newCredentialsTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14), textAlign: TextAlign.center),
+          const SizedBox(height: 6),
+          Text(l10n.newCredentialsExplain, textAlign: TextAlign.center, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+          const SizedBox(height: 12),
+          Wrap(
+            alignment: WrapAlignment.center,
+            spacing: 8,
+            runSpacing: 6,
+            children: [
+              Chip(label: Text(identifier)),
+              Chip(label: Text(password, style: const TextStyle(fontWeight: FontWeight.w700))),
+            ],
+          ),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            icon: const Icon(Icons.copy),
+            label: Text(l10n.newCredentialsCopy),
+            style: ElevatedButton.styleFrom(backgroundColor: MatchmakerTheme.gold, foregroundColor: Colors.black87),
+            onPressed: () async {
+              await Clipboard.setData(ClipboardData(text: _message));
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.newCredentialsCopied)));
+              }
+            },
+          ),
+        ],
+      ),
     );
   }
 }

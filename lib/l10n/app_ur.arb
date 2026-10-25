@@ -141,6 +141,11 @@
   "loginPasswordCopied": "کلپ بورڈ پر کاپی ہو گیا",
   "loginPasswordConfirmButton": "پاس ورڈ سیٹ کریں",
   "loginPasswordSuccess": "پاس ورڈ سیٹ ہو گیا — اب کلائنٹ کو بتا دیں۔",
+  "newCredentialsTitle": "نیا کلائنٹ لاگ ان — ابھی بھیجیں",
+  "newCredentialsExplain": "صرف ایک بار دکھایا جائے گا — ابھی کاپی کر کے بھیج دیں۔ اگر چھوٹ جائے تو نیچے \"لاگ ان پاس ورڈ سیٹ کریں\" سے نیا پاس ورڈ سیٹ کریں۔",
+  "newCredentialsCopy": "لاگ ان کاپی کریں",
+  "newCredentialsCopied": "کاپی ہو گیا — اب واٹس ایپ میں پیسٹ کریں",
+  "newCredentialsOpenStore": "پلے اسٹور لنک کھولیں",
 
   "batchesTitle": "تجاویز کے گروپ",
   "batchesNew": "نیا گروپ",

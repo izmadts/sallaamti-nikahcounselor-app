@@ -395,6 +395,22 @@ class AppLocalizationsUr extends AppLocalizations {
       'پاس ورڈ سیٹ ہو گیا — اب کلائنٹ کو بتا دیں۔';
 
   @override
+  String get newCredentialsTitle => 'نیا کلائنٹ لاگ ان — ابھی بھیجیں';
+
+  @override
+  String get newCredentialsExplain =>
+      'صرف ایک بار دکھایا جائے گا — ابھی کاپی کر کے بھیج دیں۔ اگر چھوٹ جائے تو نیچے \"لاگ ان پاس ورڈ سیٹ کریں\" سے نیا پاس ورڈ سیٹ کریں۔';
+
+  @override
+  String get newCredentialsCopy => 'لاگ ان کاپی کریں';
+
+  @override
+  String get newCredentialsCopied => 'کاپی ہو گیا — اب واٹس ایپ میں پیسٹ کریں';
+
+  @override
+  String get newCredentialsOpenStore => 'پلے اسٹور لنک کھولیں';
+
+  @override
   String get batchesTitle => 'تجاویز کے گروپ';
 
   @override

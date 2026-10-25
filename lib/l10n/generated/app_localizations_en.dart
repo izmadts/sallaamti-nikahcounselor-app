@@ -395,6 +395,22 @@ class AppLocalizationsEn extends AppLocalizations {
       'Password set — share it with the client now.';
 
   @override
+  String get newCredentialsTitle => 'New Client Credentials — Send This Now';
+
+  @override
+  String get newCredentialsExplain =>
+      'Shown once — copy and send it now. If you miss it, use \"Set Login Password\" below to set a new one.';
+
+  @override
+  String get newCredentialsCopy => 'Copy Credentials';
+
+  @override
+  String get newCredentialsCopied => 'Copied — paste it into WhatsApp now';
+
+  @override
+  String get newCredentialsOpenStore => 'Open Play Store Link';
+
+  @override
   String get batchesTitle => 'Proposal Batches';
 
   @override

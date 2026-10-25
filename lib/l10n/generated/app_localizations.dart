@@ -842,6 +842,36 @@ abstract class AppLocalizations {
   /// **'Password set — share it with the client now.'**
   String get loginPasswordSuccess;
 
+  /// No description provided for @newCredentialsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New Client Credentials — Send This Now'**
+  String get newCredentialsTitle;
+
+  /// No description provided for @newCredentialsExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Shown once — copy and send it now. If you miss it, use \"Set Login Password\" below to set a new one.'**
+  String get newCredentialsExplain;
+
+  /// No description provided for @newCredentialsCopy.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy Credentials'**
+  String get newCredentialsCopy;
+
+  /// No description provided for @newCredentialsCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Copied — paste it into WhatsApp now'**
+  String get newCredentialsCopied;
+
+  /// No description provided for @newCredentialsOpenStore.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Play Store Link'**
+  String get newCredentialsOpenStore;
+
   /// No description provided for @batchesTitle.
   ///
   /// In en, this message translates to:

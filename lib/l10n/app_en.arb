@@ -141,6 +141,11 @@
   "loginPasswordCopied": "Copied to clipboard",
   "loginPasswordConfirmButton": "Set Password",
   "loginPasswordSuccess": "Password set — share it with the client now.",
+  "newCredentialsTitle": "New Client Credentials — Send This Now",
+  "newCredentialsExplain": "Shown once — copy and send it now. If you miss it, use \"Set Login Password\" below to set a new one.",
+  "newCredentialsCopy": "Copy Credentials",
+  "newCredentialsCopied": "Copied — paste it into WhatsApp now",
+  "newCredentialsOpenStore": "Open Play Store Link",
 
   "batchesTitle": "Proposal Batches",
   "batchesNew": "New Batch",
