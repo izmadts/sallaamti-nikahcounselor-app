@@ -58,6 +58,14 @@ class _RequirementsTabState extends ConsumerState<RequirementsTab> {
             items: validItems,
           );
       ref.invalidate(clientDetailProvider(widget.leadId));
+      // Nothing visibly confirmed a successful save before this — the
+      // button just stopped spinning and went quiet, which is exactly why
+      // the activity timeline shows the same "requirements updated" event
+      // logged twice in a row: with no confirmation, tapping Save again
+      // "to be sure" looked like the only way to tell it had worked.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.requirementsSaved)));
+      }
     } on ApiException catch (e) {
       setState(() => _error = e.displayMessage);
     } finally {

@@ -31,6 +31,7 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
   final _fullNameController = TextEditingController();
   final _guardianNameController = TextEditingController();
   final _mobileController = TextEditingController();
+  final _emailController = TextEditingController();
   final _whatsappController = TextEditingController();
   final _ageController = TextEditingController();
   final _qualificationOtherController = TextEditingController();
@@ -58,6 +59,7 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
     _fullNameController.dispose();
     _guardianNameController.dispose();
     _mobileController.dispose();
+    _emailController.dispose();
     _whatsappController.dispose();
     _ageController.dispose();
     _qualificationOtherController.dispose();
@@ -70,9 +72,22 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
     super.dispose();
   }
 
+  // Unguarded before: a denied camera permission (or any other
+  // image_picker platform failure) threw an uncaught exception from this
+  // async callback — nothing crashed visibly, the camera tile just did
+  // nothing when tapped, with no way for someone unfamiliar with the app
+  // to tell why they couldn't get past this required step.
   Future<void> _pickImage(String key) async {
-    final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 85);
-    if (picked != null) setState(() => _files[key] = File(picked.path));
+    try {
+      final picked = await _picker.pickImage(source: ImageSource.camera, imageQuality: 85);
+      if (picked != null && mounted) setState(() => _files[key] = File(picked.path));
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open the camera — check that this app has camera permission in your phone\'s Settings, then try again.')),
+        );
+      }
+    }
   }
 
   Future<void> _submit() async {
@@ -97,6 +112,7 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
         'full_name': _fullNameController.text.trim(),
         'guardian_name': _guardianNameController.text.trim(),
         'mobile_number': _mobileController.text.trim(),
+        'email': _emailController.text.trim(),
         'whatsapp_number': _whatsappController.text.trim().isEmpty ? null : _whatsappController.text.trim(),
         'gender': _gender,
         'age': _ageController.text.trim(),
@@ -175,6 +191,12 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                   const SizedBox(height: 12),
                   TextFormField(controller: _mobileController, decoration: InputDecoration(labelText: l10n.clientPhoneLabel), keyboardType: TextInputType.phone, validator: _required(l10n)),
                   const SizedBox(height: 12),
+                  // Required so certification can attach to an existing
+                  // Sallaamti account (matched by this email) instead of
+                  // creating a duplicate one — see the backend's own
+                  // certify() comment for the bug this closes.
+                  TextFormField(controller: _emailController, decoration: InputDecoration(labelText: l10n.clientEmailLabel), keyboardType: TextInputType.emailAddress, validator: _email(l10n)),
+                  const SizedBox(height: 12),
                   TextFormField(controller: _whatsappController, decoration: InputDecoration(labelText: l10n.applyWhatsappLabel), keyboardType: TextInputType.phone),
                   const SizedBox(height: 12),
                   PickerField(label: l10n.clientGenderLabel, value: _gender, options: const {'male': 'Male', 'female': 'Female'}, required: true, onChanged: (v) => setState(() => _gender = v)),
@@ -242,6 +264,13 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
   }
 
   String? Function(String?) _required(AppLocalizations l10n) => (v) => (v == null || v.trim().isEmpty) ? l10n.errorGeneric : null;
+
+  String? Function(String?) _email(AppLocalizations l10n) => (v) {
+        final value = v?.trim() ?? '';
+        if (value.isEmpty) return l10n.errorGeneric;
+        if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(value)) return l10n.errorGeneric;
+        return null;
+      };
 }
 
 class _ImageTile extends StatelessWidget {

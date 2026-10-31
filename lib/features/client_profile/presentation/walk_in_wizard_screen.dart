@@ -261,6 +261,10 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
           'expectations': _fields['expectations'],
           'education': _fields['education'],
           'profession': _fields['profession'],
+          'country': _fields['country'],
+          'ethnicity': _fields['ethnicity'],
+          'language_other': _fields['language_other'],
+          if (_fields['open_to_polygamy'] != null) 'open_to_polygamy': _fields['open_to_polygamy'],
         };
       default:
         return {};
@@ -594,10 +598,36 @@ class _AboutStep extends StatefulWidget {
 
 class _AboutStepState extends State<_AboutStep> {
   late final _educationOtherController = TextEditingController(text: widget.fields['education'] as String?);
+  // The member app's own self-registration wizard collects country,
+  // ethnicity, mother tongue and polygamy preference too — this wizard
+  // simply never asked for them, so every walk-in-registered profile was
+  // missing them entirely (not rejected, just silently blank forever,
+  // since the backend only validates fields that are actually submitted).
+  // country defaults to Pakistan, matching the web counselor-application
+  // form's own convention, since that's true for the overwhelming majority
+  // of walk-in registrations and leaving it blank was the actual data gap.
+  late final _countryController = TextEditingController(text: widget.fields['country'] as String?);
+  late final _ethnicityController = TextEditingController(text: widget.fields['ethnicity'] as String?);
+  late final _languageController = TextEditingController(text: widget.fields['language_other'] as String?);
+
+  @override
+  void initState() {
+    super.initState();
+    // Default applied to the actual field (not just the controller's
+    // display text) so it's submitted even if the counselor never touches
+    // this box — country is a required field on the backend, and the
+    // previous absence of this field from the wizard entirely meant it
+    // was left permanently blank on every walk-in-registered profile.
+    widget.fields['country'] ??= 'Pakistan';
+    _countryController.text = widget.fields['country'] as String;
+  }
 
   @override
   void dispose() {
     _educationOtherController.dispose();
+    _countryController.dispose();
+    _ethnicityController.dispose();
+    _languageController.dispose();
     super.dispose();
   }
 
@@ -632,6 +662,31 @@ class _AboutStepState extends State<_AboutStep> {
         TextFormField(initialValue: widget.fields['about'] as String?, decoration: const InputDecoration(labelText: 'About'), maxLines: 3, onChanged: (v) => widget.fields['about'] = v),
         const SizedBox(height: 12),
         TextFormField(initialValue: widget.fields['expectations'] as String?, decoration: const InputDecoration(labelText: 'Expectations'), maxLines: 3, onChanged: (v) => widget.fields['expectations'] = v),
+        const SizedBox(height: 12),
+        TextFormField(
+          controller: _countryController,
+          decoration: const InputDecoration(labelText: 'Country *'),
+          onChanged: (v) => widget.fields['country'] = v,
+        ),
+        const SizedBox(height: 12),
+        TextFormField(
+          controller: _ethnicityController,
+          decoration: const InputDecoration(labelText: 'Ethnicity'),
+          onChanged: (v) => widget.fields['ethnicity'] = v,
+        ),
+        const SizedBox(height: 12),
+        TextFormField(
+          controller: _languageController,
+          decoration: const InputDecoration(labelText: 'Mother Tongue'),
+          onChanged: (v) => widget.fields['language_other'] = v,
+        ),
+        const SizedBox(height: 12),
+        PickerField(
+          label: 'Open to Polygamy',
+          value: widget.fields['open_to_polygamy'] == null ? null : (widget.fields['open_to_polygamy'] == true ? 'yes' : 'no'),
+          options: const {'yes': 'Yes', 'no': 'No'},
+          onChanged: (v) => setState(() => widget.fields['open_to_polygamy'] = v == 'yes'),
+        ),
         const SizedBox(height: 16),
         Container(
           padding: const EdgeInsets.all(12),
@@ -691,8 +746,16 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
   // Camera-only stays reserved for genuine identity verification (a selfie,
   // or a physical document photographed on the spot) — see apply_screen.dart.
   Future<void> _pickScreenshot() async {
-    final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
-    if (picked != null) setState(() => _screenshot = File(picked.path));
+    try {
+      final picked = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 85);
+      if (picked != null && mounted) setState(() => _screenshot = File(picked.path));
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not open the photo gallery — check this app\'s photo permission in your phone\'s Settings, then try again.')),
+        );
+      }
+    }
   }
 
   Future<void> _submit() async {

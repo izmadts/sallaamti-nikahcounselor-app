@@ -69,6 +69,36 @@ class NikahPackageInfo {
   }
 }
 
+class PaymentInstructions {
+  final String? jazzcashNumber;
+  final String? jazzcashAccountTitle;
+  final String? easypaisaNumber;
+  final String? bankName;
+  final String? bankAccountTitle;
+  final String? bankAccountNumber;
+  final String? bankAccountIban;
+
+  PaymentInstructions({
+    this.jazzcashNumber,
+    this.jazzcashAccountTitle,
+    this.easypaisaNumber,
+    this.bankName,
+    this.bankAccountTitle,
+    this.bankAccountNumber,
+    this.bankAccountIban,
+  });
+
+  factory PaymentInstructions.fromJson(Map<String, dynamic> json) => PaymentInstructions(
+        jazzcashNumber: json['jazzcash_number']?.toString(),
+        jazzcashAccountTitle: json['jazzcash_account_title']?.toString(),
+        easypaisaNumber: json['easypaisa_number']?.toString(),
+        bankName: json['bank_name']?.toString(),
+        bankAccountTitle: json['bank_account_title']?.toString(),
+        bankAccountNumber: json['bank_account_number']?.toString(),
+        bankAccountIban: json['bank_account_iban']?.toString(),
+      );
+}
+
 class PackagesRepository {
   final ApiClient _client;
   PackagesRepository(this._client);
@@ -77,7 +107,19 @@ class PackagesRepository {
     final data = await _client.get('/matchmaker/meta/packages');
     return (data['packages'] as List).map((e) => NikahPackageInfo.fromJson(e as Map<String, dynamic>)).toList();
   }
+
+  // Separate from index() (unchanged, still used by the read-only
+  // PackagesScreen) so that screen doesn't pull in payment instructions it
+  // never needed — only the package-payment submission screen does.
+  Future<(List<NikahPackageInfo>, PaymentInstructions)> indexWithPaymentInstructions() async {
+    final data = await _client.get('/matchmaker/meta/packages');
+    final packages = (data['packages'] as List).map((e) => NikahPackageInfo.fromJson(e as Map<String, dynamic>)).where((p) => !p.isOneTime).toList();
+    final instructions = PaymentInstructions.fromJson(Map<String, dynamic>.from(data['payment_instructions'] as Map? ?? {}));
+    return (packages, instructions);
+  }
 }
+
+final paymentInstructionsProvider = FutureProvider.autoDispose((ref) => ref.watch(packagesRepositoryProvider).indexWithPaymentInstructions());
 
 final packagesRepositoryProvider = Provider((ref) => PackagesRepository(ref.watch(apiClientProvider)));
 

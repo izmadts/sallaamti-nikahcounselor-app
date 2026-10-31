@@ -72,6 +72,11 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
       });
       ref.invalidate(clientDetailProvider(widget.leadId));
       ref.invalidate(clientListProvider);
+      // Same gap as RequirementsTab — a save that ends in silence looks
+      // identical to one that silently did nothing.
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.clientSaved)));
+      }
     } on ApiException catch (e) {
       setState(() => _error = e.displayMessage);
     } finally {
@@ -86,6 +91,10 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     final l10n = AppLocalizations.of(context)!;
     final enumsAsync = ref.watch(enumsProvider);
     final isConverted = widget.client['is_converted'] as bool? ?? false;
+    final packageId = widget.client['nikah_package_id'];
+    final packageName = widget.client['package_name'] as String?;
+    final packagePaymentStatus = widget.client['package_payment_status'] as String?;
+    final packageRejectionReason = widget.client['package_payment_rejection_reason'] as String?;
 
     return AsyncValueView(
       loading: enumsAsync.isLoading,
@@ -124,6 +133,14 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
                     ),
                   ),
                 ),
+              _PackageStatusCard(
+                leadId: widget.leadId,
+                packageId: packageId,
+                packageName: packageName,
+                paymentStatus: packagePaymentStatus,
+                rejectionReason: packageRejectionReason,
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _nameController,
                 decoration: InputDecoration(labelText: l10n.clientNameLabel),
@@ -171,6 +188,69 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
               ],
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// Matchmaking package was never shown anywhere on a client's own page
+// before this — a counselor had no way to see, let alone set, which
+// package (if any) a client was on, or whether a submitted payment was
+// still awaiting admin review.
+class _PackageStatusCard extends StatelessWidget {
+  final int leadId;
+  final dynamic packageId;
+  final String? packageName;
+  final String? paymentStatus;
+  final String? rejectionReason;
+
+  const _PackageStatusCard({
+    required this.leadId,
+    required this.packageId,
+    required this.packageName,
+    required this.paymentStatus,
+    required this.rejectionReason,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, color, title, subtitle) = switch ((packageId, paymentStatus)) {
+      (final id, _) when id != null => (
+          Icons.workspace_premium,
+          Colors.green,
+          packageName ?? 'Matchmaking package active',
+          'Active package',
+        ),
+      (_, 'submitted') => (Icons.hourglass_top, Colors.amber, 'Package payment under review', 'Admin will confirm shortly'),
+      (_, 'rejected') => (Icons.error_outline, Colors.red, 'Package payment rejected', rejectionReason ?? 'Submit a new payment'),
+      _ => (Icons.add_shopping_cart, Colors.grey, 'No matchmaking package yet', 'Select a package for this client'),
+    };
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(color: color.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(12)),
+        child: Row(
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.9))),
+                  Text(subtitle, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+                ],
+              ),
+            ),
+            if (packageId == null && paymentStatus != 'submitted')
+              TextButton(
+                onPressed: () => context.push('/clients/$leadId/package-payment'),
+                child: Text(paymentStatus == 'rejected' ? 'Retry' : 'Select'),
+              ),
+          ],
         ),
       ),
     );

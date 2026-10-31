@@ -10,8 +10,10 @@ final localeControllerProvider = StateNotifierProvider<LocaleController, Locale?
 );
 
 class LocaleController extends StateNotifier<Locale?> {
+  late final Future<void> _restoring;
+
   LocaleController() : super(null) {
-    _restore();
+    _restoring = _restore();
   }
 
   Future<void> _restore() async {
@@ -19,6 +21,17 @@ class LocaleController extends StateNotifier<Locale?> {
     if (code != null) {
       state = Locale(code);
     }
+  }
+
+  // Awaited by the splash screen before it decides whether to show the
+  // language picker. Without this, `state` was read (via ref.watch) one
+  // frame after construction — before the async secure-storage read above
+  // had any chance to complete — so a returning user with an already-saved
+  // locale still saw `null` and got sent to the picker every single time
+  // the app opened, not just on first install.
+  Future<Locale?> ensureRestored() async {
+    await _restoring;
+    return state;
   }
 
   Future<void> choose(String code) async {

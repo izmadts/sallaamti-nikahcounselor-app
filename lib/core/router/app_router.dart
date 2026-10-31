@@ -15,6 +15,7 @@ import '../../features/client_profile/presentation/walk_in_wizard_screen.dart';
 import '../../features/clients/presentation/client_create_screen.dart';
 import '../../features/clients/presentation/client_detail_screen.dart';
 import '../../features/clients/presentation/client_list_screen.dart';
+import '../../features/packages/presentation/package_payment_screen.dart';
 import '../../features/commission/presentation/commission_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
 import '../../features/guide/presentation/guide_screen.dart';
@@ -129,6 +130,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/clients/:id/profile',
         builder: (context, state) => WalkInWizardScreen(leadId: int.parse(state.pathParameters['id']!)),
+      ),
+      GoRoute(
+        path: '/clients/:id/package-payment',
+        builder: (context, state) => PackagePaymentScreen(leadId: int.parse(state.pathParameters['id']!)),
       ),
 
       GoRoute(

@@ -36,9 +36,18 @@ final authControllerProvider = StateNotifierProvider<AuthController, AuthState>(
 class AuthController extends StateNotifier<AuthState> {
   final AuthRepository _repository;
   final PushNotificationService _push;
+  late final Future<void> _restoring;
 
   AuthController(this._repository, this._push) : super(const AuthState.checking()) {
-    _restoreSession();
+    _restoring = _restoreSession();
+  }
+
+  // Mirrors LocaleController.ensureRestored() — awaited by the splash
+  // screen so it acts on the real restored session instead of a
+  // build-time snapshot that might still read `checking`.
+  Future<AuthState> ensureRestored() async {
+    await _restoring;
+    return state;
   }
 
   // Fire-and-forget — a device-token registration failure (permission

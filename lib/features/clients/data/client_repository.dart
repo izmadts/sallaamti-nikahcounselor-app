@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../core/api/api_client.dart';
 
 class ClientRepository {
@@ -43,6 +45,23 @@ class ClientRepository {
       _client.delete('/matchmaker/clients/$leadId/proposal-batches/$batchId/proposals/$proposalId');
 
   Future<Map<String, dynamic>> sendBatch(int leadId, int batchId) => _client.post('/matchmaker/clients/$leadId/proposal-batches/$batchId/send');
+
+  Future<Map<String, dynamic>> submitPackagePayment(
+    int leadId, {
+    required int nikahPackageId,
+    required String paymentMethod,
+    String? paymentReference,
+    required File screenshot,
+  }) =>
+      _client.postMultipart(
+        '/matchmaker/clients/$leadId/package-payment',
+        fields: {
+          'nikah_package_id': nikahPackageId,
+          'payment_method': paymentMethod,
+          'payment_reference': paymentReference,
+        },
+        files: {'payment_screenshot': screenshot},
+      );
 
   // Deliberately not under /matchmaker/clients/* — this channel is
   // reachable by either party (the client too, from the member app), see

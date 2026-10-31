@@ -70,8 +70,13 @@ class BrowseScreen extends ConsumerWidget {
       appBar: isPickMode ? AppBar(title: Text(l10n.browseTitle)) : const BrandTopBar(),
       body: Column(
         children: [
+          // The server-side browse filter (Api\V1\Matchmaker\
+          // NikahBrowseController::index()) always accepted sect,
+          // marital_status, min_age and max_age too — this screen just
+          // never exposed them, leaving a counselor stuck scrolling the
+          // full unfiltered list to narrow by anything beyond gender/city.
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
             child: Row(
               children: [
                 Expanded(
@@ -88,10 +93,72 @@ class BrowseScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
+                    initialValue: filters['city'],
                     decoration: InputDecoration(labelText: l10n.browseFilterCity, isDense: true),
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'city': v},
                   ),
                 ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: filters['sect'],
+                    decoration: const InputDecoration(labelText: 'Sect', isDense: true),
+                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'sect': v},
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    initialValue: filters['marital_status'],
+                    decoration: const InputDecoration(labelText: 'Marital Status', isDense: true),
+                    items: const [
+                      DropdownMenuItem(value: 'never_married', child: Text('Never Married')),
+                      DropdownMenuItem(value: 'married', child: Text('Married')),
+                      DropdownMenuItem(value: 'divorced', child: Text('Divorced')),
+                      DropdownMenuItem(value: 'widowed', child: Text('Widowed')),
+                      DropdownMenuItem(value: 'separate', child: Text('Separated')),
+                    ],
+                    onChanged: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, if (v != null) 'marital_status': v},
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: filters['min_age'],
+                    decoration: const InputDecoration(labelText: 'Min Age', isDense: true),
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'min_age': v},
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: filters['max_age'],
+                    decoration: const InputDecoration(labelText: 'Max Age', isDense: true),
+                    keyboardType: TextInputType.number,
+                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'max_age': v},
+                  ),
+                ),
+                if (filters.isNotEmpty) ...[
+                  const SizedBox(width: 8),
+                  IconButton(
+                    tooltip: 'Clear filters',
+                    icon: const Icon(Icons.filter_alt_off_outlined),
+                    onPressed: () => ref.read(browseFilterProvider.notifier).state = {},
+                  ),
+                ],
               ],
             ),
           ),
@@ -115,6 +182,11 @@ class BrowseScreen extends ConsumerWidget {
                     final score = MatchScore.fromJson(p['match_score']);
                     return Card(
                       child: ListTile(
+                        // Pick mode used to only offer the "+" quick-add
+                        // action — no way to open the full profile first,
+                        // so a counselor had to add a candidate blind just
+                        // to see anything beyond this summary row.
+                        onTap: () => context.push('/browse/${p['id']}'),
                         title: Text('${p['age']} yrs, ${p['city'] ?? '—'}'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,10 +204,7 @@ class BrowseScreen extends ConsumerWidget {
                                 icon: const Icon(Icons.add_circle, color: MatchmakerTheme.plum),
                                 onPressed: () => forBatchId != null ? _addToBatch(context, ref, p['id'] as int) : _addToShortlist(context, ref, p['id'] as int),
                               )
-                            : IconButton(
-                                icon: const Icon(Icons.chevron_right),
-                                onPressed: () => context.push('/browse/${p['id']}'),
-                              ),
+                            : const Icon(Icons.chevron_right),
                       ),
                     );
                   },
