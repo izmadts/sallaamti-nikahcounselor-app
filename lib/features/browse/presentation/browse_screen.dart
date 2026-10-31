@@ -151,6 +151,31 @@ class BrowseScreen extends ConsumerWidget {
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'max_age': v},
                   ),
                 ),
+              ],
+            ),
+          ),
+          // Education/Country — the server-side filter (mirrors the web
+          // matchmaker panel's own index()) always accepted these too, just
+          // never exposed here, same gap as the row above.
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextFormField(
+                    initialValue: filters['education'],
+                    decoration: const InputDecoration(labelText: 'Education', isDense: true),
+                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'education': v},
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextFormField(
+                    initialValue: filters['country'],
+                    decoration: const InputDecoration(labelText: 'Country', isDense: true),
+                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'country': v},
+                  ),
+                ),
                 if (filters.isNotEmpty) ...[
                   const SizedBox(width: 8),
                   IconButton(
