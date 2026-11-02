@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/state/locale_controller.dart';
 import '../../../core/theme/matchmaker_theme.dart';
+import '../../../core/update/app_version_checker.dart';
 import '../state/auth_controller.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
@@ -26,6 +27,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   // had any chance to finish, so it reliably looked null and sent every
   // app open (not just first install) to the language picker.
   Future<void> _decideRoute() async {
+    // Checked before anything else, logged in or not — the provider itself
+    // fails open on any error, so a check that can't complete just falls
+    // through to the normal locale/auth flow instead of blocking forever.
+    final updateStatus = await ref.read(appUpdateProvider.future);
+    if (!mounted) return;
+
+    if (updateStatus.updateRequired) {
+      context.go('/update-required', extra: updateStatus.updateUrl);
+      return;
+    }
+
     final locale = await ref.read(localeControllerProvider.notifier).ensureRestored();
     if (!mounted) return;
 

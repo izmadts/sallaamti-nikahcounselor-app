@@ -25,6 +25,10 @@ dependencies:
   firebase_messaging: ^16.0.3
   flutter_local_notifications: ^19.4.2
   path_provider: ^2.1.5
+  url_launcher: ^6.3.1
+  # Reads the installed build's own version/build number at runtime, for
+  # the force-update check (AppVersionChecker).
+  package_info_plus: ^8.3.0
 
 dev_dependencies:
   flutter_test:
