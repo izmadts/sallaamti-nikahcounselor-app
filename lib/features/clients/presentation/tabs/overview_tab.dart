@@ -91,6 +91,9 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     final l10n = AppLocalizations.of(context)!;
     final enumsAsync = ref.watch(enumsProvider);
     final isConverted = widget.client['is_converted'] as bool? ?? false;
+    final profilePaymentStatus = widget.client['profile_payment_status'] as String?;
+    final profilePaymentAmount = widget.client['profile_payment_amount'];
+    final profilePaymentRejectionReason = widget.client['profile_payment_rejection_reason'] as String?;
     final packageId = widget.client['nikah_package_id'];
     final packageName = widget.client['package_name'] as String?;
     final packagePaymentStatus = widget.client['package_payment_status'] as String?;
@@ -133,6 +136,14 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
                     ),
                   ),
                 ),
+              if (isConverted)
+                _VerificationPaymentStatusCard(
+                  leadId: widget.leadId,
+                  paymentStatus: profilePaymentStatus,
+                  amount: profilePaymentAmount,
+                  rejectionReason: profilePaymentRejectionReason,
+                ),
+              if (isConverted) const SizedBox(height: 16),
               _PackageStatusCard(
                 leadId: widget.leadId,
                 packageId: packageId,
@@ -252,6 +263,61 @@ class _PackageStatusCard extends StatelessWidget {
               ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+// The one-time verification fee — distinct from the matchmaking package
+// above. Many clients only agree to pay once a contact request is about to
+// be shared, not at registration (see the walk-in wizard's own "Skip for
+// now" on its payment step) — this is the only way back to submit it once
+// they're ready, since the wizard's payment step isn't otherwise reachable
+// again after the initial registration.
+class _VerificationPaymentStatusCard extends StatelessWidget {
+  final int leadId;
+  final String? paymentStatus;
+  final dynamic amount;
+  final String? rejectionReason;
+
+  const _VerificationPaymentStatusCard({
+    required this.leadId,
+    required this.paymentStatus,
+    required this.amount,
+    required this.rejectionReason,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final (icon, color, title, subtitle) = switch (paymentStatus) {
+      'confirmed' => (Icons.verified, Colors.green, 'Verification fee paid', 'Confirmed'),
+      'submitted' => (Icons.hourglass_top, Colors.amber, 'Verification payment under review', 'Admin will confirm shortly'),
+      'rejected' => (Icons.error_outline, Colors.red, 'Verification payment rejected', rejectionReason ?? 'Submit a new payment'),
+      _ => (Icons.payments_outlined, Colors.grey, 'Verification fee not submitted', amount != null ? 'Rs. $amount — can be submitted anytime' : 'Can be submitted anytime'),
+    };
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.9))),
+                Text(subtitle, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+              ],
+            ),
+          ),
+          if (paymentStatus != 'confirmed' && paymentStatus != 'submitted')
+            TextButton(
+              onPressed: () => context.push('/clients/$leadId/verification-payment'),
+              child: Text(paymentStatus == 'rejected' ? 'Retry' : 'Submit'),
+            ),
+        ],
       ),
     );
   }

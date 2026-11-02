@@ -16,6 +16,7 @@ import '../../features/client_profile/presentation/walk_in_wizard_screen.dart';
 import '../../features/clients/presentation/client_create_screen.dart';
 import '../../features/clients/presentation/client_detail_screen.dart';
 import '../../features/clients/presentation/client_list_screen.dart';
+import '../../features/client_profile/presentation/verification_payment_screen.dart';
 import '../../features/packages/presentation/package_payment_screen.dart';
 import '../../features/commission/presentation/commission_screen.dart';
 import '../../features/dashboard/presentation/dashboard_screen.dart';
@@ -143,6 +144,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/clients/:id/package-payment',
         builder: (context, state) => PackagePaymentScreen(leadId: int.parse(state.pathParameters['id']!)),
+      ),
+      GoRoute(
+        path: '/clients/:id/verification-payment',
+        builder: (context, state) => VerificationPaymentScreen(leadId: int.parse(state.pathParameters['id']!)),
       ),
 
       GoRoute(

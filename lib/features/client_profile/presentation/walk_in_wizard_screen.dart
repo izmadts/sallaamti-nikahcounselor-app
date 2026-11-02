@@ -827,6 +827,22 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
       title: l10n.walkInStepPayment,
       children: [
         if (_error != null) Padding(padding: const EdgeInsets.only(bottom: 12), child: Text(_error!, style: const TextStyle(color: Colors.redAccent))),
+        // Many clients only agree to actually pay once contact sharing is
+        // about to happen, not at registration — the profile itself is
+        // already saved (every earlier step already persisted via store()),
+        // so this is never "finish registration or lose it," just "collect
+        // payment now or later." A counselor-registered profile is also
+        // exempt from the self-service 7-day payment deadline, so there's
+        // no clock running either way.
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(color: Colors.blue.shade50, borderRadius: BorderRadius.circular(12)),
+          margin: const EdgeInsets.only(bottom: 16),
+          child: Text(
+            'The client\'s profile is already saved. If they\'d rather pay later — e.g. once a contact request is ready to share — skip this for now and submit it anytime from the client\'s page.',
+            style: TextStyle(fontSize: 12, color: Colors.blue.shade900),
+          ),
+        ),
         PickerField(
           label: l10n.walkInPaymentMethodLabel,
           value: _method,
@@ -843,6 +859,18 @@ class _PaymentStepState extends ConsumerState<_PaymentStep> {
           child: _submitting
               ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
               : Text(l10n.walkInSubmitPayment),
+        ),
+        const SizedBox(height: 10),
+        TextButton(
+          onPressed: _submitting
+              ? null
+              : () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Profile saved — submit payment anytime from the client\'s page.')),
+                  );
+                  context.pop();
+                },
+          child: const Text('Skip for now — collect payment later'),
         ),
       ],
     );
