@@ -182,6 +182,24 @@ abstract class AppLocalizations {
   /// **'Apply Here'**
   String get applyHere;
 
+  /// No description provided for @pendingApprovalTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Under Review'**
+  String get pendingApprovalTitle;
+
+  /// No description provided for @pendingApprovalMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application is still being reviewed by our team. You\'ll get full access to the app as soon as you\'re certified.'**
+  String get pendingApprovalMessage;
+
+  /// No description provided for @pendingApprovalContactWhatsapp.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact Support on WhatsApp'**
+  String get pendingApprovalContactWhatsapp;
+
   /// No description provided for @forgotPassword.
   ///
   /// In en, this message translates to:
@@ -335,13 +353,13 @@ abstract class AppLocalizations {
   /// No description provided for @applyPayoutTitle.
   ///
   /// In en, this message translates to:
-  /// **'Commission Payout Details (optional)'**
+  /// **'Commission Payout Details'**
   String get applyPayoutTitle;
 
   /// No description provided for @applyPayoutSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'You can add this later too — only needed once you start earning commission.'**
+  /// **'This is where we\'ll send your commission once you\'re certified.'**
   String get applyPayoutSubtitle;
 
   /// No description provided for @applyPayoutTitleLabel.
@@ -379,6 +397,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Read the Code of Conduct'**
   String get applyReadCodeOfConduct;
+
+  /// No description provided for @applyPasswordSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose a Login Password'**
+  String get applyPasswordSectionTitle;
+
+  /// No description provided for @applyPasswordSectionSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'For logging into the website and this app once you\'re certified.'**
+  String get applyPasswordSectionSubtitle;
+
+  /// No description provided for @applyConfirmPasswordLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm Password'**
+  String get applyConfirmPasswordLabel;
+
+  /// No description provided for @applyPasswordTooShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 8 characters.'**
+  String get applyPasswordTooShort;
+
+  /// No description provided for @applyPasswordMismatch.
+  ///
+  /// In en, this message translates to:
+  /// **'Passwords do not match.'**
+  String get applyPasswordMismatch;
 
   /// No description provided for @applyConsentRequired.
   ///
@@ -608,11 +656,11 @@ abstract class AppLocalizations {
   /// **'Overview'**
   String get clientTabOverview;
 
-  /// No description provided for @clientTabRequirements.
+  /// No description provided for @clientTabRegistration.
   ///
   /// In en, this message translates to:
-  /// **'Requirements'**
-  String get clientTabRequirements;
+  /// **'Registration'**
+  String get clientTabRegistration;
 
   /// No description provided for @clientTabShortlist.
   ///
@@ -650,41 +698,53 @@ abstract class AppLocalizations {
   /// **'View Profile'**
   String get viewProfile;
 
-  /// No description provided for @requirementsTitle.
+  /// No description provided for @registrationStepBasic.
   ///
   /// In en, this message translates to:
-  /// **'Matchmaking Requirements'**
-  String get requirementsTitle;
+  /// **'Basic Criteria'**
+  String get registrationStepBasic;
 
-  /// No description provided for @requirementsAddItem.
+  /// No description provided for @registrationStepDeen.
   ///
   /// In en, this message translates to:
-  /// **'Add Requirement'**
-  String get requirementsAddItem;
+  /// **'Background & Deen'**
+  String get registrationStepDeen;
 
-  /// No description provided for @requirementTypeLabel.
+  /// No description provided for @registrationStepOther.
   ///
   /// In en, this message translates to:
-  /// **'Type'**
-  String get requirementTypeLabel;
+  /// **'Other Preferences'**
+  String get registrationStepOther;
 
-  /// No description provided for @requirementValueLabel.
+  /// No description provided for @registrationAgeRangeHint.
   ///
   /// In en, this message translates to:
-  /// **'What they want'**
-  String get requirementValueLabel;
+  /// **'e.g. 25-30'**
+  String get registrationAgeRangeHint;
 
-  /// No description provided for @requirementPriorityLabel.
+  /// No description provided for @registrationSaved.
   ///
   /// In en, this message translates to:
-  /// **'Priority'**
-  String get requirementPriorityLabel;
+  /// **'Registration saved.'**
+  String get registrationSaved;
 
-  /// No description provided for @requirementsSaved.
+  /// No description provided for @registrationRequiredFieldsMissing.
   ///
   /// In en, this message translates to:
-  /// **'Requirements saved.'**
-  String get requirementsSaved;
+  /// **'Please fill in every required field before continuing.'**
+  String get registrationRequiredFieldsMissing;
+
+  /// No description provided for @registrationNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get registrationNext;
+
+  /// No description provided for @registrationBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get registrationBack;
 
   /// No description provided for @shortlistTitle.
   ///

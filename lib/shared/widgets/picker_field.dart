@@ -1,5 +1,18 @@
 import 'package:flutter/material.dart';
 
+// Shared by PickerField below and any plain TextFormField that also needs
+// a required marker — a red asterisk, not just a plain "*" appended to the
+// text, so a required field actually stands out at a glance on a long form.
+Widget? requiredFieldLabel(BuildContext context, String label, bool required) {
+  if (!required) return null;
+  return RichText(
+    text: TextSpan(style: DefaultTextStyle.of(context).style.copyWith(color: Colors.grey.shade700), children: [
+      TextSpan(text: label),
+      const TextSpan(text: ' *', style: TextStyle(color: Colors.redAccent)),
+    ]),
+  );
+}
+
 // Every enumerable field in the app (consent type, lead status/source, etc.)
 // renders as a dropdown sourced from the backend's own enum arrays
 // (GET /matchmaker/meta/enums) rather than free text — standing project
@@ -27,7 +40,8 @@ class PickerField extends StatelessWidget {
     return DropdownButtonFormField<String>(
       initialValue: value,
       decoration: InputDecoration(
-        labelText: required ? '$label *' : label,
+        label: requiredFieldLabel(context, label, required),
+        labelText: required ? null : label,
         helperText: helperText,
         helperMaxLines: 3,
       ),

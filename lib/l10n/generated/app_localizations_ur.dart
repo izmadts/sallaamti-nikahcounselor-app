@@ -53,6 +53,17 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applyHere => 'یہاں درخواست دیں';
 
   @override
+  String get pendingApprovalTitle => 'درخواست زیرِ جائزہ ہے';
+
+  @override
+  String get pendingApprovalMessage =>
+      'آپ کی درخواست ابھی ہماری ٹیم کے زیرِ جائزہ ہے۔ سرٹیفائیڈ ہوتے ہی آپ کو ایپ تک مکمل رسائی مل جائے گی۔';
+
+  @override
+  String get pendingApprovalContactWhatsapp =>
+      'واٹس ایپ پر سپورٹ سے رابطہ کریں';
+
+  @override
   String get forgotPassword => 'پاسورڈ بھول گئے؟';
 
   @override
@@ -132,11 +143,11 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applyAddressLabel => 'پتہ';
 
   @override
-  String get applyPayoutTitle => 'کمیشن وصولی کی تفصیلات (اختیاری)';
+  String get applyPayoutTitle => 'کمیشن وصولی کی تفصیلات';
 
   @override
   String get applyPayoutSubtitle =>
-      'یہ بعد میں بھی شامل کر سکتے ہیں — صرف کمیشن کمانا شروع کرنے پر درکار ہے۔';
+      'سرٹیفائیڈ ہونے کے بعد آپ کا کمیشن یہاں بھیجا جائے گا۔';
 
   @override
   String get applyPayoutTitleLabel => 'اکاؤنٹ کا نام';
@@ -157,6 +168,22 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get applyReadCodeOfConduct => 'ضابطہ اخلاق پڑھیں';
+
+  @override
+  String get applyPasswordSectionTitle => 'لاگ اِن پاسورڈ منتخب کریں';
+
+  @override
+  String get applyPasswordSectionSubtitle =>
+      'سرٹیفائیڈ ہونے کے بعد ویب سائٹ اور اس ایپ میں لاگ اِن کے لیے۔';
+
+  @override
+  String get applyConfirmPasswordLabel => 'پاسورڈ کی تصدیق کریں';
+
+  @override
+  String get applyPasswordTooShort => 'پاسورڈ کم از کم 8 حروف کا ہونا چاہیے۔';
+
+  @override
+  String get applyPasswordMismatch => 'پاسورڈز مماثل نہیں ہیں۔';
 
   @override
   String get applyConsentRequired =>
@@ -275,7 +302,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get clientTabOverview => 'خلاصہ';
 
   @override
-  String get clientTabRequirements => 'ضروریات';
+  String get clientTabRegistration => 'رجسٹریشن';
 
   @override
   String get clientTabShortlist => 'شارٹ لسٹ';
@@ -296,22 +323,29 @@ class AppLocalizationsUr extends AppLocalizations {
   String get viewProfile => 'پروفائل دیکھیں';
 
   @override
-  String get requirementsTitle => 'رشتے کی ضروریات';
+  String get registrationStepBasic => 'بنیادی معیار';
 
   @override
-  String get requirementsAddItem => 'ضرورت شامل کریں';
+  String get registrationStepDeen => 'پس منظر اور دین';
 
   @override
-  String get requirementTypeLabel => 'قسم';
+  String get registrationStepOther => 'دیگر ترجیحات';
 
   @override
-  String get requirementValueLabel => 'کیا چاہیے';
+  String get registrationAgeRangeHint => 'مثلاً 25-30';
 
   @override
-  String get requirementPriorityLabel => 'ترجیح';
+  String get registrationSaved => 'رجسٹریشن محفوظ ہو گئی۔';
 
   @override
-  String get requirementsSaved => 'ضروریات محفوظ ہو گئیں۔';
+  String get registrationRequiredFieldsMissing =>
+      'آگے بڑھنے سے پہلے تمام ضروری خانے پُر کریں۔';
+
+  @override
+  String get registrationNext => 'اگلا';
+
+  @override
+  String get registrationBack => 'پیچھے';
 
   @override
   String get shortlistTitle => 'شارٹ لسٹ';

@@ -53,6 +53,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyHere => 'Apply Here';
 
   @override
+  String get pendingApprovalTitle => 'Application Under Review';
+
+  @override
+  String get pendingApprovalMessage =>
+      'Your application is still being reviewed by our team. You\'ll get full access to the app as soon as you\'re certified.';
+
+  @override
+  String get pendingApprovalContactWhatsapp => 'Contact Support on WhatsApp';
+
+  @override
   String get forgotPassword => 'Forgot your password?';
 
   @override
@@ -132,11 +142,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyAddressLabel => 'Address';
 
   @override
-  String get applyPayoutTitle => 'Commission Payout Details (optional)';
+  String get applyPayoutTitle => 'Commission Payout Details';
 
   @override
   String get applyPayoutSubtitle =>
-      'You can add this later too — only needed once you start earning commission.';
+      'This is where we\'ll send your commission once you\'re certified.';
 
   @override
   String get applyPayoutTitleLabel => 'Account Title';
@@ -157,6 +167,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get applyReadCodeOfConduct => 'Read the Code of Conduct';
+
+  @override
+  String get applyPasswordSectionTitle => 'Choose a Login Password';
+
+  @override
+  String get applyPasswordSectionSubtitle =>
+      'For logging into the website and this app once you\'re certified.';
+
+  @override
+  String get applyConfirmPasswordLabel => 'Confirm Password';
+
+  @override
+  String get applyPasswordTooShort => 'Password must be at least 8 characters.';
+
+  @override
+  String get applyPasswordMismatch => 'Passwords do not match.';
 
   @override
   String get applyConsentRequired =>
@@ -275,7 +301,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientTabOverview => 'Overview';
 
   @override
-  String get clientTabRequirements => 'Requirements';
+  String get clientTabRegistration => 'Registration';
 
   @override
   String get clientTabShortlist => 'Shortlist';
@@ -296,22 +322,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewProfile => 'View Profile';
 
   @override
-  String get requirementsTitle => 'Matchmaking Requirements';
+  String get registrationStepBasic => 'Basic Criteria';
 
   @override
-  String get requirementsAddItem => 'Add Requirement';
+  String get registrationStepDeen => 'Background & Deen';
 
   @override
-  String get requirementTypeLabel => 'Type';
+  String get registrationStepOther => 'Other Preferences';
 
   @override
-  String get requirementValueLabel => 'What they want';
+  String get registrationAgeRangeHint => 'e.g. 25-30';
 
   @override
-  String get requirementPriorityLabel => 'Priority';
+  String get registrationSaved => 'Registration saved.';
 
   @override
-  String get requirementsSaved => 'Requirements saved.';
+  String get registrationRequiredFieldsMissing =>
+      'Please fill in every required field before continuing.';
+
+  @override
+  String get registrationNext => 'Next';
+
+  @override
+  String get registrationBack => 'Back';
 
   @override
   String get shortlistTitle => 'Shortlist';
