@@ -728,6 +728,30 @@ abstract class AppLocalizations {
   /// **'Remove'**
   String get shortlistRemove;
 
+  /// No description provided for @shortlistShare.
+  ///
+  /// In en, this message translates to:
+  /// **'Share on WhatsApp'**
+  String get shortlistShare;
+
+  /// No description provided for @shortlistMarkFinal.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark Final'**
+  String get shortlistMarkFinal;
+
+  /// No description provided for @shortlistMarkFinalExplain.
+  ///
+  /// In en, this message translates to:
+  /// **'Records the client\'s consent and moves this candidate straight into Proposals.'**
+  String get shortlistMarkFinalExplain;
+
+  /// No description provided for @shortlistFinalized.
+  ///
+  /// In en, this message translates to:
+  /// **'Candidate finalized — moved to Proposals.'**
+  String get shortlistFinalized;
+
   /// No description provided for @shortlistNoteLabel.
   ///
   /// In en, this message translates to:

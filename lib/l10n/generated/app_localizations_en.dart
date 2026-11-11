@@ -337,6 +337,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shortlistRemove => 'Remove';
 
   @override
+  String get shortlistShare => 'Share on WhatsApp';
+
+  @override
+  String get shortlistMarkFinal => 'Mark Final';
+
+  @override
+  String get shortlistMarkFinalExplain =>
+      'Records the client\'s consent and moves this candidate straight into Proposals.';
+
+  @override
+  String get shortlistFinalized => 'Candidate finalized — moved to Proposals.';
+
+  @override
   String get shortlistNoteLabel => 'Note (optional)';
 
   @override

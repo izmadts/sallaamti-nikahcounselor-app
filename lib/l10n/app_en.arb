@@ -119,6 +119,10 @@
   "shortlistEmpty": "No candidates shortlisted yet.",
   "shortlistAdd": "Add to Shortlist",
   "shortlistRemove": "Remove",
+  "shortlistShare": "Share on WhatsApp",
+  "shortlistMarkFinal": "Mark Final",
+  "shortlistMarkFinalExplain": "Records the client's consent and moves this candidate straight into Proposals.",
+  "shortlistFinalized": "Candidate finalized — moved to Proposals.",
   "shortlistNoteLabel": "Note (optional)",
 
   "consentTitle": "Consent",

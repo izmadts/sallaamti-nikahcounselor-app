@@ -338,6 +338,20 @@ class AppLocalizationsUr extends AppLocalizations {
   String get shortlistRemove => 'ہٹائیں';
 
   @override
+  String get shortlistShare => 'واٹس ایپ پر شیئر کریں';
+
+  @override
+  String get shortlistMarkFinal => 'حتمی قرار دیں';
+
+  @override
+  String get shortlistMarkFinalExplain =>
+      'کلائنٹ کی رضامندی ریکارڈ کرے گا اور یہ امیدوار براہِ راست تجاویز میں منتقل ہو جائے گا۔';
+
+  @override
+  String get shortlistFinalized =>
+      'امیدوار حتمی قرار دیا گیا — تجاویز میں منتقل ہو گیا۔';
+
+  @override
   String get shortlistNoteLabel => 'نوٹ (اختیاری)';
 
   @override

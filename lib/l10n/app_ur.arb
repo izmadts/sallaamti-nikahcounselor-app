@@ -119,6 +119,10 @@
   "shortlistEmpty": "ابھی کوئی پروفائل شارٹ لسٹ نہیں کی گئی۔",
   "shortlistAdd": "شارٹ لسٹ میں شامل کریں",
   "shortlistRemove": "ہٹائیں",
+  "shortlistShare": "واٹس ایپ پر شیئر کریں",
+  "shortlistMarkFinal": "حتمی قرار دیں",
+  "shortlistMarkFinalExplain": "کلائنٹ کی رضامندی ریکارڈ کرے گا اور یہ امیدوار براہِ راست تجاویز میں منتقل ہو جائے گا۔",
+  "shortlistFinalized": "امیدوار حتمی قرار دیا گیا — تجاویز میں منتقل ہو گیا۔",
   "shortlistNoteLabel": "نوٹ (اختیاری)",
 
   "consentTitle": "رضامندی",

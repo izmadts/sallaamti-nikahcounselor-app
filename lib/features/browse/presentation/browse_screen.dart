@@ -30,15 +30,25 @@ final browseListProvider = FutureProvider.autoDispose.family<Map<String, dynamic
 // forBatchId is also set, "add to batch") action instead of just browsing —
 // same screen, two purposes, since the underlying candidate list and
 // filters are identical either way.
-class BrowseScreen extends ConsumerWidget {
+class BrowseScreen extends ConsumerStatefulWidget {
   final int? forLeadId;
   final int? forBatchId;
   const BrowseScreen({super.key, this.forLeadId, this.forBatchId});
 
+  @override
+  ConsumerState<BrowseScreen> createState() => _BrowseScreenState();
+}
+
+class _BrowseScreenState extends ConsumerState<BrowseScreen> {
+  // Guards against re-seeding on every rebuild (the filter fields below
+  // would otherwise keep snapping back to the server's defaults even after
+  // the counselor edits one of them) — once per screen visit is enough.
+  bool _seededFromServer = false;
+
   Future<void> _addToShortlist(BuildContext context, WidgetRef ref, int profileId) async {
     try {
-      await ref.read(clientRepositoryProvider).addToShortlist(forLeadId!, profileId);
-      ref.invalidate(clientDetailProvider(forLeadId!));
+      await ref.read(clientRepositoryProvider).addToShortlist(widget.forLeadId!, profileId);
+      ref.invalidate(clientDetailProvider(widget.forLeadId!));
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.shortlistAdd)));
     } on ApiException catch (e) {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
@@ -47,8 +57,8 @@ class BrowseScreen extends ConsumerWidget {
 
   Future<void> _addToBatch(BuildContext context, WidgetRef ref, int profileId) async {
     try {
-      await ref.read(clientRepositoryProvider).addProposal(forLeadId!, forBatchId!, profileId);
-      ref.invalidate(clientDetailProvider(forLeadId!));
+      await ref.read(clientRepositoryProvider).addProposal(widget.forLeadId!, widget.forBatchId!, profileId);
+      ref.invalidate(clientDetailProvider(widget.forLeadId!));
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.batchAddCandidate)));
     } on ApiException catch (e) {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
@@ -56,11 +66,31 @@ class BrowseScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final async = ref.watch(browseListProvider(forLeadId));
+    final async = ref.watch(browseListProvider(widget.forLeadId));
     final filters = ref.watch(browseFilterProvider);
-    final isPickMode = forLeadId != null;
+    final isPickMode = widget.forLeadId != null;
+
+    // Seeds the filter fields from the server's applied_filters the first
+    // time a pick-mode load comes back with any (gender's own auto-default
+    // doesn't appear here — it's reflected directly in the results, not a
+    // field above) — so the counselor sees why the list is narrowed instead
+    // of empty-looking fields. Guarded to once per visit; overriding a
+    // field after that is a deliberate override, not something to re-seed.
+    if (isPickMode) {
+      ref.listen(browseListProvider(widget.forLeadId), (previous, next) {
+        if (_seededFromServer) return;
+        final applied = next.valueOrNull?['applied_filters'] as Map?;
+        if (applied == null || applied.isEmpty) return;
+        _seededFromServer = true;
+        final current = ref.read(browseFilterProvider);
+        ref.read(browseFilterProvider.notifier).state = {
+          ...current,
+          for (final entry in applied.entries) entry.key as String: entry.value.toString(),
+        };
+      });
+    }
 
     return Scaffold(
       // Pick mode is a focused sub-task (choosing a candidate for a
@@ -81,6 +111,13 @@ class BrowseScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
+                    // `initialValue` only ever applies on this widget's
+                    // first build — without a key tied to the value, a
+                    // later change to `filters` (the server's
+                    // applied_filters seed, or clearing filters) wouldn't
+                    // be reflected here even though the query itself
+                    // already re-ran with the new value.
+                    key: ValueKey('gender-${filters['gender']}'),
                     initialValue: filters['gender'],
                     decoration: InputDecoration(labelText: l10n.browseFilterGender, isDense: true),
                     items: const [
@@ -93,6 +130,7 @@ class BrowseScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('city-${filters['city']}'),
                     initialValue: filters['city'],
                     decoration: InputDecoration(labelText: l10n.browseFilterCity, isDense: true),
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'city': v},
@@ -107,6 +145,7 @@ class BrowseScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('sect-${filters['sect']}'),
                     initialValue: filters['sect'],
                     decoration: const InputDecoration(labelText: 'Sect', isDense: true),
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'sect': v},
@@ -115,7 +154,9 @@ class BrowseScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: DropdownButtonFormField<String>(
+                    key: ValueKey('marital_status-${filters['marital_status']}'),
                     initialValue: filters['marital_status'],
+                    isExpanded: true,
                     decoration: const InputDecoration(labelText: 'Marital Status', isDense: true),
                     items: const [
                       DropdownMenuItem(value: 'never_married', child: Text('Never Married')),
@@ -136,6 +177,7 @@ class BrowseScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('min_age-${filters['min_age']}'),
                     initialValue: filters['min_age'],
                     decoration: const InputDecoration(labelText: 'Min Age', isDense: true),
                     keyboardType: TextInputType.number,
@@ -145,6 +187,7 @@ class BrowseScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('max_age-${filters['max_age']}'),
                     initialValue: filters['max_age'],
                     decoration: const InputDecoration(labelText: 'Max Age', isDense: true),
                     keyboardType: TextInputType.number,
@@ -163,6 +206,7 @@ class BrowseScreen extends ConsumerWidget {
               children: [
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('education-${filters['education']}'),
                     initialValue: filters['education'],
                     decoration: const InputDecoration(labelText: 'Education', isDense: true),
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'education': v},
@@ -171,6 +215,7 @@ class BrowseScreen extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: TextFormField(
+                    key: ValueKey('country-${filters['country']}'),
                     initialValue: filters['country'],
                     decoration: const InputDecoration(labelText: 'Country', isDense: true),
                     onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'country': v},
@@ -192,7 +237,7 @@ class BrowseScreen extends ConsumerWidget {
               loading: async.isLoading,
               error: async.error,
               data: async.valueOrNull,
-              onRetry: () => ref.invalidate(browseListProvider(forLeadId)),
+              onRetry: () => ref.invalidate(browseListProvider(widget.forLeadId)),
               builder: (data) {
                 final profiles = List<Map<String, dynamic>>.from((data['profiles'] as List).map((e) => Map<String, dynamic>.from(e as Map)));
                 if (profiles.isEmpty) {
@@ -227,7 +272,7 @@ class BrowseScreen extends ConsumerWidget {
                         trailing: isPickMode
                             ? IconButton(
                                 icon: const Icon(Icons.add_circle, color: MatchmakerTheme.plum),
-                                onPressed: () => forBatchId != null ? _addToBatch(context, ref, p['id'] as int) : _addToShortlist(context, ref, p['id'] as int),
+                                onPressed: () => widget.forBatchId != null ? _addToBatch(context, ref, p['id'] as int) : _addToShortlist(context, ref, p['id'] as int),
                               )
                             : const Icon(Icons.chevron_right),
                       ),

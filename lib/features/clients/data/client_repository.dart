@@ -25,6 +25,9 @@ class ClientRepository {
 
   Future<void> removeFromShortlist(int leadId, int itemId) => _client.delete('/matchmaker/clients/$leadId/shortlist/$itemId');
 
+  Future<Map<String, dynamic>> finalizeShortlistItem(int leadId, int itemId, {required String method, String? notes}) =>
+      _client.post('/matchmaker/clients/$leadId/shortlist/$itemId/finalize', data: {'method': method, 'notes': notes});
+
   Future<Map<String, dynamic>> recordConsent(int leadId, {required String consentType, required String method, String? notes}) =>
       _client.post('/matchmaker/clients/$leadId/consents', data: {'consent_type': consentType, 'method': method, 'notes': notes});
 
