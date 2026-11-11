@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../core/theme/matchmaker_theme.dart';
@@ -87,6 +88,16 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
           const SnackBar(content: Text('Could not open the camera — check that this app has camera permission in your phone\'s Settings, then try again.')),
         );
       }
+    }
+  }
+
+  // Opens the real, existing public page (resources/views/nikah-counselor/
+  // code-of-conduct.blade.php) — this form's own terms checkbox previously
+  // had no way to actually read what it was agreeing to before ticking it.
+  Future<void> _openCodeOfConduct() async {
+    final uri = Uri.parse('https://sallaamti.com/nikah-counselor/code-of-conduct');
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open the page — check your connection and try again.')));
     }
   }
 
@@ -246,6 +257,14 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                     value: _termsAccepted,
                     onChanged: (v) => setState(() => _termsAccepted = v ?? false),
                     title: Text(l10n.applyTermsText, style: const TextStyle(fontSize: 13)),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: _openCodeOfConduct,
+                      style: TextButton.styleFrom(padding: EdgeInsets.zero, minimumSize: const Size(0, 0), tapTargetSize: MaterialTapTargetSize.shrinkWrap),
+                      child: Text(l10n.applyReadCodeOfConduct, style: const TextStyle(fontSize: 12.5, decoration: TextDecoration.underline)),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(

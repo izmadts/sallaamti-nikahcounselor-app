@@ -126,7 +126,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applySelfieLabel => 'اپنی تصویر';
 
   @override
-  String get applyAreaLabel => 'علاقہ';
+  String get applyAreaLabel => 'شہر';
 
   @override
   String get applyAddressLabel => 'پتہ';
@@ -154,6 +154,9 @@ class AppLocalizationsUr extends AppLocalizations {
   @override
   String get applyTermsText =>
       'میں نکاح کاؤنسلر کی شرائط اور ضابطہ اخلاق سے متفق ہوں۔';
+
+  @override
+  String get applyReadCodeOfConduct => 'ضابطہ اخلاق پڑھیں';
 
   @override
   String get applyConsentRequired =>

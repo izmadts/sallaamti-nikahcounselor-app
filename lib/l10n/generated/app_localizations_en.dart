@@ -126,7 +126,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applySelfieLabel => 'Selfie Photo';
 
   @override
-  String get applyAreaLabel => 'Area';
+  String get applyAreaLabel => 'City';
 
   @override
   String get applyAddressLabel => 'Address';
@@ -154,6 +154,9 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get applyTermsText =>
       'I agree to the Nikah Counselor terms and code of conduct.';
+
+  @override
+  String get applyReadCodeOfConduct => 'Read the Code of Conduct';
 
   @override
   String get applyConsentRequired =>

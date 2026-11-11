@@ -323,7 +323,7 @@ abstract class AppLocalizations {
   /// No description provided for @applyAreaLabel.
   ///
   /// In en, this message translates to:
-  /// **'Area'**
+  /// **'City'**
   String get applyAreaLabel;
 
   /// No description provided for @applyAddressLabel.
@@ -373,6 +373,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'I agree to the Nikah Counselor terms and code of conduct.'**
   String get applyTermsText;
+
+  /// No description provided for @applyReadCodeOfConduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Read the Code of Conduct'**
+  String get applyReadCodeOfConduct;
 
   /// No description provided for @applyConsentRequired.
   ///
