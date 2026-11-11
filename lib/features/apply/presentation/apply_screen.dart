@@ -10,6 +10,7 @@ import '../../../core/api/api_exception.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/password_field.dart';
 import '../../../shared/widgets/picker_field.dart';
 import '../../auth/state/auth_controller.dart';
 import '../data/apply_repository.dart';
@@ -42,6 +43,8 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
   final _payoutTitleController = TextEditingController();
   final _payoutNumberController = TextEditingController();
   final _payoutBankController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   String? _gender;
   String? _maritalStatus;
@@ -70,6 +73,8 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
     _payoutTitleController.dispose();
     _payoutNumberController.dispose();
     _payoutBankController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
@@ -139,6 +144,8 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
         'payout_bank_name': _payoutBankController.text.trim().isEmpty ? null : _payoutBankController.text.trim(),
         'consent_accepted': true,
         'terms_accepted': true,
+        'password': _passwordController.text,
+        'password_confirmation': _confirmPasswordController.text,
       }, _files);
       setState(() => _submitted = true);
     } on ApiException catch (e) {
@@ -234,17 +241,44 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                   const SizedBox(height: 4),
                   Text(l10n.applyPayoutSubtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
                   const SizedBox(height: 8),
-                  PickerField(label: l10n.walkInPaymentMethodLabel, value: _payoutMethod, options: payoutMethods, onChanged: (v) => setState(() => _payoutMethod = v)),
+                  PickerField(
+                    label: l10n.walkInPaymentMethodLabel,
+                    value: _payoutMethod,
+                    options: payoutMethods,
+                    required: true,
+                    onChanged: (v) => setState(() => _payoutMethod = v),
+                  ),
+                  // Server-required regardless (see both NikahCounselorApplication
+                  // Controllers' own validation) — these used to have no
+                  // validator at all, so a counselor who skipped them got a
+                  // generic, unexplained submission failure instead of being
+                  // told which field was missing.
                   if (_payoutMethod != null) ...[
                     const SizedBox(height: 12),
-                    TextFormField(controller: _payoutTitleController, decoration: InputDecoration(labelText: l10n.applyPayoutTitleLabel)),
+                    TextFormField(controller: _payoutTitleController, decoration: InputDecoration(labelText: l10n.applyPayoutTitleLabel), validator: _required(l10n)),
                     const SizedBox(height: 12),
-                    TextFormField(controller: _payoutNumberController, decoration: InputDecoration(labelText: l10n.applyPayoutNumberLabel)),
+                    TextFormField(controller: _payoutNumberController, decoration: InputDecoration(labelText: l10n.applyPayoutNumberLabel), validator: _required(l10n)),
                     if (_payoutMethod == 'bank_transfer') ...[
                       const SizedBox(height: 12),
-                      TextFormField(controller: _payoutBankController, decoration: InputDecoration(labelText: l10n.applyPayoutBankLabel)),
+                      TextFormField(controller: _payoutBankController, decoration: InputDecoration(labelText: l10n.applyPayoutBankLabel), validator: _required(l10n)),
                     ],
                   ],
+                  const SizedBox(height: 20),
+                  Text(l10n.applyPasswordSectionTitle, style: const TextStyle(fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 4),
+                  Text(l10n.applyPasswordSectionSubtitle, style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+                  const SizedBox(height: 8),
+                  PasswordField(
+                    controller: _passwordController,
+                    labelText: l10n.password,
+                    validator: (v) => (v == null || v.length < 8) ? l10n.applyPasswordTooShort : null,
+                  ),
+                  const SizedBox(height: 12),
+                  PasswordField(
+                    controller: _confirmPasswordController,
+                    labelText: l10n.applyConfirmPasswordLabel,
+                    validator: (v) => v != _passwordController.text ? l10n.applyPasswordMismatch : null,
+                  ),
                   const SizedBox(height: 20),
                   CheckboxListTile(
                     contentPadding: EdgeInsets.zero,
