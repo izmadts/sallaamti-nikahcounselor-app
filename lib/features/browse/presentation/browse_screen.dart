@@ -256,7 +256,7 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
                         // action — no way to open the full profile first,
                         // so a counselor had to add a candidate blind just
                         // to see anything beyond this summary row.
-                        onTap: () => context.push('/browse/${p['id']}'),
+                        onTap: () => context.push('/browse/${p['id']}${widget.forLeadId != null ? '?forLeadId=${widget.forLeadId}' : ''}'),
                         title: Text('${p['age']} yrs, ${p['city'] ?? '—'}'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

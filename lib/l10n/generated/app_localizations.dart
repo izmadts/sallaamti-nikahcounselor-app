@@ -932,6 +932,12 @@ abstract class AppLocalizations {
   /// **'Sent'**
   String get batchStatusSent;
 
+  /// No description provided for @batchFinalMatchTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Final Match — Client Interested'**
+  String get batchFinalMatchTitle;
+
   /// No description provided for @shareLink.
   ///
   /// In en, this message translates to:

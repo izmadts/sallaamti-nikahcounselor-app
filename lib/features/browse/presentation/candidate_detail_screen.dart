@@ -12,12 +12,13 @@ final candidateDetailProvider = FutureProvider.family.autoDispose(
 
 class CandidateDetailScreen extends ConsumerWidget {
   final int profileId;
-  const CandidateDetailScreen({super.key, required this.profileId});
+  final int? forLeadId;
+  const CandidateDetailScreen({super.key, required this.profileId, this.forLeadId});
 
   Future<void> _requestContact(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     try {
-      await ref.read(browseRepositoryProvider).requestContact(profileId);
+      await ref.read(browseRepositoryProvider).requestContact(profileId, leadId: forLeadId);
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.browseRequestSent)));
     } on ApiException catch (e) {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));

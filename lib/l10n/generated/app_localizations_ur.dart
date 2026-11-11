@@ -445,6 +445,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get batchStatusSent => 'بھیج دیا گیا';
 
   @override
+  String get batchFinalMatchTitle => 'حتمی رشتہ — کلائنٹ کو پسند آیا';
+
+  @override
   String get shareLink => 'لنک بھیجیں';
 
   @override

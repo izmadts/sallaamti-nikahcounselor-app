@@ -166,7 +166,10 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       GoRoute(
         path: '/browse/:id',
-        builder: (context, state) => CandidateDetailScreen(profileId: int.parse(state.pathParameters['id']!)),
+        builder: (context, state) => CandidateDetailScreen(
+          profileId: int.parse(state.pathParameters['id']!),
+          forLeadId: state.uri.queryParameters['forLeadId'] != null ? int.parse(state.uri.queryParameters['forLeadId']!) : null,
+        ),
       ),
 
       GoRoute(path: '/commission', builder: (context, state) => const CommissionScreen()),

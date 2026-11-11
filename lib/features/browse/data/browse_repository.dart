@@ -8,5 +8,6 @@ class BrowseRepository {
 
   Future<Map<String, dynamic>> show(int profileId) => _client.get('/matchmaker/browse/$profileId');
 
-  Future<Map<String, dynamic>> requestContact(int profileId) => _client.post('/matchmaker/browse/$profileId/request-contact');
+  Future<Map<String, dynamic>> requestContact(int profileId, {int? leadId}) =>
+      _client.post('/matchmaker/browse/$profileId/request-contact', data: {if (leadId != null) 'lead_id': leadId});
 }

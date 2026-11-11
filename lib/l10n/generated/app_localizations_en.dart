@@ -443,6 +443,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get batchStatusSent => 'Sent';
 
   @override
+  String get batchFinalMatchTitle => 'Final Match — Client Interested';
+
+  @override
   String get shareLink => 'Share Link';
 
   @override

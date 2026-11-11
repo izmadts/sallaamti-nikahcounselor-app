@@ -156,6 +156,7 @@
   "batchSend": "Send Batch",
   "batchStatusDraft": "Draft",
   "batchStatusSent": "Sent",
+  "batchFinalMatchTitle": "Final Match — Client Interested",
   "shareLink": "Share Link",
   "regenerateLink": "Regenerate Link",
 
