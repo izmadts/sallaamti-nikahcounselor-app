@@ -104,7 +104,7 @@
   "clientSaved": "کلائنٹ محفوظ ہو گیا۔",
 
   "clientTabOverview": "خلاصہ",
-  "clientTabRegistration": "رجسٹریشن",
+  "clientTabRequirements": "ضروریات",
   "clientTabShortlist": "شارٹ لسٹ",
   "clientTabConsent": "رضامندی",
   "clientTabBatches": "تجاویز",
@@ -113,14 +113,7 @@
   "profileAlreadyLinked": "نکاح پروفائل جڑا ہوا ہے",
   "viewProfile": "پروفائل دیکھیں",
 
-  "registrationStepBasic": "بنیادی معیار",
-  "registrationStepDeen": "پس منظر اور دین",
-  "registrationStepOther": "دیگر ترجیحات",
-  "registrationAgeRangeHint": "مثلاً 25-30",
-  "registrationSaved": "رجسٹریشن محفوظ ہو گئی۔",
-  "registrationRequiredFieldsMissing": "آگے بڑھنے سے پہلے تمام ضروری خانے پُر کریں۔",
-  "registrationNext": "اگلا",
-  "registrationBack": "پیچھے",
+  "requirementsSaved": "ضروریات محفوظ ہو گئیں۔",
 
   "shortlistTitle": "شارٹ لسٹ",
   "shortlistEmpty": "ابھی کوئی پروفائل شارٹ لسٹ نہیں کی گئی۔",

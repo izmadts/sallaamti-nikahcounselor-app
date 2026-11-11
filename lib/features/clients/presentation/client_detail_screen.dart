@@ -8,7 +8,7 @@ import 'tabs/batches_tab.dart';
 import 'tabs/consent_tab.dart';
 import 'tabs/messages_tab.dart';
 import 'tabs/overview_tab.dart';
-import 'tabs/registration_tab.dart';
+import 'tabs/requirements_tab.dart';
 import 'tabs/shortlist_tab.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
@@ -30,7 +30,7 @@ class ClientDetailScreen extends ConsumerWidget {
             isScrollable: true,
             tabs: [
               Tab(text: l10n.clientTabOverview),
-              Tab(text: l10n.clientTabRegistration),
+              Tab(text: l10n.clientTabRequirements),
               Tab(text: l10n.clientTabShortlist),
               Tab(text: l10n.clientTabConsent),
               Tab(text: l10n.clientTabBatches),
@@ -59,7 +59,7 @@ class ClientDetailScreen extends ConsumerWidget {
             builder: (client) => TabBarView(
               children: [
                 OverviewTab(leadId: leadId, client: client),
-                RegistrationTab(leadId: leadId, client: client),
+                RequirementsTab(leadId: leadId, client: client),
                 ShortlistTab(leadId: leadId, client: client),
                 ConsentTab(leadId: leadId, client: client),
                 BatchesTab(leadId: leadId, client: client),

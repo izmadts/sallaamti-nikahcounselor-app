@@ -302,7 +302,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get clientTabOverview => 'خلاصہ';
 
   @override
-  String get clientTabRegistration => 'رجسٹریشن';
+  String get clientTabRequirements => 'ضروریات';
 
   @override
   String get clientTabShortlist => 'شارٹ لسٹ';
@@ -323,29 +323,7 @@ class AppLocalizationsUr extends AppLocalizations {
   String get viewProfile => 'پروفائل دیکھیں';
 
   @override
-  String get registrationStepBasic => 'بنیادی معیار';
-
-  @override
-  String get registrationStepDeen => 'پس منظر اور دین';
-
-  @override
-  String get registrationStepOther => 'دیگر ترجیحات';
-
-  @override
-  String get registrationAgeRangeHint => 'مثلاً 25-30';
-
-  @override
-  String get registrationSaved => 'رجسٹریشن محفوظ ہو گئی۔';
-
-  @override
-  String get registrationRequiredFieldsMissing =>
-      'آگے بڑھنے سے پہلے تمام ضروری خانے پُر کریں۔';
-
-  @override
-  String get registrationNext => 'اگلا';
-
-  @override
-  String get registrationBack => 'پیچھے';
+  String get requirementsSaved => 'ضروریات محفوظ ہو گئیں۔';
 
   @override
   String get shortlistTitle => 'شارٹ لسٹ';

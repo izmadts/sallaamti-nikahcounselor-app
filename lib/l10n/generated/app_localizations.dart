@@ -656,11 +656,11 @@ abstract class AppLocalizations {
   /// **'Overview'**
   String get clientTabOverview;
 
-  /// No description provided for @clientTabRegistration.
+  /// No description provided for @clientTabRequirements.
   ///
   /// In en, this message translates to:
-  /// **'Registration'**
-  String get clientTabRegistration;
+  /// **'Requirements'**
+  String get clientTabRequirements;
 
   /// No description provided for @clientTabShortlist.
   ///
@@ -698,53 +698,11 @@ abstract class AppLocalizations {
   /// **'View Profile'**
   String get viewProfile;
 
-  /// No description provided for @registrationStepBasic.
+  /// No description provided for @requirementsSaved.
   ///
   /// In en, this message translates to:
-  /// **'Basic Criteria'**
-  String get registrationStepBasic;
-
-  /// No description provided for @registrationStepDeen.
-  ///
-  /// In en, this message translates to:
-  /// **'Background & Deen'**
-  String get registrationStepDeen;
-
-  /// No description provided for @registrationStepOther.
-  ///
-  /// In en, this message translates to:
-  /// **'Other Preferences'**
-  String get registrationStepOther;
-
-  /// No description provided for @registrationAgeRangeHint.
-  ///
-  /// In en, this message translates to:
-  /// **'e.g. 25-30'**
-  String get registrationAgeRangeHint;
-
-  /// No description provided for @registrationSaved.
-  ///
-  /// In en, this message translates to:
-  /// **'Registration saved.'**
-  String get registrationSaved;
-
-  /// No description provided for @registrationRequiredFieldsMissing.
-  ///
-  /// In en, this message translates to:
-  /// **'Please fill in every required field before continuing.'**
-  String get registrationRequiredFieldsMissing;
-
-  /// No description provided for @registrationNext.
-  ///
-  /// In en, this message translates to:
-  /// **'Next'**
-  String get registrationNext;
-
-  /// No description provided for @registrationBack.
-  ///
-  /// In en, this message translates to:
-  /// **'Back'**
-  String get registrationBack;
+  /// **'Requirements saved.'**
+  String get requirementsSaved;
 
   /// No description provided for @shortlistTitle.
   ///

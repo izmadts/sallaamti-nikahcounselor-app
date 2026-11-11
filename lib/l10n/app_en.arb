@@ -104,7 +104,7 @@
   "clientSaved": "Client saved.",
 
   "clientTabOverview": "Overview",
-  "clientTabRegistration": "Registration",
+  "clientTabRequirements": "Requirements",
   "clientTabShortlist": "Shortlist",
   "clientTabConsent": "Consent",
   "clientTabBatches": "Proposals",
@@ -113,14 +113,7 @@
   "profileAlreadyLinked": "Nikah profile linked",
   "viewProfile": "View Profile",
 
-  "registrationStepBasic": "Basic Criteria",
-  "registrationStepDeen": "Background & Deen",
-  "registrationStepOther": "Other Preferences",
-  "registrationAgeRangeHint": "e.g. 25-30",
-  "registrationSaved": "Registration saved.",
-  "registrationRequiredFieldsMissing": "Please fill in every required field before continuing.",
-  "registrationNext": "Next",
-  "registrationBack": "Back",
+  "requirementsSaved": "Requirements saved.",
 
   "shortlistTitle": "Shortlist",
   "shortlistEmpty": "No candidates shortlisted yet.",

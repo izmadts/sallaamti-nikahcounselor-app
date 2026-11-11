@@ -301,7 +301,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get clientTabOverview => 'Overview';
 
   @override
-  String get clientTabRegistration => 'Registration';
+  String get clientTabRequirements => 'Requirements';
 
   @override
   String get clientTabShortlist => 'Shortlist';
@@ -322,29 +322,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get viewProfile => 'View Profile';
 
   @override
-  String get registrationStepBasic => 'Basic Criteria';
-
-  @override
-  String get registrationStepDeen => 'Background & Deen';
-
-  @override
-  String get registrationStepOther => 'Other Preferences';
-
-  @override
-  String get registrationAgeRangeHint => 'e.g. 25-30';
-
-  @override
-  String get registrationSaved => 'Registration saved.';
-
-  @override
-  String get registrationRequiredFieldsMissing =>
-      'Please fill in every required field before continuing.';
-
-  @override
-  String get registrationNext => 'Next';
-
-  @override
-  String get registrationBack => 'Back';
+  String get requirementsSaved => 'Requirements saved.';
 
   @override
   String get shortlistTitle => 'Shortlist';

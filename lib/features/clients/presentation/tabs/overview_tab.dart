@@ -72,7 +72,7 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
       });
       ref.invalidate(clientDetailProvider(widget.leadId));
       ref.invalidate(clientListProvider);
-      // Same gap as RegistrationTab — a save that ends in silence looks
+      // Same gap as RequirementsTab — a save that ends in silence looks
       // identical to one that silently did nothing.
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocalizations.of(context)!.clientSaved)));
