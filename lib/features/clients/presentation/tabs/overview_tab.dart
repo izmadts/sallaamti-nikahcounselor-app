@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/api/api_exception.dart';
 import '../../../../core/data/enum_repository.dart';
@@ -98,6 +99,8 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
     final packageName = widget.client['package_name'] as String?;
     final packagePaymentStatus = widget.client['package_payment_status'] as String?;
     final packageRejectionReason = widget.client['package_payment_rejection_reason'] as String?;
+    final memberHasAccount = widget.client['member_has_account'] as bool? ?? false;
+    final memberAppLastSeenAt = widget.client['member_app_last_seen_at'] as String?;
 
     return AsyncValueView(
       loading: enumsAsync.isLoading,
@@ -144,6 +147,12 @@ class _OverviewTabState extends ConsumerState<OverviewTab> {
                   rejectionReason: profilePaymentRejectionReason,
                 ),
               if (isConverted) const SizedBox(height: 16),
+              // Answers "is this client even reachable in the member app,
+              // or am I only ever going to reach them on WhatsApp?" — only
+              // meaningful once an account exists at all (isConverted);
+              // before that there's nothing to check.
+              if (memberHasAccount) _AppActivityCard(lastSeenAt: memberAppLastSeenAt),
+              if (memberHasAccount) const SizedBox(height: 16),
               _PackageStatusCard(
                 leadId: widget.leadId,
                 packageId: packageId,
@@ -265,6 +274,52 @@ class _PackageStatusCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// A null lastSeenAt means the client has a member account but no
+// device-token row for it — never opened the app (or logged out, which
+// deletes the row — see SallaamtiFlutterApp's unregisterThisDevice()).
+// Either way: don't count on in-app messaging reaching them right now.
+class _AppActivityCard extends StatelessWidget {
+  final String? lastSeenAt;
+  const _AppActivityCard({required this.lastSeenAt});
+
+  @override
+  Widget build(BuildContext context) {
+    final lastSeen = lastSeenAt != null ? DateTime.tryParse(lastSeenAt!) : null;
+
+    final (icon, color, title, subtitle) = lastSeen == null
+        ? (Icons.phonelink_erase, Colors.grey, 'Not using the Member App', 'Not seen in the app — use WhatsApp/phone for now')
+        : (Icons.phone_iphone, Colors.green, 'Active in Member App', 'Last seen ${_timeAgo(lastSeen)}');
+
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.08), borderRadius: BorderRadius.circular(12)),
+      child: Row(
+        children: [
+          Icon(icon, color: color),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: TextStyle(fontWeight: FontWeight.w700, color: color.withValues(alpha: 0.9))),
+                Text(subtitle, style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _timeAgo(DateTime dateTime) {
+    final diff = DateTime.now().difference(dateTime.toLocal());
+    if (diff.inMinutes < 60) return '${diff.inMinutes} min ago';
+    if (diff.inHours < 24) return '${diff.inHours} hr ago';
+    if (diff.inDays < 7) return '${diff.inDays} days ago';
+    return DateFormat('d MMM yyyy').format(dateTime.toLocal());
   }
 }
 
