@@ -51,6 +51,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     if (auth.status == AuthStatus.authenticated) {
       context.go('/dashboard');
+    } else if (auth.status == AuthStatus.pendingApplication) {
+      context.go('/pending-approval');
     } else {
       context.go('/login');
     }

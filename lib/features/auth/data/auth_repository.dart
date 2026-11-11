@@ -12,11 +12,14 @@ class AuthResult {
       );
 }
 
-// Login/logout/me plus password recovery — a matchmaker account only ever
-// comes from Admin\MatchmakerApplicationController::certify(), so there is no
-// self-registration or OTP login flow in this app (unlike the member app).
-// Forgetting the password admin handed out at certification, though, is very
-// much a thing that happens, hence the reset pair below.
+// Login/logout/me plus password recovery — an account is created as soon as
+// someone applies (NikahCounselorApplicationController::store()), and only
+// gains the actual 'matchmaker' role once Admin\MatchmakerApplicationController
+// advances the application all the way to 'certified'. So there is no
+// self-registration/OTP flow here (unlike the member app) but there IS a
+// window where an account exists and can log in without the role yet — see
+// AuthController._acceptIfCounselor(). Forgetting the password chosen at
+// apply time is very much a thing that happens, hence the reset pair below.
 class AuthRepository {
   final ApiClient _client;
   AuthRepository(this._client);
@@ -25,6 +28,11 @@ class AuthRepository {
     final data = await _client.post('/auth/login', data: {'login': login, 'password': password});
     return AuthResult.fromJson(data);
   }
+
+  // Self-scoped to the token's own account server-side — safe to call for
+  // any authenticated user, matchmaker role or not. Returns `has_application:
+  // false` for an account with no application at all.
+  Future<Map<String, dynamic>> applicationStatus() => _client.get('/matchmaker/application');
 
   // Shared with the member app — /auth/password/* is role-agnostic, and
   // AuthController below applies the same counselor-only courtesy check it

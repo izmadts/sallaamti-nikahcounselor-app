@@ -7,6 +7,7 @@ import '../../features/apply/presentation/apply_screen.dart';
 import '../../features/auth/presentation/language_screen.dart';
 import '../../features/auth/presentation/forgot_password_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
+import '../../features/auth/presentation/pending_approval_screen.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/update_required_screen.dart';
 import '../../features/auth/state/auth_controller.dart';
@@ -80,6 +81,18 @@ final routerProvider = Provider<GoRouter>((ref) {
         return '/dashboard';
       }
 
+      // A pending applicant is authenticated (has a valid token) but has no
+      // 'matchmaker' role yet — every real screen below is behind
+      // EnsureUserIsMatchmakerApi server-side anyway, so there is nowhere
+      // else for them to be but this one waiting screen until they're
+      // certified or they log out.
+      if (auth.status == AuthStatus.pendingApplication && path != '/pending-approval') {
+        return '/pending-approval';
+      }
+      if (auth.status != AuthStatus.pendingApplication && path == '/pending-approval') {
+        return '/login';
+      }
+
       return null;
     },
     routes: [
@@ -92,6 +105,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(path: '/forgot-password', builder: (context, state) => const ForgotPasswordScreen()),
       GoRoute(path: '/apply', builder: (context, state) => const ApplyScreen()),
+      GoRoute(path: '/pending-approval', builder: (context, state) => const PendingApprovalScreen()),
 
       ShellRoute(
         builder: (context, state, child) => AppShell(location: state.matchedLocation, child: child),

@@ -8,17 +8,23 @@ import '../../../core/storage/secure_store.dart';
 import '../data/auth_repository.dart';
 import '../domain/app_user.dart';
 
-enum AuthStatus { checking, authenticated, unauthenticated }
+enum AuthStatus { checking, authenticated, unauthenticated, pendingApplication }
 
 class AuthState {
   final AuthStatus status;
   final AppUser? user;
+  // Only set when status == pendingApplication — the raw
+  // /matchmaker/application response, same shape ApplicationScreen already
+  // renders (status_label, steps, step_index, is_terminal, ...).
+  final Map<String, dynamic>? applicationStatus;
 
-  const AuthState({required this.status, this.user});
+  const AuthState({required this.status, this.user, this.applicationStatus});
 
   const AuthState.checking() : this(status: AuthStatus.checking);
   const AuthState.unauthenticated() : this(status: AuthStatus.unauthenticated);
   const AuthState.authenticated(AppUser user) : this(status: AuthStatus.authenticated, user: user);
+  const AuthState.pendingApplication(AppUser user, Map<String, dynamic> applicationStatus)
+      : this(status: AuthStatus.pendingApplication, user: user, applicationStatus: applicationStatus);
 }
 
 final apiClientProvider = Provider<ApiClient>((ref) => ApiClient());
@@ -68,8 +74,7 @@ class AuthController extends StateNotifier<AuthState> {
     try {
       final user = await _repository.me();
       if (!user.isMatchmaker) {
-        await SecureStore.clearToken();
-        state = const AuthState.unauthenticated();
+        await _settleNonCounselor(user);
         return;
       }
       state = AuthState.authenticated(user);
@@ -83,6 +88,20 @@ class AuthController extends StateNotifier<AuthState> {
   Future<void> login({required String login, required String password}) =>
       _acceptIfCounselor(_repository.login(login: login, password: password));
 
+  // Re-checks application status from the waiting screen (e.g. pull to
+  // refresh) — a no-op if the applicant has since been certified elsewhere,
+  // since the next full login/restore will pick up the real role then; this
+  // just keeps the on-screen status/step chips current meanwhile.
+  Future<void> refreshPendingStatus() async {
+    if (state.status != AuthStatus.pendingApplication || state.user == null) return;
+    try {
+      final status = await _repository.applicationStatus();
+      state = AuthState.pendingApplication(state.user!, status);
+    } on ApiException {
+      // Keep showing the last known status rather than bouncing the screen.
+    }
+  }
+
   Future<String> forgotPassword(String email) => _repository.forgotPassword(email);
 
   Future<void> resetPassword({required String email, required String code, required String password}) =>
@@ -92,25 +111,51 @@ class AuthController extends StateNotifier<AuthState> {
   // are role-agnostic by design (any account can use them) — the real backend
   // security boundary is EnsureUserIsMatchmakerApi on every matchmaker.*
   // route. This is a client-side courtesy so a non-counselor account sees a
-  // clear message instead of a broken empty dashboard where every screen
-  // 403s, and its token is dropped rather than left sitting on the device.
+  // clear message (or, for a genuine pending applicant, the waiting screen)
+  // instead of a broken empty dashboard where every screen 403s.
   Future<void> _acceptIfCounselor(Future<AuthResult> pending) async {
     final result = await pending;
+    await SecureStore.saveToken(result.token);
 
     if (!result.user.isMatchmaker) {
-      await SecureStore.saveToken(result.token);
-      try {
-        await _repository.logout();
-      } on ApiException {
-        // Token may already be unusable — proceed regardless.
+      await _settleNonCounselor(result.user);
+      if (state.status != AuthStatus.pendingApplication) {
+        throw ApiException(message: 'not_counselor_account');
       }
-      await SecureStore.clearToken();
-      throw ApiException(message: 'not_counselor_account');
+      return;
     }
 
-    await SecureStore.saveToken(result.token);
     state = AuthState.authenticated(result.user);
     _registerPushSafely();
+  }
+
+  // A non-matchmaker-role account is either a genuine pending applicant
+  // (shown the waiting screen, token kept so it can poll its own status and
+  // log out) or an unrelated account with no application at all / a
+  // rejected-withdrawn one (token dropped, same as before this screen
+  // existed).
+  Future<void> _settleNonCounselor(AppUser user) async {
+    try {
+      final status = await _repository.applicationStatus();
+      final hasApplication = status['has_application'] as bool? ?? false;
+      final isTerminal = status['is_terminal'] as bool? ?? false;
+      if (hasApplication && !isTerminal) {
+        state = AuthState.pendingApplication(user, status);
+        return;
+      }
+    } on ApiException {
+      // Couldn't even check — fall through to the generic non-counselor path
+      // below rather than leaving the app stuck on a blank authenticated-ish
+      // state.
+    }
+
+    try {
+      await _repository.logout();
+    } on ApiException {
+      // Token may already be unusable — proceed regardless.
+    }
+    await SecureStore.clearToken();
+    state = const AuthState.unauthenticated();
   }
 
   Future<void> logout() async {

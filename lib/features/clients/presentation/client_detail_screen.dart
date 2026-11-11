@@ -8,7 +8,7 @@ import 'tabs/batches_tab.dart';
 import 'tabs/consent_tab.dart';
 import 'tabs/messages_tab.dart';
 import 'tabs/overview_tab.dart';
-import 'tabs/requirements_tab.dart';
+import 'tabs/registration_tab.dart';
 import 'tabs/shortlist_tab.dart';
 
 class ClientDetailScreen extends ConsumerWidget {
@@ -30,7 +30,7 @@ class ClientDetailScreen extends ConsumerWidget {
             isScrollable: true,
             tabs: [
               Tab(text: l10n.clientTabOverview),
-              Tab(text: l10n.clientTabRequirements),
+              Tab(text: l10n.clientTabRegistration),
               Tab(text: l10n.clientTabShortlist),
               Tab(text: l10n.clientTabConsent),
               Tab(text: l10n.clientTabBatches),
@@ -44,20 +44,28 @@ class ClientDetailScreen extends ConsumerWidget {
             ],
           ),
         ),
-        body: AsyncValueView(
-          loading: async.isLoading,
-          error: async.error,
-          data: async.valueOrNull,
-          onRetry: () => ref.invalidate(clientDetailProvider(leadId)),
-          builder: (client) => TabBarView(
-            children: [
-              OverviewTab(leadId: leadId, client: client),
-              RequirementsTab(leadId: leadId, client: client),
-              ShortlistTab(leadId: leadId, client: client),
-              ConsentTab(leadId: leadId, client: client),
-              BatchesTab(leadId: leadId, client: client),
-              MessagesTab(leadId: leadId),
-            ],
+        // RegistrationTab's Next/Back row (and ConsentTab's own action
+        // buttons) sit directly in this body rather than
+        // `bottomNavigationBar` — Scaffold only insets that latter slot
+        // from the system nav bar automatically, so without SafeArea here
+        // those buttons sit flush against on-screen (3-button) navigation.
+        // Same fix as walk_in_wizard_screen.dart's own SafeArea.
+        body: SafeArea(
+          child: AsyncValueView(
+            loading: async.isLoading,
+            error: async.error,
+            data: async.valueOrNull,
+            onRetry: () => ref.invalidate(clientDetailProvider(leadId)),
+            builder: (client) => TabBarView(
+              children: [
+                OverviewTab(leadId: leadId, client: client),
+                RegistrationTab(leadId: leadId, client: client),
+                ShortlistTab(leadId: leadId, client: client),
+                ConsentTab(leadId: leadId, client: client),
+                BatchesTab(leadId: leadId, client: client),
+                MessagesTab(leadId: leadId),
+              ],
+            ),
           ),
         ),
       ),
