@@ -257,12 +257,14 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
                         // so a counselor had to add a candidate blind just
                         // to see anything beyond this summary row.
                         onTap: () => context.push('/browse/${p['id']}${widget.forLeadId != null ? '?forLeadId=${widget.forLeadId}' : ''}'),
+                        leading: GenderBadge(gender: p['gender'] as String?),
                         title: Text('${p['age']} yrs, ${p['city'] ?? '—'}'),
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text([p['sect'], p['profession']].where((e) => e != null).join(' · ')),
+                            Text('Profile #${p['id']}', style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
                             if (score != null) ...[
                               const SizedBox(height: 4),
                               MatchScoreBadge(score: score, small: true),

@@ -217,7 +217,7 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
                       final profileId = c['nikah_profile_id'] as int?;
                       return Card(
                         child: ListTile(
-                          leading: _GenderBadge(gender: c['gender'] as String?),
+                          leading: GenderBadge(gender: c['gender'] as String?),
                           title: Text(c['name'] as String, style: const TextStyle(fontWeight: FontWeight.w700)),
                           subtitle: Text([
                             (c['phone'] as String?) ?? (c['email'] as String?) ?? '—',
@@ -256,9 +256,9 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
 // purpose as the Profile # shown right next to it — gender alone, not a
 // photo (matchmaker browse/clients views never show identity-revealing
 // fields).
-class _GenderBadge extends StatelessWidget {
+class GenderBadge extends StatelessWidget {
   final String? gender;
-  const _GenderBadge({required this.gender});
+  const GenderBadge({super.key, required this.gender});
 
   @override
   Widget build(BuildContext context) {
