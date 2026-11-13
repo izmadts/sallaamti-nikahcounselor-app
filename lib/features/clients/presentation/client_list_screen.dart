@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/api/api_exception.dart';
 import '../../../core/theme/matchmaker_theme.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
@@ -14,10 +15,103 @@ final clientRepositoryProvider = Provider((ref) => ClientRepository(ref.watch(ap
 
 final clientListFilterProvider = StateProvider.autoDispose((ref) => (status: '', search: ''));
 
-final clientListProvider = FutureProvider.autoDispose((ref) async {
+class ClientListState {
+  final List<Map<String, dynamic>> clients;
+  final int page;
+  final int lastPage;
+  final bool loading;
+  final bool loadingMore;
+  final Object? error;
+
+  const ClientListState({
+    this.clients = const [],
+    this.page = 1,
+    this.lastPage = 1,
+    this.loading = true,
+    this.loadingMore = false,
+    this.error,
+  });
+
+  bool get hasMore => page < lastPage;
+
+  ClientListState copyWith({
+    List<Map<String, dynamic>>? clients,
+    int? page,
+    int? lastPage,
+    bool? loading,
+    bool? loadingMore,
+    Object? error,
+  }) =>
+      ClientListState(
+        clients: clients ?? this.clients,
+        page: page ?? this.page,
+        lastPage: lastPage ?? this.lastPage,
+        loading: loading ?? this.loading,
+        loadingMore: loadingMore ?? this.loadingMore,
+        error: error,
+      );
+}
+
+// A counselor's lead list is paginated server-side (15/page — see
+// Matchmaker\ClientController::index()), but the previous version of this
+// screen never requested page 2+, so once a counselor passed 15 leads the
+// rest were simply never fetched — it looked like the list "stopped
+// scrolling" once the visible 15 ran out, when really there was nothing
+// more on screen to scroll to.
+class ClientListController extends StateNotifier<ClientListState> {
+  final ClientRepository _repo;
+  final ({String status, String search}) _filter;
+
+  ClientListController(this._repo, this._filter) : super(const ClientListState()) {
+    _load();
+  }
+
+  Future<void> _load() async {
+    state = state.copyWith(loading: true, error: null);
+    try {
+      final data = await _repo.index(status: _filter.status, search: _filter.search, page: 1);
+      state = ClientListState(
+        clients: List<Map<String, dynamic>>.from((data['clients'] as List).map((e) => Map<String, dynamic>.from(e as Map))),
+        page: data['current_page'] as int? ?? 1,
+        lastPage: data['last_page'] as int? ?? 1,
+        loading: false,
+      );
+    } on ApiException catch (e) {
+      state = state.copyWith(loading: false, error: e);
+    } catch (e) {
+      state = state.copyWith(loading: false, error: e);
+    }
+  }
+
+  Future<void> refresh() => _load();
+
+  Future<void> loadMore() async {
+    if (state.loadingMore || !state.hasMore) return;
+    state = state.copyWith(loadingMore: true);
+    try {
+      final nextPage = state.page + 1;
+      final data = await _repo.index(status: _filter.status, search: _filter.search, page: nextPage);
+      final more = List<Map<String, dynamic>>.from((data['clients'] as List).map((e) => Map<String, dynamic>.from(e as Map)));
+      state = state.copyWith(
+        clients: [...state.clients, ...more],
+        page: data['current_page'] as int? ?? nextPage,
+        lastPage: data['last_page'] as int? ?? state.lastPage,
+        loadingMore: false,
+      );
+    } on ApiException {
+      // A failed "load more" shouldn't blank out the list already on
+      // screen — just stop trying; the counselor can retry by scrolling
+      // again, which calls loadMore() once more.
+      state = state.copyWith(loadingMore: false);
+    } catch (_) {
+      state = state.copyWith(loadingMore: false);
+    }
+  }
+}
+
+final clientListProvider = StateNotifierProvider.autoDispose<ClientListController, ClientListState>((ref) {
   final filter = ref.watch(clientListFilterProvider);
-  final repo = ref.watch(clientRepositoryProvider);
-  return repo.index(status: filter.status, search: filter.search);
+  return ClientListController(ref.watch(clientRepositoryProvider), filter);
 });
 
 class ClientListScreen extends ConsumerStatefulWidget {
@@ -29,9 +123,24 @@ class ClientListScreen extends ConsumerStatefulWidget {
 
 class _ClientListScreenState extends ConsumerState<ClientListScreen> {
   final _searchController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200) {
+      ref.read(clientListProvider.notifier).loadMore();
+    }
+  }
 
   @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -77,30 +186,43 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
           ),
           Expanded(
             child: AsyncValueView(
-              loading: async.isLoading,
+              loading: async.loading,
               error: async.error,
-              data: async.valueOrNull,
+              data: async.clients.isEmpty && (async.loading || async.error != null) ? null : async,
               onRetry: () => ref.invalidate(clientListProvider),
               builder: (data) {
-                final clients = List<Map<String, dynamic>>.from((data['clients'] as List).map((e) => Map<String, dynamic>.from(e as Map)));
+                final clients = data.clients;
 
                 if (clients.isEmpty) {
                   return Center(child: Text(l10n.clientsEmpty, style: TextStyle(color: Colors.grey.shade600)));
                 }
 
                 return RefreshIndicator(
-                  onRefresh: () => ref.refresh(clientListProvider.future),
+                  onRefresh: () => ref.read(clientListProvider.notifier).refresh(),
                   child: ListView.separated(
+                    controller: _scrollController,
                     padding: const EdgeInsets.all(12),
-                    itemCount: clients.length,
+                    itemCount: clients.length + (data.hasMore ? 1 : 0),
                     separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (context, i) {
+                      if (i >= clients.length) {
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          child: Center(child: CircularProgressIndicator(strokeWidth: 2, color: MatchmakerTheme.plum)),
+                        );
+                      }
+
                       final c = clients[i];
                       final unread = c['unread_message_count'] as int? ?? 0;
+                      final profileId = c['nikah_profile_id'] as int?;
                       return Card(
                         child: ListTile(
+                          leading: _GenderBadge(gender: c['gender'] as String?),
                           title: Text(c['name'] as String, style: const TextStyle(fontWeight: FontWeight.w700)),
-                          subtitle: Text((c['phone'] as String?) ?? (c['email'] as String?) ?? '—'),
+                          subtitle: Text([
+                            (c['phone'] as String?) ?? (c['email'] as String?) ?? '—',
+                            if (profileId != null) 'Profile #$profileId',
+                          ].join(' · ')),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
@@ -126,6 +248,28 @@ class _ClientListScreenState extends ConsumerState<ClientListScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// Lets the counselor tell cards apart at a glance in a long list, same
+// purpose as the Profile # shown right next to it — gender alone, not a
+// photo (matchmaker browse/clients views never show identity-revealing
+// fields).
+class _GenderBadge extends StatelessWidget {
+  final String? gender;
+  const _GenderBadge({required this.gender});
+
+  @override
+  Widget build(BuildContext context) {
+    final isMale = gender == 'male';
+    final isFemale = gender == 'female';
+    final color = isMale ? Colors.blue.shade600 : (isFemale ? MatchmakerTheme.plum : Colors.grey.shade400);
+    final icon = isMale ? Icons.male : (isFemale ? Icons.female : Icons.person_outline);
+
+    return CircleAvatar(
+      backgroundColor: color.withValues(alpha: 0.15),
+      child: Icon(icon, color: color),
     );
   }
 }

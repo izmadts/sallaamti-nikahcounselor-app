@@ -77,10 +77,34 @@ class AuthController extends StateNotifier<AuthState> {
         await _settleNonCounselor(user);
         return;
       }
+      await SecureStore.saveUser(user.toJson());
       state = AuthState.authenticated(user);
       _registerPushSafely();
-    } on ApiException {
-      await SecureStore.clearToken();
+    } on ApiException catch (e) {
+      // Only a real 401/403 means this token is actually invalid — a
+      // connection error or a flaky server (statusCode null, or 5xx) says
+      // nothing about the token, and used to log the counselor out and
+      // force a fresh login every time the network was briefly bad. Fall
+      // back to the last-known profile instead, so the dashboard opens with
+      // stale-but-correct data and the next successful request refreshes it.
+      if (e.statusCode == 401 || e.statusCode == 403) {
+        await SecureStore.clearToken();
+        await SecureStore.clearUser();
+        state = const AuthState.unauthenticated();
+        return;
+      }
+
+      final cached = await SecureStore.readUser();
+      if (cached != null) {
+        final user = AppUser.fromJson(cached);
+        if (user.isMatchmaker) {
+          state = AuthState.authenticated(user);
+          _registerPushSafely();
+          return;
+        }
+      }
+      // No usable cache to fall back on (e.g. very first launch with no
+      // connectivity) — nothing to show but the login screen.
       state = const AuthState.unauthenticated();
     }
   }
@@ -125,6 +149,7 @@ class AuthController extends StateNotifier<AuthState> {
       return;
     }
 
+    await SecureStore.saveUser(result.user.toJson());
     state = AuthState.authenticated(result.user);
     _registerPushSafely();
   }
@@ -155,6 +180,7 @@ class AuthController extends StateNotifier<AuthState> {
       // Token may already be unusable — proceed regardless.
     }
     await SecureStore.clearToken();
+    await SecureStore.clearUser();
     state = const AuthState.unauthenticated();
   }
 
@@ -176,6 +202,7 @@ class AuthController extends StateNotifier<AuthState> {
       // out either way.
     }
     await SecureStore.clearToken();
+    await SecureStore.clearUser();
     state = const AuthState.unauthenticated();
   }
 }

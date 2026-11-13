@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/api/api_exception.dart';
 import '../../../l10n/generated/app_localizations.dart';
@@ -22,6 +24,24 @@ class CandidateDetailScreen extends ConsumerWidget {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.browseRequestSent)));
     } on ApiException catch (e) {
       if (context.mounted) ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.displayMessage)));
+    }
+  }
+
+  // Mirrors the admin web panel's "📋 Copy Summary" / WhatsApp buttons on a
+  // profile's show page (admin/nikah/show.blade.php) — same backend text
+  // (NikahProfile::shareSummary()), same no-destination wa.me link so the
+  // counselor picks whichever WhatsApp chat to paste it into.
+  Future<void> _copySummary(BuildContext context, String summary) async {
+    await Clipboard.setData(ClipboardData(text: summary));
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied! Paste it into WhatsApp.')));
+    }
+  }
+
+  Future<void> _shareOnWhatsapp(BuildContext context, String summary) async {
+    final uri = Uri.parse('https://wa.me/?text=${Uri.encodeComponent(summary)}');
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication) && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Could not open WhatsApp.')));
     }
   }
 
@@ -62,6 +82,26 @@ class CandidateDetailScreen extends ConsumerWidget {
                 label: Text(l10n.browseRequestContact),
                 onPressed: () => _requestContact(context, ref),
               ),
+              if (p['share_summary'] != null) ...[
+                const SizedBox(height: 12),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    OutlinedButton.icon(
+                      icon: const Icon(Icons.copy_outlined),
+                      label: const Text('Copy Summary'),
+                      onPressed: () => _copySummary(context, p['share_summary'] as String),
+                    ),
+                    FilledButton.icon(
+                      style: FilledButton.styleFrom(backgroundColor: const Color(0xFF25D366)),
+                      icon: const Icon(Icons.chat_outlined),
+                      label: const Text('WhatsApp'),
+                      onPressed: () => _shareOnWhatsapp(context, p['share_summary'] as String),
+                    ),
+                  ],
+                ),
+              ],
             ],
           );
         },

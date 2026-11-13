@@ -32,4 +32,18 @@ class AppUser {
         roles: (json['roles'] as List? ?? []).map((e) => e.toString()).toList(),
         tier: json['tier'] as String?,
       );
+
+  // Round-trips through SecureStore so a restored session has something to
+  // show immediately if the /auth/me call that would normally refresh it
+  // fails for a reason that isn't "this token is invalid" (see
+  // AuthController._restoreSession()).
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'avatar_url': avatarUrl,
+        'roles': roles,
+        'tier': tier,
+      };
 }

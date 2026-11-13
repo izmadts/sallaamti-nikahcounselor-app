@@ -6,9 +6,11 @@ class ClientRepository {
   final ApiClient _client;
   ClientRepository(this._client);
 
-  Future<Map<String, dynamic>> index({String? status, String? search}) => _client.get('/matchmaker/clients', query: {
+  Future<Map<String, dynamic>> index({String? status, String? search, int page = 1}) =>
+      _client.get('/matchmaker/clients', query: {
         if (status != null && status.isNotEmpty) 'status': status,
         if (search != null && search.isNotEmpty) 'search': search,
+        'page': page,
       });
 
   Future<Map<String, dynamic>> create(Map<String, dynamic> fields) => _client.post('/matchmaker/clients', data: fields);
