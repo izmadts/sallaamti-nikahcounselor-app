@@ -37,6 +37,19 @@ class PickerField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // DropdownButtonFormField asserts if `initialValue` isn't exactly one
+    // of `items`, even though it's otherwise an unmanaged, one-time seed —
+    // a lead already in a status the app's cached /matchmaker/meta/enums
+    // response predates (e.g. opened right after a new status like 'hot'
+    // or 'paid' ships, before that cache refreshes) would hard-crash this
+    // screen. Confirmed via a widget test. A synthetic extra item for
+    // exactly that value keeps the field showing something real instead.
+    final hasCurrentValue = value == null || options.containsKey(value);
+    final items = [
+      if (!hasCurrentValue) DropdownMenuItem(value: value, child: Text(value!, overflow: TextOverflow.ellipsis)),
+      ...options.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, overflow: TextOverflow.ellipsis))),
+    ];
+
     return DropdownButtonFormField<String>(
       initialValue: value,
       decoration: InputDecoration(
@@ -45,9 +58,7 @@ class PickerField extends StatelessWidget {
         helperText: helperText,
         helperMaxLines: 3,
       ),
-      items: options.entries
-          .map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, overflow: TextOverflow.ellipsis)))
-          .toList(),
+      items: items,
       onChanged: onChanged,
       validator: required ? (v) => v == null ? 'Required' : null : null,
     );
