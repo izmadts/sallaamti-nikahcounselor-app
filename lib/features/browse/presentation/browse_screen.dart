@@ -93,17 +93,27 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
     // not something to re-seed. gender_locked is excluded here (read
     // separately below) — it's not a real query param, just the hard-locked
     // opposite gender the server enforces for a pick-mode browse.
-    final lockedGender = ref.watch(browseListProvider(widget.forLeadId)).valueOrNull?['applied_filters']?['gender_locked'] as String?;
+    //
+    // `is Map` (not `as Map?`) on purpose: PHP serializes a genuinely empty
+    // array as JSON `[]`, not `{}` — a plain browse with zero filters set
+    // decodes applied_filters as an empty List here, and `as Map?` throws
+    // on a non-null non-Map value regardless of the `?`. Found 15 Nov 2026
+    // on a live device: this blanked the whole Browse tab on first open,
+    // every time, before any filter was ever touched. Fixed server-side too
+    // (NikahBrowseController now always sends an object), but this still
+    // needs to survive talking to production before that deploy lands.
+    final appliedFiltersRaw = ref.watch(browseListProvider(widget.forLeadId)).valueOrNull?['applied_filters'];
+    final lockedGender = appliedFiltersRaw is Map ? appliedFiltersRaw['gender_locked'] as String? : null;
     if (isPickMode) {
       ref.listen(browseListProvider(widget.forLeadId), (previous, next) {
         if (_seededFromServer) return;
-        final applied = next.valueOrNull?['applied_filters'] as Map?;
-        if (applied == null || applied.isEmpty) return;
+        final appliedRaw = next.valueOrNull?['applied_filters'];
+        if (appliedRaw is! Map || appliedRaw.isEmpty) return;
         _seededFromServer = true;
         final current = ref.read(browseFilterProvider);
         ref.read(browseFilterProvider.notifier).state = {
           ...current,
-          for (final entry in applied.entries.where((e) => e.key != 'gender_locked')) entry.key as String: entry.value.toString(),
+          for (final entry in appliedRaw.entries.where((e) => e.key != 'gender_locked')) entry.key as String: entry.value.toString(),
         };
       });
     }
