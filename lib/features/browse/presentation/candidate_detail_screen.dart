@@ -63,6 +63,8 @@ class CandidateDetailScreen extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             children: [
               Text('${p['age']} yrs, ${p['city'] ?? '—'}', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 6),
+              TrustStatusBadge(verificationStatus: p['verification_status'] as String?, paymentStatus: p['payment_status'] as String?),
               const SizedBox(height: 8),
               _InfoRow(label: 'Marital Status', value: p['marital_status'] as String?),
               _InfoRow(label: 'Sect', value: p['sect'] as String?),

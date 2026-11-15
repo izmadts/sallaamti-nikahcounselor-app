@@ -17,6 +17,20 @@ final browseRepositoryProvider = Provider((ref) => BrowseRepository(ref.watch(ap
 
 final browseFilterProvider = StateProvider.autoDispose<Map<String, String>>((ref) => {});
 
+// Same canonical list the registration wizard's Education step and the
+// Requirements tab's own Education field use (resources/views/nikah/wizard/
+// step-basic.blade.php) — a free-text filter here almost never matched a
+// real stored value.
+const _educationLevels = {
+  'Matric / O-Levels': 'Matric / O-Levels',
+  'Intermediate / A-Levels': 'Intermediate / A-Levels',
+  "Bachelor's": "Bachelor's",
+  "Master's": "Master's",
+  'MPhil / MS': 'MPhil / MS',
+  'PhD': 'PhD',
+  'Madrassah / Islamic Education': 'Madrassah / Islamic Education',
+};
+
 // Keyed by forLeadId so a plain browse (null) and a pick-mode browse for a
 // specific client never share a cached result — the server includes a
 // match_score per candidate only when a lead_id is sent.
@@ -73,11 +87,13 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
     final isPickMode = widget.forLeadId != null;
 
     // Seeds the filter fields from the server's applied_filters the first
-    // time a pick-mode load comes back with any (gender's own auto-default
-    // doesn't appear here — it's reflected directly in the results, not a
-    // field above) — so the counselor sees why the list is narrowed instead
-    // of empty-looking fields. Guarded to once per visit; overriding a
-    // field after that is a deliberate override, not something to re-seed.
+    // time a pick-mode load comes back with any — so the counselor sees why
+    // the list is narrowed instead of empty-looking fields. Guarded to once
+    // per visit; overriding a field after that is a deliberate override,
+    // not something to re-seed. gender_locked is excluded here (read
+    // separately below) — it's not a real query param, just the hard-locked
+    // opposite gender the server enforces for a pick-mode browse.
+    final lockedGender = ref.watch(browseListProvider(widget.forLeadId)).valueOrNull?['applied_filters']?['gender_locked'] as String?;
     if (isPickMode) {
       ref.listen(browseListProvider(widget.forLeadId), (previous, next) {
         if (_seededFromServer) return;
@@ -87,7 +103,7 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
         final current = ref.read(browseFilterProvider);
         ref.read(browseFilterProvider.notifier).state = {
           ...current,
-          for (final entry in applied.entries) entry.key as String: entry.value.toString(),
+          for (final entry in applied.entries.where((e) => e.key != 'gender_locked')) entry.key as String: entry.value.toString(),
         };
       });
     }
@@ -110,22 +126,44 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: DropdownButtonFormField<String>(
-                    // `initialValue` only ever applies on this widget's
-                    // first build — without a key tied to the value, a
-                    // later change to `filters` (the server's
-                    // applied_filters seed, or clearing filters) wouldn't
-                    // be reflected here even though the query itself
-                    // already re-ran with the new value.
-                    key: ValueKey('gender-${filters['gender']}'),
-                    initialValue: filters['gender'],
-                    decoration: InputDecoration(labelText: l10n.browseFilterGender, isDense: true),
-                    items: const [
-                      DropdownMenuItem(value: 'male', child: Text('Male')),
-                      DropdownMenuItem(value: 'female', child: Text('Female')),
-                    ],
-                    onChanged: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, if (v != null) 'gender': v},
-                  ),
+                  // Owner, 15 Nov 2026: opposite-gender-only when picking for
+                  // a specific client is now a hard server rule the counselor
+                  // can't override — showing an editable dropdown here would
+                  // be a lie (any value they pick gets silently overruled).
+                  // A locked indicator instead of a plain-browse dropdown.
+                  child: isPickMode
+                      ? InputDecorator(
+                          decoration: InputDecoration(labelText: l10n.browseFilterGender, isDense: true),
+                          child: Text(
+                            lockedGender == 'female' ? 'Female (locked)' : (lockedGender == 'male' ? 'Male (locked)' : '—'),
+                            style: TextStyle(color: Colors.grey.shade700),
+                          ),
+                        )
+                      : DropdownButtonFormField<String>(
+                          // `initialValue` only ever applies on this widget's
+                          // first build — without a key tied to the value, a
+                          // later change to `filters` (the server's
+                          // applied_filters seed, or clearing filters) wouldn't
+                          // be reflected here even though the query itself
+                          // already re-ran with the new value.
+                          key: ValueKey('gender-${filters['gender']}'),
+                          initialValue: filters['gender'],
+                          decoration: InputDecoration(labelText: l10n.browseFilterGender, isDense: true),
+                          items: const [
+                            DropdownMenuItem(value: null, child: Text('Any')),
+                            DropdownMenuItem(value: 'male', child: Text('Male')),
+                            DropdownMenuItem(value: 'female', child: Text('Female')),
+                          ],
+                          onChanged: (v) {
+                            final next = {...filters};
+                            if (v == null) {
+                              next.remove('gender');
+                            } else {
+                              next['gender'] = v;
+                            }
+                            ref.read(browseFilterProvider.notifier).state = next;
+                          },
+                        ),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -159,13 +197,25 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
                     isExpanded: true,
                     decoration: const InputDecoration(labelText: 'Marital Status', isDense: true),
                     items: const [
+                      DropdownMenuItem(value: null, child: Text('Any')),
                       DropdownMenuItem(value: 'never_married', child: Text('Never Married')),
                       DropdownMenuItem(value: 'married', child: Text('Married')),
                       DropdownMenuItem(value: 'divorced', child: Text('Divorced')),
                       DropdownMenuItem(value: 'widowed', child: Text('Widowed')),
-                      DropdownMenuItem(value: 'separate', child: Text('Separated')),
+                      // Was 'separate' — didn't match any real profile's
+                      // marital_status ('separated'), so picking this
+                      // always returned zero results. Fixed 15 Nov 2026.
+                      DropdownMenuItem(value: 'separated', child: Text('Separated')),
                     ],
-                    onChanged: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, if (v != null) 'marital_status': v},
+                    onChanged: (v) {
+                      final next = {...filters};
+                      if (v == null) {
+                        next.remove('marital_status');
+                      } else {
+                        next['marital_status'] = v;
+                      }
+                      ref.read(browseFilterProvider.notifier).state = next;
+                    },
                   ),
                 ),
               ],
@@ -205,11 +255,29 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
             child: Row(
               children: [
                 Expanded(
-                  child: TextFormField(
+                  // Was free text — a counselor had to type an education
+                  // level exactly matching what's stored (e.g. "Matric /
+                  // O-Levels") with zero hint of the real values, so it
+                  // almost never actually matched anything. Dropdown now,
+                  // same list as the Requirements tab's own Education field.
+                  child: DropdownButtonFormField<String>(
                     key: ValueKey('education-${filters['education']}'),
                     initialValue: filters['education'],
+                    isExpanded: true,
                     decoration: const InputDecoration(labelText: 'Education', isDense: true),
-                    onFieldSubmitted: (v) => ref.read(browseFilterProvider.notifier).state = {...filters, 'education': v},
+                    items: [
+                      const DropdownMenuItem(value: null, child: Text('Any')),
+                      ..._educationLevels.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, overflow: TextOverflow.ellipsis))),
+                    ],
+                    onChanged: (v) {
+                      final next = {...filters};
+                      if (v == null) {
+                        next.remove('education');
+                      } else {
+                        next['education'] = v;
+                      }
+                      ref.read(browseFilterProvider.notifier).state = next;
+                    },
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -265,6 +333,8 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
                           children: [
                             Text([p['sect'], p['profession']].where((e) => e != null).join(' · ')),
                             Text('Profile #${p['id']}', style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+                            const SizedBox(height: 4),
+                            TrustStatusBadge(verificationStatus: p['verification_status'] as String?, paymentStatus: p['payment_status'] as String?),
                             if (score != null) ...[
                               const SizedBox(height: 4),
                               MatchScoreBadge(score: score, small: true),
@@ -286,6 +356,40 @@ class _BrowseScreenState extends ConsumerState<BrowseScreen> {
           ),
         ],
       ),
+    );
+  }
+}
+
+// Mirrors the web member-facing trust badges (NikahProfile::trustBadges(),
+// resources/views/nikah/partials/profile-card.blade.php) in the 3 states a
+// counselor actually needs to tell apart here — matchmakerVisible() shows
+// every opted-in profile regardless of review state, so without this a
+// counselor could shortlist/propose a profile that hasn't even finished
+// paying its own verification fee yet, same as a fully-verified one.
+class TrustStatusBadge extends StatelessWidget {
+  final String? verificationStatus;
+  final String? paymentStatus;
+  const TrustStatusBadge({super.key, required this.verificationStatus, required this.paymentStatus});
+
+  @override
+  Widget build(BuildContext context) {
+    final String label;
+    final Color color;
+    if (verificationStatus == 'verified') {
+      label = '✅ Trusted';
+      color = Colors.green.shade600;
+    } else if (paymentStatus == 'unpaid') {
+      label = '⚪ Incomplete';
+      color = Colors.grey.shade600;
+    } else {
+      label = '⏳ Pending';
+      color = Colors.amber.shade800;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(color: color.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(999)),
+      child: Text(label, style: TextStyle(color: color, fontSize: 11, fontWeight: FontWeight.w600)),
     );
   }
 }

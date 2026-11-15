@@ -24,6 +24,11 @@ class PickerField extends StatelessWidget {
   final ValueChanged<String?> onChanged;
   final String? helperText;
   final bool required;
+  // Opt-in, not default-on: a required field (lead status, consent type)
+  // must never offer "no value" — only an optional preference field
+  // (Requirements tab's Sect/Education/Marital Status) should.
+  final bool allowClear;
+  final String clearLabel;
 
   const PickerField({
     super.key,
@@ -33,6 +38,8 @@ class PickerField extends StatelessWidget {
     required this.onChanged,
     this.helperText,
     this.required = false,
+    this.allowClear = false,
+    this.clearLabel = 'Any',
   });
 
   @override
@@ -46,11 +53,12 @@ class PickerField extends StatelessWidget {
     // exactly that value keeps the field showing something real instead.
     final hasCurrentValue = value == null || options.containsKey(value);
     final items = [
+      if (allowClear) DropdownMenuItem(value: null, child: Text(clearLabel)),
       if (!hasCurrentValue) DropdownMenuItem(value: value, child: Text(value!, overflow: TextOverflow.ellipsis)),
       ...options.entries.map((e) => DropdownMenuItem(value: e.key, child: Text(e.value, overflow: TextOverflow.ellipsis))),
     ];
 
-    return DropdownButtonFormField<String>(
+    return DropdownButtonFormField<String?>(
       initialValue: value,
       decoration: InputDecoration(
         label: requiredFieldLabel(context, label, required),
