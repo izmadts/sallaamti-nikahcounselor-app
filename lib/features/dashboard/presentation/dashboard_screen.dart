@@ -32,6 +32,22 @@ class DashboardScreen extends ConsumerWidget {
             children: [
               if (user != null)
                 Text('Assalamu Alaikum, ${user.name}', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+              // Trainee-access addendum (15/16 Nov 2026) — only shown at
+              // Training, where the quiz/promotion actually matters; once
+              // Assessed+ the same screen stays reachable from More, just
+              // without this nudge.
+              if (user?.ncStage == 'training') ...[
+                const SizedBox(height: 12),
+                Card(
+                  color: MatchmakerTheme.plum.withValues(alpha: 0.08),
+                  child: ListTile(
+                    leading: const Icon(Icons.school_outlined, color: MatchmakerTheme.plum),
+                    title: Text(l10n.dashboardTrainingBanner, style: const TextStyle(fontWeight: FontWeight.w600)),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => context.push('/training-guide'),
+                  ),
+                ),
+              ],
               const SizedBox(height: 16),
               GridView.count(
                 crossAxisCount: 2,

@@ -443,6 +443,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get batchStatusSent => 'Sent';
 
   @override
+  String get batchStatusPendingApproval => '⏳ Waiting for approval';
+
+  @override
   String get batchFinalMatchTitle => 'Final Match — Client Interested';
 
   @override
@@ -737,4 +740,54 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guideTitle => 'Nikah Counselor Guide';
+
+  @override
+  String get featureLockedTitle => 'Not unlocked yet';
+
+  @override
+  String get featureLockedMessage => 'This feature unlocks at your next stage.';
+
+  @override
+  String get moreTrainingGuide => 'Training Guide & Quiz';
+
+  @override
+  String get dashboardTrainingBanner =>
+      '📘 Complete your Training Guide & take the Assessment to unlock more features';
+
+  @override
+  String get trainingGuideTitle => 'Training Guide';
+
+  @override
+  String get trainingGuideTakeAssessment => 'Take the Assessment';
+
+  @override
+  String get trainingQuizTitle => 'Assessment';
+
+  @override
+  String get trainingQuizSubmit => 'Submit';
+
+  @override
+  String trainingQuizScoreResult(int score, int total) {
+    return 'You scored $score/$total';
+  }
+
+  @override
+  String get trainingQuizPassed => 'Passed!';
+
+  @override
+  String get trainingQuizFailed =>
+      'Not passed yet — read the guide again and retake the assessment any time.';
+
+  @override
+  String get trainingQuizPromoted =>
+      '🎉 You\'re now Assessed — more features just unlocked!';
+
+  @override
+  String get trainingQuizViewAttempts => 'My past attempts';
+
+  @override
+  String get trainingQuizNoAttempts => 'No attempts yet.';
+
+  @override
+  String get trainingQuizRetake => 'Retake';
 }

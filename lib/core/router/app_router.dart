@@ -28,6 +28,8 @@ import '../../features/notifications/presentation/notifications_screen.dart';
 import '../../features/packages/presentation/packages_screen.dart';
 import '../../features/payment_accounts/presentation/payment_accounts_screen.dart';
 import '../../features/performance/presentation/performance_screen.dart';
+import '../../features/training/presentation/training_guide_screen.dart';
+import '../../features/training/presentation/training_quiz_screen.dart';
 import '../../features/referral/presentation/referral_screen.dart';
 import '../../shared/widgets/app_shell.dart';
 import '../state/locale_controller.dart';
@@ -143,6 +145,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       GoRoute(path: '/notifications', builder: (context, state) => const NotificationsScreen()),
       GoRoute(path: '/guide', builder: (context, state) => const GuideScreen()),
+      GoRoute(path: '/training-guide', builder: (context, state) => const TrainingGuideScreen()),
+      GoRoute(path: '/training-quiz', builder: (context, state) => const TrainingQuizScreen()),
       GoRoute(path: '/payment-accounts', builder: (context, state) => const PaymentAccountsScreen()),
       GoRoute(path: '/packages', builder: (context, state) => const PackagesScreen()),
 

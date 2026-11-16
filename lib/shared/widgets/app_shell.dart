@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/theme/matchmaker_theme.dart';
+import '../../features/auth/state/auth_controller.dart';
 import '../../l10n/generated/app_localizations.dart';
 
 // Bottom-nav shell for the 4 highest-frequency destinations; everything
 // else (Commission, Performance, Referral, Certification, Logout) lives
 // behind "More" — keeps the primary bar to a thumb-reachable 5 items.
-class AppShell extends StatelessWidget {
+//
+// Trainee-access addendum (15/16 Nov 2026) — Browse is greyed out and
+// intercepted (shows the locked message instead of navigating) below the
+// Assessed stage; Dashboard/Clients/Interests/More stay always-enabled at
+// every stage, same as before this addendum.
+class AppShell extends ConsumerWidget {
   final Widget child;
   final String location;
 
@@ -28,9 +35,11 @@ class AppShell extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final index = _indexFor(location);
+    final user = ref.watch(authControllerProvider).user;
+    final browseUnlocked = user == null || user.hasFeature('browse');
 
     return Scaffold(
       body: child,
@@ -65,6 +74,10 @@ class AppShell extends StatelessWidget {
             selectedIndex: index,
             elevation: 0,
             onDestinationSelected: (i) {
+              if (i == 2 && !browseUnlocked) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l10n.featureLockedMessage)));
+                return;
+              }
               switch (i) {
                 case 0:
                   context.go('/dashboard');
@@ -86,7 +99,11 @@ class AppShell extends StatelessWidget {
             destinations: [
               NavigationDestination(icon: const Icon(Icons.dashboard_outlined), selectedIcon: const Icon(Icons.dashboard_rounded), label: l10n.navDashboard),
               NavigationDestination(icon: const Icon(Icons.people_outline), selectedIcon: const Icon(Icons.people_rounded), label: l10n.navClients),
-              NavigationDestination(icon: const Icon(Icons.search_outlined), selectedIcon: const Icon(Icons.search_rounded), label: l10n.navBrowse),
+              NavigationDestination(
+                icon: Icon(Icons.search_outlined, color: browseUnlocked ? null : Colors.grey.shade400),
+                selectedIcon: const Icon(Icons.search_rounded),
+                label: browseUnlocked ? l10n.navBrowse : '🔒 ${l10n.navBrowse}',
+              ),
               NavigationDestination(icon: const Icon(Icons.favorite_border_rounded), selectedIcon: const Icon(Icons.favorite_rounded), label: l10n.navInterests),
               NavigationDestination(icon: const Icon(Icons.more_horiz_rounded), selectedIcon: const Icon(Icons.more_horiz_rounded), label: l10n.navMore),
             ],

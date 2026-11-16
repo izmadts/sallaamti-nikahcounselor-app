@@ -71,6 +71,11 @@ class BatchesTab extends ConsumerWidget {
                 final batch = batches[i];
                 final proposals = List<Map<String, dynamic>>.from((batch['proposals'] as List? ?? []).map((e) => Map<String, dynamic>.from(e as Map)));
                 final isDraft = batch['status'] == 'draft';
+                // Trainee-access addendum (15/16 Nov 2026) — a Probation
+                // trainee's "Send" doesn't reach the client yet; this status
+                // only ever appears for them, never for a certified
+                // matchmaker's own batches.
+                final isPendingApproval = batch['status'] == 'pending_approval';
 
                 return Card(
                   margin: const EdgeInsets.only(bottom: 12),
@@ -84,8 +89,10 @@ class BatchesTab extends ConsumerWidget {
                             Text('Batch #${batch['batch_number']}', style: const TextStyle(fontWeight: FontWeight.w700)),
                             const Spacer(),
                             StatusChip(
-                              label: isDraft ? l10n.batchStatusDraft : l10n.batchStatusSent,
-                              color: isDraft ? Colors.grey : Colors.green,
+                              label: isDraft
+                                  ? l10n.batchStatusDraft
+                                  : (isPendingApproval ? l10n.batchStatusPendingApproval : l10n.batchStatusSent),
+                              color: isDraft ? Colors.grey : (isPendingApproval ? Colors.amber : Colors.green),
                             ),
                           ],
                         ),

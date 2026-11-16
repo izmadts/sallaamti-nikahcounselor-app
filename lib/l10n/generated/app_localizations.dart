@@ -932,6 +932,12 @@ abstract class AppLocalizations {
   /// **'Sent'**
   String get batchStatusSent;
 
+  /// No description provided for @batchStatusPendingApproval.
+  ///
+  /// In en, this message translates to:
+  /// **'⏳ Waiting for approval'**
+  String get batchStatusPendingApproval;
+
   /// No description provided for @batchFinalMatchTitle.
   ///
   /// In en, this message translates to:
@@ -1489,6 +1495,96 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nikah Counselor Guide'**
   String get guideTitle;
+
+  /// No description provided for @featureLockedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Not unlocked yet'**
+  String get featureLockedTitle;
+
+  /// No description provided for @featureLockedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This feature unlocks at your next stage.'**
+  String get featureLockedMessage;
+
+  /// No description provided for @moreTrainingGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Training Guide & Quiz'**
+  String get moreTrainingGuide;
+
+  /// No description provided for @dashboardTrainingBanner.
+  ///
+  /// In en, this message translates to:
+  /// **'📘 Complete your Training Guide & take the Assessment to unlock more features'**
+  String get dashboardTrainingBanner;
+
+  /// No description provided for @trainingGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Training Guide'**
+  String get trainingGuideTitle;
+
+  /// No description provided for @trainingGuideTakeAssessment.
+  ///
+  /// In en, this message translates to:
+  /// **'Take the Assessment'**
+  String get trainingGuideTakeAssessment;
+
+  /// No description provided for @trainingQuizTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Assessment'**
+  String get trainingQuizTitle;
+
+  /// No description provided for @trainingQuizSubmit.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit'**
+  String get trainingQuizSubmit;
+
+  /// No description provided for @trainingQuizScoreResult.
+  ///
+  /// In en, this message translates to:
+  /// **'You scored {score}/{total}'**
+  String trainingQuizScoreResult(int score, int total);
+
+  /// No description provided for @trainingQuizPassed.
+  ///
+  /// In en, this message translates to:
+  /// **'Passed!'**
+  String get trainingQuizPassed;
+
+  /// No description provided for @trainingQuizFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not passed yet — read the guide again and retake the assessment any time.'**
+  String get trainingQuizFailed;
+
+  /// No description provided for @trainingQuizPromoted.
+  ///
+  /// In en, this message translates to:
+  /// **'🎉 You\'re now Assessed — more features just unlocked!'**
+  String get trainingQuizPromoted;
+
+  /// No description provided for @trainingQuizViewAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'My past attempts'**
+  String get trainingQuizViewAttempts;
+
+  /// No description provided for @trainingQuizNoAttempts.
+  ///
+  /// In en, this message translates to:
+  /// **'No attempts yet.'**
+  String get trainingQuizNoAttempts;
+
+  /// No description provided for @trainingQuizRetake.
+  ///
+  /// In en, this message translates to:
+  /// **'Retake'**
+  String get trainingQuizRetake;
 }
 
 class _AppLocalizationsDelegate

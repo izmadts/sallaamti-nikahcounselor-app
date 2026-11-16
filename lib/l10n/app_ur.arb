@@ -156,6 +156,7 @@
   "batchSend": "گروپ بھیجیں",
   "batchStatusDraft": "ڈرافٹ",
   "batchStatusSent": "بھیج دیا گیا",
+  "batchStatusPendingApproval": "⏳ منظوری کا انتظار",
   "batchFinalMatchTitle": "حتمی رشتہ — کلائنٹ کو پسند آیا",
   "shareLink": "لنک بھیجیں",
   "regenerateLink": "نیا لنک بنائیں",
@@ -269,5 +270,24 @@
   "notificationsEmpty": "آپ کا سب کچھ مکمل ہے — ابھی کچھ بھی توجہ طلب نہیں۔",
   "notificationsFollowUpsSection": "فالو اپ باقی",
   "notificationsActivitySection": "حالیہ سرگرمی",
-  "guideTitle": "نکاح مشیر گائیڈ"
+  "guideTitle": "نکاح مشیر گائیڈ",
+
+  "featureLockedTitle": "ابھی نہیں کھلا",
+  "featureLockedMessage": "یہ سہولت اگلے مرحلے میں کھلے گی",
+  "moreTrainingGuide": "ٹریننگ گائیڈ اور کوئز",
+  "dashboardTrainingBanner": "📘 مزید سہولیات کھولنے کے لیے اپنی ٹریننگ گائیڈ مکمل کریں اور اسیسمنٹ دیں",
+  "trainingGuideTitle": "ٹریننگ گائیڈ",
+  "trainingGuideTakeAssessment": "اسیسمنٹ دیں",
+  "trainingQuizTitle": "اسیسمنٹ",
+  "trainingQuizSubmit": "جمع کروائیں",
+  "trainingQuizScoreResult": "آپ نے {score}/{total} اسکور کیا",
+  "@trainingQuizScoreResult": {
+    "placeholders": { "score": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "trainingQuizPassed": "کامیاب!",
+  "trainingQuizFailed": "ابھی پاس نہیں ہوا — گائیڈ دوبارہ پڑھیں اور کسی بھی وقت اسیسمنٹ دوبارہ دیں۔",
+  "trainingQuizPromoted": "🎉 اب آپ Assessed ہیں — مزید سہولیات کھل گئی ہیں!",
+  "trainingQuizViewAttempts": "میری پچھلی کوششیں",
+  "trainingQuizNoAttempts": "ابھی تک کوئی کوشش نہیں۔",
+  "trainingQuizRetake": "دوبارہ دیں"
 }

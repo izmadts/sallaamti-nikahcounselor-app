@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/generated/app_localizations.dart';
 import '../../../shared/widgets/async_value_view.dart';
+import '../../../shared/widgets/locked_feature_gate.dart';
 import '../state/client_detail_provider.dart';
 import 'tabs/batches_tab.dart';
 import 'tabs/consent_tab.dart';
@@ -59,10 +60,10 @@ class ClientDetailScreen extends ConsumerWidget {
             builder: (client) => TabBarView(
               children: [
                 OverviewTab(leadId: leadId, client: client),
-                RequirementsTab(leadId: leadId, client: client),
-                ShortlistTab(leadId: leadId, client: client),
-                ConsentTab(leadId: leadId, client: client),
-                BatchesTab(leadId: leadId, client: client),
+                LockedFeatureGate(featureKey: 'requirements', child: RequirementsTab(leadId: leadId, client: client)),
+                LockedFeatureGate(featureKey: 'shortlist', child: ShortlistTab(leadId: leadId, client: client)),
+                LockedFeatureGate(featureKey: 'consent', child: ConsentTab(leadId: leadId, client: client)),
+                LockedFeatureGate(featureKey: 'proposal_batch', child: BatchesTab(leadId: leadId, client: client)),
                 MessagesTab(leadId: leadId),
               ],
             ),

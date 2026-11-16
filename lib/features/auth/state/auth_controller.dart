@@ -73,7 +73,7 @@ class AuthController extends StateNotifier<AuthState> {
 
     try {
       final user = await _repository.me();
-      if (!user.isMatchmaker) {
+      if (!user.hasAppAccess) {
         await _settleNonCounselor(user);
         return;
       }
@@ -97,7 +97,7 @@ class AuthController extends StateNotifier<AuthState> {
       final cached = await SecureStore.readUser();
       if (cached != null) {
         final user = AppUser.fromJson(cached);
-        if (user.isMatchmaker) {
+        if (user.hasAppAccess) {
           state = AuthState.authenticated(user);
           _registerPushSafely();
           return;
@@ -126,6 +126,23 @@ class AuthController extends StateNotifier<AuthState> {
     }
   }
 
+  // Trainee-access addendum (15/16 Nov 2026) — re-fetches the current user
+  // so a quiz pass's training→assessed promotion unlocks
+  // Requirements/Consent/Browse immediately, without a full logout/login.
+  // A no-op once this would matter less (not currently authenticated).
+  Future<void> refreshUser() async {
+    if (state.status != AuthStatus.authenticated) return;
+    try {
+      final user = await _repository.me();
+      if (user.hasAppAccess) {
+        await SecureStore.saveUser(user.toJson());
+        state = AuthState.authenticated(user);
+      }
+    } on ApiException {
+      // Keep showing the last known user rather than bouncing the screen.
+    }
+  }
+
   Future<String> forgotPassword(String email) => _repository.forgotPassword(email);
 
   Future<void> resetPassword({required String email, required String code, required String password}) =>
@@ -141,7 +158,7 @@ class AuthController extends StateNotifier<AuthState> {
     final result = await pending;
     await SecureStore.saveToken(result.token);
 
-    if (!result.user.isMatchmaker) {
+    if (!result.user.hasAppAccess) {
       await _settleNonCounselor(result.user);
       if (state.status != AuthStatus.pendingApplication) {
         throw ApiException(message: 'not_counselor_account');

@@ -156,6 +156,7 @@
   "batchSend": "Send Batch",
   "batchStatusDraft": "Draft",
   "batchStatusSent": "Sent",
+  "batchStatusPendingApproval": "⏳ Waiting for approval",
   "batchFinalMatchTitle": "Final Match — Client Interested",
   "shareLink": "Share Link",
   "regenerateLink": "Regenerate Link",
@@ -269,5 +270,24 @@
   "notificationsEmpty": "You're all caught up — nothing needs your attention right now.",
   "notificationsFollowUpsSection": "Follow-ups Due",
   "notificationsActivitySection": "Recent Activity",
-  "guideTitle": "Nikah Counselor Guide"
+  "guideTitle": "Nikah Counselor Guide",
+
+  "featureLockedTitle": "Not unlocked yet",
+  "featureLockedMessage": "This feature unlocks at your next stage.",
+  "moreTrainingGuide": "Training Guide & Quiz",
+  "dashboardTrainingBanner": "📘 Complete your Training Guide & take the Assessment to unlock more features",
+  "trainingGuideTitle": "Training Guide",
+  "trainingGuideTakeAssessment": "Take the Assessment",
+  "trainingQuizTitle": "Assessment",
+  "trainingQuizSubmit": "Submit",
+  "trainingQuizScoreResult": "You scored {score}/{total}",
+  "@trainingQuizScoreResult": {
+    "placeholders": { "score": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "trainingQuizPassed": "Passed!",
+  "trainingQuizFailed": "Not passed yet — read the guide again and retake the assessment any time.",
+  "trainingQuizPromoted": "🎉 You're now Assessed — more features just unlocked!",
+  "trainingQuizViewAttempts": "My past attempts",
+  "trainingQuizNoAttempts": "No attempts yet.",
+  "trainingQuizRetake": "Retake"
 }

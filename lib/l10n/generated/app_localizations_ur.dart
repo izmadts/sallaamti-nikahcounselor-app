@@ -445,6 +445,9 @@ class AppLocalizationsUr extends AppLocalizations {
   String get batchStatusSent => 'بھیج دیا گیا';
 
   @override
+  String get batchStatusPendingApproval => '⏳ منظوری کا انتظار';
+
+  @override
   String get batchFinalMatchTitle => 'حتمی رشتہ — کلائنٹ کو پسند آیا';
 
   @override
@@ -739,4 +742,54 @@ class AppLocalizationsUr extends AppLocalizations {
 
   @override
   String get guideTitle => 'نکاح مشیر گائیڈ';
+
+  @override
+  String get featureLockedTitle => 'ابھی نہیں کھلا';
+
+  @override
+  String get featureLockedMessage => 'یہ سہولت اگلے مرحلے میں کھلے گی';
+
+  @override
+  String get moreTrainingGuide => 'ٹریننگ گائیڈ اور کوئز';
+
+  @override
+  String get dashboardTrainingBanner =>
+      '📘 مزید سہولیات کھولنے کے لیے اپنی ٹریننگ گائیڈ مکمل کریں اور اسیسمنٹ دیں';
+
+  @override
+  String get trainingGuideTitle => 'ٹریننگ گائیڈ';
+
+  @override
+  String get trainingGuideTakeAssessment => 'اسیسمنٹ دیں';
+
+  @override
+  String get trainingQuizTitle => 'اسیسمنٹ';
+
+  @override
+  String get trainingQuizSubmit => 'جمع کروائیں';
+
+  @override
+  String trainingQuizScoreResult(int score, int total) {
+    return 'آپ نے $score/$total اسکور کیا';
+  }
+
+  @override
+  String get trainingQuizPassed => 'کامیاب!';
+
+  @override
+  String get trainingQuizFailed =>
+      'ابھی پاس نہیں ہوا — گائیڈ دوبارہ پڑھیں اور کسی بھی وقت اسیسمنٹ دوبارہ دیں۔';
+
+  @override
+  String get trainingQuizPromoted =>
+      '🎉 اب آپ Assessed ہیں — مزید سہولیات کھل گئی ہیں!';
+
+  @override
+  String get trainingQuizViewAttempts => 'میری پچھلی کوششیں';
+
+  @override
+  String get trainingQuizNoAttempts => 'ابھی تک کوئی کوشش نہیں۔';
+
+  @override
+  String get trainingQuizRetake => 'دوبارہ دیں';
 }
