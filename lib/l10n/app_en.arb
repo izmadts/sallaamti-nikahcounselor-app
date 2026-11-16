@@ -64,6 +64,8 @@
   "applyPasswordMismatch": "Passwords do not match.",
   "applyConsentRequired": "Please accept both checkboxes to continue.",
   "applyPhotosRequired": "Please add your selfie photo.",
+  "applySelfieStillUploading": "Your selfie is still uploading — please wait a moment.",
+  "applyInvalidNumber": "Enter a valid number.",
   "applySubmit": "Submit Application",
   "applySubmitted": "Thank you! Your application has been received — our team will review it and be in touch soon.",
 

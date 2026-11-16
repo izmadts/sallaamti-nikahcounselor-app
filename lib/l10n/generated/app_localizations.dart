@@ -440,6 +440,18 @@ abstract class AppLocalizations {
   /// **'Please add your selfie photo.'**
   String get applyPhotosRequired;
 
+  /// No description provided for @applySelfieStillUploading.
+  ///
+  /// In en, this message translates to:
+  /// **'Your selfie is still uploading — please wait a moment.'**
+  String get applySelfieStillUploading;
+
+  /// No description provided for @applyInvalidNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number.'**
+  String get applyInvalidNumber;
+
   /// No description provided for @applySubmit.
   ///
   /// In en, this message translates to:

@@ -18,7 +18,16 @@ class ApiClient {
     _dio = Dio(BaseOptions(
       baseUrl: AppConfig.apiBaseUrl,
       connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      // Found live (16 Nov 2026): 15s was too tight for a multipart photo
+      // upload (selfie/CNIC/payment screenshot) on a slow mobile
+      // connection — it repeatedly misreported a slow-but-working upload
+      // as "Couldn't connect". The member app (SallaamtiFlutterApp) hit
+      // and fixed this exact same copied-from ApiClient bug earlier with
+      // these same values — matched here rather than guessed, since 60s/
+      // 30s is the already-proven real-world number for this app's own
+      // traffic (photo upload headroom / shared-hosting processing time).
+      sendTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 30),
       headers: {'Accept': 'application/json'},
     ));
 
@@ -78,7 +87,20 @@ class ApiClient {
       map[entry.key] = await MultipartFile.fromFile(entry.value.path, filename: entry.value.path.split(Platform.pathSeparator).last);
     }
 
-    return _request(() => _dio.post(path, data: FormData.fromMap(map)));
+    // Found live (16 Nov 2026): the base 15s connect/receive timeout — fine
+    // for a plain JSON call — repeatedly misreported a slow-but-working
+    // mobile connection as "Couldn't connect" while a multi-megabyte
+    // selfie/CNIC/payment-screenshot photo was still genuinely uploading.
+    // Every multipart call in the app goes through this one method, so a
+    // generous timeout here (120s) fixes registration/document-upload
+    // broadly, not just one screen, without loosening the 15s timeout that
+    // correctly fails fast on a truly dead connection for ordinary
+    // JSON requests.
+    return _request(() => _dio.post(
+          path,
+          data: FormData.fromMap(map),
+          options: Options(sendTimeout: const Duration(seconds: 120), receiveTimeout: const Duration(seconds: 120)),
+        ));
   }
 
   Future<Map<String, dynamic>> _request(Future<Response> Function() call) async {
@@ -91,7 +113,8 @@ class ApiClient {
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
           e.type == DioExceptionType.connectionTimeout ||
-          e.type == DioExceptionType.receiveTimeout) {
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
         throw ApiException.network();
       }
       throw ApiException.fromResponseData(e.response?.data, e.response?.statusCode);

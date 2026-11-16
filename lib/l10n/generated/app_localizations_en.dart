@@ -192,6 +192,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyPhotosRequired => 'Please add your selfie photo.';
 
   @override
+  String get applySelfieStillUploading =>
+      'Your selfie is still uploading — please wait a moment.';
+
+  @override
+  String get applyInvalidNumber => 'Enter a valid number.';
+
+  @override
   String get applySubmit => 'Submit Application';
 
   @override

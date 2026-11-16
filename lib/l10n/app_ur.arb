@@ -64,6 +64,8 @@
   "applyPasswordMismatch": "پاسورڈز مماثل نہیں ہیں۔",
   "applyConsentRequired": "آگے بڑھنے کے لیے دونوں خانوں کو نشان زد کریں۔",
   "applyPhotosRequired": "براہ کرم اپنی سیلفی تصویر شامل کریں۔",
+  "applySelfieStillUploading": "آپ کی سیلفی ابھی اپ لوڈ ہو رہی ہے — براہ کرم تھوڑا انتظار کریں۔",
+  "applyInvalidNumber": "ایک درست نمبر درج کریں۔",
   "applySubmit": "درخواست جمع کروائیں",
   "applySubmitted": "شکریہ! آپ کی درخواست موصول ہو گئی ہے — ہماری ٹیم جائزہ لے کر جلد رابطہ کرے گی۔",
 

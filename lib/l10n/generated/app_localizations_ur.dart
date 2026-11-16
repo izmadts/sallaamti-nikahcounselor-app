@@ -193,6 +193,13 @@ class AppLocalizationsUr extends AppLocalizations {
   String get applyPhotosRequired => 'براہ کرم اپنی سیلفی تصویر شامل کریں۔';
 
   @override
+  String get applySelfieStillUploading =>
+      'آپ کی سیلفی ابھی اپ لوڈ ہو رہی ہے — براہ کرم تھوڑا انتظار کریں۔';
+
+  @override
+  String get applyInvalidNumber => 'ایک درست نمبر درج کریں۔';
+
+  @override
   String get applySubmit => 'درخواست جمع کروائیں';
 
   @override
