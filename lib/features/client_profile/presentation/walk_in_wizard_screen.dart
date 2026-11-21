@@ -57,6 +57,13 @@ class _WalkInWizardScreenState extends ConsumerState<WalkInWizardScreen> {
     if (_hasProfile) {
       final profile = Map<String, dynamic>.from(data['profile'] as Map);
       _fields.addAll({
+        // Found live (16 Nov 2026) — missing from this list entirely, so
+        // editing an existing client's profile always showed Date of Birth
+        // blank, even though it's one of the four fields a profile can't
+        // be saved without (CREATION_REQUIRED on the backend) — a
+        // counselor re-saving without noticing and re-entering it could
+        // wipe a real stored DOB back to empty.
+        'date_of_birth': profile['date_of_birth'],
         'city': profile['city'],
         'marital_status': profile['marital_status'],
         'height': profile['height'],
@@ -363,9 +370,13 @@ class _DatePickerField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
+        // Found alongside the missing-prefill fix above — this always
+        // opened the calendar on "25 years ago" even when editing someone
+        // with a real stored date, instead of jumping to it.
+        final existing = value != null ? DateTime.tryParse(value!) : null;
         final picked = await showDatePicker(
           context: context,
-          initialDate: DateTime.now().subtract(const Duration(days: 365 * 25)),
+          initialDate: existing ?? DateTime.now().subtract(const Duration(days: 365 * 25)),
           firstDate: DateTime.now().subtract(const Duration(days: 365 * 100)),
           lastDate: DateTime.now().subtract(const Duration(days: 365 * 18)),
         );
