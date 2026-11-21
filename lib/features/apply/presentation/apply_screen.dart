@@ -332,7 +332,7 @@ class _ApplyScreenState extends ConsumerState<ApplyScreen> {
                     TextFormField(controller: _qualificationOtherController, decoration: InputDecoration(labelText: l10n.applyQualificationLabel)),
                   ],
                   const SizedBox(height: 12),
-                  TextFormField(controller: _cnicNumberController, decoration: InputDecoration(labelText: l10n.walkInCnicNumberLabel), validator: _required(l10n)),
+                  TextFormField(controller: _cnicNumberController, decoration: InputDecoration(labelText: l10n.walkInCnicNumberLabel)),
                   const SizedBox(height: 16),
                   _ImageTile(
                     label: l10n.applySelfieLabel,
